@@ -9,6 +9,9 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
+
+    
+    
     "tabs": [
       {
         "tab": "Get Started",
@@ -27,7 +30,14 @@
               "payments/overview",
               "payments/payment-methods"
             ]
-          }          
+          },
+          {
+            "group": "References",
+            "pages": [
+              "references/faq",
+              "references/payment-methods"
+            ]
+          }
         ]
       },
       {
