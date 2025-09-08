@@ -31,13 +31,13 @@
               {
                 "group": "Payment Methods",
                 "pages": [
-                  "payments/payment-methods/card",
-                  "payments/payment-methods/digital-wallet",  
-                  "payments/payment-methods/real-time-payment",
-                  "payments/payment-methods/virtual-account",
-                  "payments/payment-methods/bank-redirect",
+                  "payments/payment-methods/cards",
+                  "payments/payment-methods/digital-wallets",  
+                  "payments/payment-methods/real-time-payments",
+                  "payments/payment-methods/virtual-accounts",
+                  "payments/payment-methods/bank-redirects",
                   "payments/payment-methods/pay-later",
-                  "payments/payment-methods/convenience-store"
+                  "payments/payment-methods/convenience-stores"
                 ]
               },
               "payments/payment-flow",
