@@ -16,7 +16,7 @@
           {
             "group": "Getting started",
             "pages": [
-              "wecome",
+              "welcome",
               "onboarding",
               "development"
             ]
