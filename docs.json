@@ -9,9 +9,6 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-
-    
-    
     "tabs": [
       {
         "tab": "Get Started",
@@ -25,6 +22,30 @@
             ]
           },
           {
+            "group": "Integration",
+            "pages": [
+              "integration/overview",
+              {
+                "group": "Monxa Checkout",
+                "pages": [
+                  "integration/checkout/overview",
+                  "integration/checkout/sdks",
+                  "integration/checkout/plugins",
+                  "integration/checkout/payment-links"
+                ]
+              },
+              {
+                "group": "Payment APIs",
+                "pages": [
+                  "integration/api/overview",
+                  "integration/api/integration-flow"
+                ]
+              },
+              "payments/webhooks",
+              "payments/integration-test"
+            ]
+          },
+          {
             "group": "Payments",
             "pages": [
               "payments/overview",
@@ -32,7 +53,7 @@
                 "group": "Payment Methods",
                 "pages": [
                   "payments/payment-methods/cards",
-                  "payments/payment-methods/digital-wallets",  
+                  "payments/payment-methods/digital-wallets",
                   "payments/payment-methods/real-time-payments",
                   "payments/payment-methods/virtual-accounts",
                   "payments/payment-methods/bank-redirects",
@@ -45,9 +66,19 @@
             ]
           },
           {
+            "group": "Payouts",
+            "pages": [
+              "payouts/overview",
+              "payouts/payout-network",
+              "payouts/before-payment",
+              "payouts/after-payment"
+            ]
+          },
+          {
             "group": "References",
             "pages": [
-              "references/faq"
+              "references/faq",
+              "references/security"
             ]
           }
         ]
@@ -104,10 +135,10 @@
   },
   "contextual": {
     "options": [
-     "chatgpt",
-     "claude",
-     "perplexity"
-   ]
+      "chatgpt",
+      "claude",
+      "perplexity"
+    ]
   },
   "footer": {
     "socials": {
