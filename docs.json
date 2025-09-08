@@ -39,7 +39,10 @@
                   "payments/payment-methods/pay-later",
                   "payments/payment-methods/convenience-store"
                 ]
-              }
+              },
+              "payments/payment-flow",
+              "payments/during-payment",
+              "payments/after-payment"
             ]
           },
           {
