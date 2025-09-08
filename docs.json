@@ -22,25 +22,18 @@
             ]
           },
           {
-            "group": "Integration",
+            "group": "Developers",
             "pages": [
               "integration/overview",
               {
                 "group": "Monxa Checkout",
                 "pages": [
-                  "integration/checkout/overview",
                   "integration/checkout/sdks",
                   "integration/checkout/plugins",
                   "integration/checkout/payment-links"
                 ]
-              },
-              {
-                "group": "Payment APIs",
-                "pages": [
-                  "integration/api/overview",
-                  "integration/api/integration-flow"
-                ]
-              },
+              },              
+              "payments/payment-api",
               "payments/webhooks",
               "payments/integration-test"
             ]
