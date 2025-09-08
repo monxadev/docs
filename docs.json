@@ -40,7 +40,6 @@
                   "payments/payment-methods/convenience-stores"
                 ]
               },
-              "payments/payment-flow",
               "payments/during-payment",
               "payments/after-payment"
             ]
