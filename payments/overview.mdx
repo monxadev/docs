@@ -3,8 +3,7 @@ title: "Overview"
 metadata: "[object Object]"
 ---
 
-Whether you’re building a **website**, **mobile app**, or prefer a **no-code setup**, Monxa makes it simple to start accepting payments across Asia.
-Our platform unifies diverse payment providers into one streamlined solution — giving your customers more choice, while you enjoy simplified operations.
+Accepting payments across Asia doesn’t have to be complicated. Monxa brings all your payment methods and providers together in one simple platform. Whether you’re using a website, app, or no-code tool, your customers get more options, and you enjoy hassle-free payment operations.
 
 ## Why Choose Monxa?
 
@@ -17,31 +16,96 @@ Instead of connecting to multiple banks, gateways, and wallets individually, Mon
 - ⚡ Our **smart routing engine** ensures payments are processed through the most reliable path.
 - 🛡️ Built-in redundancy reduces drop-offs and increases success rates.
 
-👉 The result? **More successful transactions, less operational hassle.**
+## Key Features
 
-## Simplified for Merchants 🛠️
+Design a docs site that looks great and empowers your users.
 
-With Monxa, merchants **no longer need to**:
+<Columns cols={2}>
+  <Card title="Seamless Processing" icon="water" iconType="solid" href="#">
+    Accept cards, e-Wallet, bank transfers and local methods with a single, streamlined integration.
+  </Card>
+  <Card title="Smart Routing" icon="arrow-progress" iconType="solid" href="#">
+    Automatically optimizes transaction success by directing payments to the most reliable channel available.
+  </Card>
+  <Card title="Instant Payouts" icon="gauge-max" iconType="solid" href="#">
+    Transfer funds 24/7 in real time to banks and e-Wallets across the entire Asian region.
+  </Card>
+  <Card title="Secure & Compliant" icon="shield-check" iconType="solid" href="#">
+    All transactions are protected by industry-grade security and ISO certified infrastructure.
+  </Card>
+</Columns>
 
-❌ Manage multiple dashboards
+## Payment Flow
 
-❌ Handle different settlement SLAs
+Monxa makes accepting payments across Asia simple and seamless by organizing the process into payment **Intent** and **Charges**.
 
-❌ Juggle disputes across providers
+### Step 1: Create a Payment Intent
 
-Instead, Monxa provides:
+A **Payment Intent** represents the **customer’s intention to make a payment** before the actual transaction occurs. It acts as a placeholder or “plan” for a payment, allowing the merchant to prepare and manage the transaction details ahead of time.
 
-✅ One integration
+<AccordionGroup>
+  <Accordion title="Key Points" icon="star" iconType="solid">
+    - **Represents intent, not payment** → A Payment Intent is only the _plan_ to pay, no money moves until a charge is created.
+    - **Single source of truth** → It tracks the entire lifecycle of a transaction (pending, succeeded, canceled, expired).
+    - **Supports multiple attempts** → Customers can retry failed payments with different methods under the same intent.
+    - **Expiry built-in** → Each intent has an expiry time to prevent indefinite open transactions.
+    - **Locks in details** → Amount and currency are fixed once the intent is created, ensuring consistency.
+    - **Connects to charges** → All payment attempts (charges) link back to the same intent, giving clear traceability.
+    - **Merchant control** → Merchants can cancel intents if an order is abandoned or invalid.
+  </Accordion>
+  <Accordion title="mportant Notes" icon="triangle-exclamation" iconType="solid">
+    When working with **Payment Intents**, keep these points in mind:
 
-✅ One dashboard
+    - **Expiry Time** → A Payment Intent has a set lifetime. Once expired, no new charges can be created under it.
+    - **One Final State** → A Payment Intent can only end in **succeeded, canceled, or expired** state — it cannot be reused once closed.
+    - **Amount & Currency Lock** → The amount and currency are fixed at creation and cannot be changed later.
+    - **Multiple Charges** → You can attempt multiple charges under the same Payment Intent, but only one can succeed.
+    - **Cancellation** → Merchants may cancel a Payment Intent manually if the customer abandons checkout or requests cancellation.
+    - **Concurrency** → Avoid creating multiple active Payment Intents for the same order to prevent double billing.
+    - **Lifecycle Handling** → Always track intent status (via API or webhooks) to handle cases like failure, expiration, or cancellation.
+  </Accordion>
+</AccordionGroup>
 
-✅ One settlement flow
+<Tip>
+  **Analogy:** Think of a Payment Intent as **placing items in a shopping cart**—it shows the intent to purchase, but no money has been transferred yet.
+</Tip>
 
-## Key Features & Benefits 🌟
+### Step 2: Initiate a Charge
 
-- **Seamless Payment Processing**
-  Accept credit cards, bank transfers, e-wallets, virtual accounts, and regional payment methods through a single platform.
-- **Dynamic Smart Routing**
-  Payments are automatically routed to the most stable provider, ensuring higher success rates and reducing drop-offs.
-- **Fast, Secure & Reliable**
-  Real-time transactions backed by **enterprise-grade compliance (ISO 27001 certified)** and tested reliability.
+A **Payment Charge** represents the **actual attempt to collect money** from the customer, based on a Payment Intent. Each charge is tied to a payment method (e.g., credit card, bank transfer, e-wallet) and processes the transaction.
+
+<AccordionGroup>
+  <Accordion title="Key Points" icon="star" iconType="solid">
+    - **Linked to a Payment Intent:** A charge can only exist within an active Payment Intent.
+    - **Execution of payment:** It’s the step where the system tries to move money from the customer to the merchant.
+    - **Has its own expiry:** A charge attempt must be completed within its allowed time, and cannot exceed the Payment Intent’s expiry.
+    - **Retry allowed:** If a charge fails, another charge can be created under the same Payment Intent.
+    - **Completion:** When a charge succeeds, the Payment Intent is marked as completed, and the transaction is finalized.
+  </Accordion>
+  <Accordion title="Important Notes" icon="triangle-exclamation">
+    When working with **Charges**, please keep the following in mind to avoid errors or duplicate payments:
+
+    - **Charge Expiry** → Each charge has its own expiry, but it cannot extend beyond the parent **Payment Intent’s expiry**.
+    - **Avoid Duplicates** → Always check the charge status before retrying. Do not create multiple charges at the same time for the same intent.
+    - **Failed Charges** → A failed charge does **not** complete the Payment Intent. Customers can retry with another method until the intent expires.
+    - **Pending Status** → Some methods (e.g., bank transfers, QRIS, wallets) may return a **pending** status. Always use **webhooks** or polling to track updates.
+    - **Idempotency** → Use **idempotency keys** (if supported) to prevent accidental duplicate charges when resending API requests.
+    - **Currency & Amount Lock** → Once a Payment Intent is created, its **amount and currency are fixed**; all charges must match.
+    - **Declines & Fraud Checks** → Be ready to handle declines from insufficient funds, fraud screening, or restrictions from payment providers.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  \*\*Analogy: **Think of a Payment Intent as the plan, and a**Payment Charge as the action \*\* of swiping the card or **confirming the transfer**.
+</Tip>
+
+### Step 3: Charge Processing
+
+A **Charge** represents the actual attempt to collect money. Once created, it will either succeed and finalize the transaction, or fail and allow the customer to retry.
+
+- **When a charge succeeds:**
+  - The **Charge** status is updated to **completed**.
+  - The linked **Payment Intent** is also marked as **completed**, finalizing the transaction.
+- **When a charge fails:**
+  - The **Payment Intent** stays active.
+  - Customers can retry the payment with the same or a different method until the Payment Intent expires.
