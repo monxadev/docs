@@ -24,7 +24,14 @@
           {
             "group": "INTEGRATION",
             "pages": [
-              "integration/overview",
+              "integration/overview",              
+              {
+                "group": "Payment APIs",
+                "pages": [
+                  "integration/api/qr-codes",
+                  "integration/api/digital-wallets"
+                ]
+              },    
               {
                 "group": "Monxa Checkout",
                 "pages": [
@@ -32,8 +39,7 @@
                   "integration/checkout/plugins",
                   "integration/checkout/payment-links"
                 ]
-              },              
-              "integration/api",
+              },
               "integration/webhooks"
             ]
           },
