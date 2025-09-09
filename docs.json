@@ -11,10 +11,10 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Get Started",
+        "tab": "Get started",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "GETTING STARTED",
             "pages": [
               "welcome",
               "onboarding",
@@ -22,7 +22,7 @@
             ]
           },
           {
-            "group": "Developers",
+            "group": "INTEGRATION",
             "pages": [
               "integration/overview",
               {
@@ -33,13 +33,12 @@
                   "integration/checkout/payment-links"
                 ]
               },              
-              "payments/payment-api",
-              "payments/webhooks",
-              "payments/integration-test"
+              "integration/api",
+              "integration/webhooks"
             ]
           },
           {
-            "group": "Payments",
+            "group": "PAYMENTS",
             "pages": [
               "payments/overview",
               {
@@ -59,7 +58,7 @@
             ]
           },
           {
-            "group": "Payouts",
+            "group": "PAYOUTS",
             "pages": [
               "payouts/overview",
               "payouts/payout-network",
@@ -68,7 +67,7 @@
             ]
           },
           {
-            "group": "References",
+            "group": "REFERENCES",
             "pages": [
               "references/faq",
               "references/security"
