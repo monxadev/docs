@@ -1,4 +1,136 @@
 ---
 title: "Webhooks"
-description: "Description of your new file."
+description: "Listen to key events in Monxa, including payment intents, charge, and other important notifications."
 ---
+
+## Introduction
+
+A **webhook** is a **POST request sent from Monxa’s server to your endpoint** to inform you of payment or transaction updates. When integrating Monxa APIs into your e-commerce checkout, **update the order status to “paid” only after the webhook is received and verified**.
+
+## Handling a Webhook
+
+1. **Create a Webhook Endpoint**\
+   Create an endpoint on your server to receive POST requests, e.g.:
+
+   ```
+   POST /payment-confirmation/webhook
+   ```
+
+   The request will have a content type of `application/x-www-form-urlencoded`.
+2. **Validate the Webhook**\
+   Verify the webhook payload using your **secret key (salt value)** to ensure it is sent from Monxa.
+3. **Respond to the Webhook**\
+   Return **HTTP status code 200 OK** to acknowledge receipt.
+4. **Process the Payment**\
+   Once validated, **mark the corresponding order as paid** in your system.
+
+<AccordionGroup>
+  <Accordion title="Sample Webhook Payload">
+    ```json
+    {
+      "id": "9e9a3451-a3e5-4fc5-9dfc-bc75e67c8808",
+      "business_id": "98567029-f559-49f9-916b-042a4255b32a",
+      "channel": "point_of_sale",
+      "customer_id": "9b3503bd-fd04-4e39-9271-b2bc26fa5c96",
+      "status": "succeeded",
+      "currency": "SGD",
+      "amount": 913.84,
+      "order": {
+        "id": "9e9a344b-2c04-44f4-b521-e36dce8f4ade",
+        "order_display_number": 2766
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Validating a Webhook
+
+To ensure that a webhook payload is **authentic and secure**, follow these steps:
+
+<AccordionGroup>
+  <Accordion title="1. Extract the Payload">
+    Extract the key-value pairs from the webhook POST request.
+
+    ```json
+    payment_id=92965a2d-ece3-4ace-1245-494050c9a3c1&
+    payment_request_id=92965a20-dae5-4d89-a452-5fdfa382dbe1&
+    reference_number=ABC123&
+    phone=&
+    amount=599.00&
+    currency=SGD&
+    status=completed&
+    hmac=330c34a6a8fb9ddb75833620dedb94bf4d4c2e51399d346cbc2b08c381a1399c
+    ```
+  </Accordion>
+  <Accordion title="2. Exclude HMAC">
+    Remove the `hmac` key and its value from the payload. This ensures the HMAC is not included in signature generation.
+  </Accordion>
+  <Accordion title="3. Concatenate & Sort">
+    - Concatenate the **keys and values** of the remaining payload without `&` or `=`.
+    - Sort the keys in **alphabetical order**.
+
+    **Example Concatenated String:**
+
+    ```json
+    amount599.00
+    currencySGD
+    payment_id92965a2d-ece3-4ace-1245-494050c9a3c1
+    payment_request_id92965a20-dae5-4d89-a452-5fdfa382dbe1
+    phone
+    reference_numberABC123
+    statuscompleted
+    ```
+  </Accordion>
+  <Accordion title="4. Generate Signature">
+    - Use the **HMAC-SHA256 algorithm** with your **secret key (salt)** from the Monxa dashboard.
+    - Generate a signature for the concatenated string.
+    - This signature is unique to the payload.
+  </Accordion>
+  <Accordion title="5. Compare Signature">
+    - Compare the generated signature with the `hmac` value from the original payload.
+    - If they **match**, the webhook is valid and can be trusted.
+    - If they **don’t match**, discard the webhook and log for review.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  **Result:** Following this process guarantees the authenticity and integrity of webhook payloads, ensuring your system processes only secure, verified transactions.
+</Tip>
+
+### **Sample Code**
+
+<CodeGroup>
+
+```PHP PHP
+function generateSignatureArray($secret, array $args) {   
+  $hmacSource = [];        
+  foreach ($args as $key => $val) {
+    $hmacSource[$key] = "{$key}{$val}";
+  }
+  ksort($hmacSource);
+  $sig            = implode("", array_values($hmacSource));
+  $calculatedHmac = hash_hmac('sha256', $sig, $secret); 
+
+  return $calculatedHmac;
+}
+```
+
+
+```javascript NodeJS
+var crypto = require('crypto');
+
+function generateSignatureArray(secret, vals) {
+  const source = [];
+  Object.keys(vals).sort().forEach((key) => {
+    source.push(`${key}${vals[key]}`);
+  });
+  var payload = source.join("");
+  const hmac = crypto.createHmac('sha256', secret);
+  console.log(payload)
+  let signed = hmac.update(Buffer.from(payload, 'utf-8')).digest("hex");
+  return signed;
+}
+```
+
+</CodeGroup>
