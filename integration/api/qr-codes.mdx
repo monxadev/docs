@@ -1,4 +1,169 @@
 ---
 title: "QR Codes"
-description: "Description of your new file."
+description: "Guide to integrating Embedded QR Code payments via Monxa API"
 ---
+
+## Introduction
+
+Embedded QR Code Payments let you accept QR-based transactions **directly inside your platform** without redirecting customers to external pages.
+
+At a broad level, incorporating QR code payments into your system follows a four-step process:
+
+<Columns cols={2}>
+  <Card title="Create a Payment Intent" icon="star" iconType="solid" href="#">
+    Start by creating a payment intent in your system with the required details.
+  </Card>
+  <Card title="Generate & Display the QR Code" icon="qrcode" iconType="solid" href="#">
+    Use the payment intent to generate a QR code and present it to the customer.
+  </Card>
+  <Card title="Customer Scans to Pay" icon="camera" iconType="solid" href="#">
+    The customer scans the QR code and completes payment through their banking or wallet app.
+  </Card>
+  <Card title="Handle Webhooks" icon="anchor" iconType="solid" href="#">
+    After processing, Monxa sends a webhook notification. Use this to update your server and client with the final payment status.
+  </Card>
+</Columns>
+
+### Supported Methods
+
+Not all payment methods support Embedded QR Codes. The following methods are available:
+
+| Payment Method   | Code           | Country/Region               |
+| ---------------- | -------------- | ---------------------------- |
+| PayNow           | `qr_paynow`    | 🇸🇬 Singapore               |
+| ShopeePay        | `qr_shopeepay` | 🇸🇬🇮🇩 Singapore/Indonesia |
+| QRIS (Indonesia) | `qr_qris`      | 🇮🇩 Indonesia               |
+| WeChat Pay       | `qr_wechatpay` | 🇨🇳 China                   |
+| VietQR           | `qt_vietqr`    | 🇻🇳 Vietnam                 |
+| PromptPay        | `qr_promptpay` | 🇹🇭 Thailand                |
+| TrueMoney        | `qr_truemoney` | 🇹🇭 Thailand                |
+| GrabPay          | `qr_grabpay`   | 🇸🇬 Singapore               |
+| UPI              | `qr_upi`       | 🇮🇳 India                   |
+| GCash            | `qr_gcash`     | 🇵🇭 Philippines             |
+| QRPH             | `qr_qrph`      | 🇵🇭 Philippines             |
+| Touch ’n Go      | `qr_touchngo`  | 🇲🇾 Malaysia                |
+
+## Integration Flow
+
+### Step 1: Create a Payment Intent
+
+This is the initial stage of the payment process. After gathering all the user’s details and preparing to collect payment, use this API to generate a payment request.
+
+<Tip>
+  **Endpoint: POST /payment-intents**
+</Tip>
+
+<AccordionGroup>
+  <Accordion title="Request Parameters" iconType="solid">
+    | Parameter             | Type    | Description                                                  |
+    | --------------------- | ------- | ------------------------------------------------------------ |
+    | **amount**            | string  | _Required._ The amount to be paid.                           |
+    | **currency**          | string  | _Required._ The currency of the payment (e.g., “sgd”).       |
+    | **payment_methods[]** | array   | _Required._ Specify **paynow_online** as the payment method. |
+    | **generate_qr**       | boolean | _Required._ Set to **true** to generate the QR code.         |
+    | **name**              | string  | Optional. The name of the customer.                          |
+    | **email**             | string  | Optional. The email of the customer.                         |
+    | **phone**             | string  | Optional. The phone number of the customer.                  |
+    | **purpose**           | string  | Optional. The purpose of the payment.                        |
+    | **reference_number**  | string  | Optional. A reference number for the payment.                |
+  </Accordion>
+  <Accordion title="Example Request">
+    ```json
+    {
+      "amount": "123.00",
+      "currency": "sgd",
+      "payment_methods": ["qr_qris"],
+      "generate_qr": true,
+      "expiry_date": "2024-06-01T14:37:11"
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Response
+
+The response includes a qr_code_data object that contains the information needed to generate a scannable QR code (qr_code).
+
+<AccordionGroup>
+  <Accordion title="Example Response">
+    ```json
+    {
+      "id": "9c262fb5-f3cd-4187-8c3e-fbe20730b9c6",
+      "name": null,
+      "email": null,
+      "phone": null,
+      "amount": "123.00",
+      "currency": "sgd",
+      "is_currency_editable": false,
+      "status": "pending",
+      "purpose": null,
+      "reference_number": null,
+      "payment_methods": [
+        "paynow_online"
+      ],
+      "url": "https://securecheckout.hit-pay.com/payment-request/@nitinmuthyala/9c262fb5-f3cd-4187-8c3e-fbe20730b9c6/checkout",
+      "redirect_url": null,
+      "webhook": null,
+      "send_sms": true,
+      "send_email": false,
+      "sms_status": "pending",
+      "email_status": "pending",
+      "allow_repeated_payments": false,
+      "expiry_date": null,
+      "address": null,
+      "line_items": null,
+      "executor_id": null,
+      "created_at": "2024-05-28T14:37:11",
+      "updated_at": "2024-05-28T14:37:11",
+      "qr_code_data": {
+        "qr_code": "00020101021226550009SG.PAYNOW010120210201605883W030100414202405281445315204000053037025406123.005802SG5905Nitin6009Singapore62290125DICNP17168782314914MWULPX63043561",
+        "qr_code_expiry": null
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Step 2: Generate and Present the QR Code
+
+After creating the payment request, use the response data to generate a QR code and present it to the user.
+
+<Warning>
+  **🔎 Sandbox Behavior**
+
+  - In the **Sandbox environment**, the `qr_code` value returned may be a URL (e.g., `https://checkout.monxa.dev/...`) instead of the raw PayNow QR string.
+  - This allows you to test the flow easily using any standard QR code scanner or by opening the link directly in a browser.
+
+  **🚀 Production Behavior**
+
+  - In **Production**, the `qr_code` value will be a **raw PayNow payload string**.
+  - You must convert this string into a scannable QR code for use with supported banking apps.
+</Warning>
+
+### Step 3: Client Scans and Pay
+
+The customer scans the QR code with their banking app to initiate and confirm the payment.
+
+### Step 4: Handle Webhooks & Update Payment Status
+
+After the payment is completed, your system must handle **webhooks** to receive payment notifications and keep the order status in sync.
+
+## What is a Webhook?
+
+A **webhook** is a `POST` request sent from **Monxa’s server → your server** when a payment is confirmed.
+
+> ⚠️ **Important**: Only mark an order as **Paid** after the **webhook is received and validated** — not when the client completes the payment.
+
+### ⚙️ Handling Webhooks
+
+1. **Create an Endpoint**
+   - Example: `/payment-confirmation/webhook`
+   - Accepts `POST` requests with content type: `application/x-www-form-urlencoded`
+2. **Validate the Payload**
+   - Use your **salt value** to ensure authenticity.
+3. **Acknowledge the Request**
+   - Return an HTTP `200 OK` response to Monxa.
+4. **Update Your System**
+   - Mark the order as **Paid** after successful validation.
+
+### Step 3: Client Scans and Pay
