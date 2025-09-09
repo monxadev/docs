@@ -34,7 +34,7 @@ Not all payment methods support Embedded QR Codes. The following methods are ava
 | ShopeePay        | `qr_shopeepay` | 🇸🇬🇮🇩 Singapore/Indonesia |
 | QRIS (Indonesia) | `qr_qris`      | 🇮🇩 Indonesia               |
 | WeChat Pay       | `qr_wechatpay` | 🇨🇳 China                   |
-| VietQR           | `qt_vietqr`    | 🇻🇳 Vietnam                 |
+| VietQR           | `qr_vietqr`    | 🇻🇳 Vietnam                 |
 | PromptPay        | `qr_promptpay` | 🇹🇭 Thailand                |
 | TrueMoney        | `qr_truemoney` | 🇹🇭 Thailand                |
 | GrabPay          | `qr_grabpay`   | 🇸🇬 Singapore               |
@@ -99,9 +99,9 @@ The response includes a qr_code_data object that contains the information needed
       "purpose": null,
       "reference_number": null,
       "payment_methods": [
-        "paynow_online"
+        "qr_paynow"
       ],
-      "url": "https://securecheckout.hit-pay.com/payment-request/@nitinmuthyala/9c262fb5-f3cd-4187-8c3e-fbe20730b9c6/checkout",
+      "url": "https://checkout.monxa.dev/payment-request/@nitinmuthyala/9c262fb5-f3cd-4187-8c3e-fbe20730b9c6/checkout",
       "redirect_url": null,
       "webhook": null,
       "send_sms": true,
@@ -124,7 +124,7 @@ The response includes a qr_code_data object that contains the information needed
   </Accordion>
 </AccordionGroup>
 
-### Step 2: Generate and Present the QR Code
+### Step 2: Generate & Display the QR Code
 
 After creating the payment request, use the response data to generate a QR code and present it to the user.
 
@@ -140,13 +140,17 @@ After creating the payment request, use the response data to generate a QR code 
   - You must convert this string into a scannable QR code for use with supported banking apps.
 </Warning>
 
-### Step 3: Client Scans and Pay
+### Step 3: Customer Scans to Pay
 
 The customer scans the QR code with their banking app to initiate and confirm the payment.
 
 ### Step 4: Handle Webhooks & Update Payment Status
 
 After the payment is completed, your system must handle **webhooks** to receive payment notifications and keep the order status in sync.
+
+<Tip>
+  **Tip:** For general information on webhooks and best practices for handling them, refer to the [Webhook Guide ](/integration/webhooks)page.
+</Tip>
 
 <AccordionGroup>
   <Accordion title="Webhook Response Parameters">
@@ -165,7 +169,3 @@ After the payment is completed, your system must handle **webhooks** to receive 
     
   </Accordion>
 </AccordionGroup>
-
-<Tip>
-  **Tip:** For general information on webhooks and best practices for handling them, refer to the [Webhook Guide ](/integration/webhooks)page.
-</Tip>
