@@ -134,3 +134,114 @@ function generateSignatureArray(secret, vals) {
 ```
 
 </CodeGroup>
+
+### **List of Webhook Events**
+
+Monxa provides a set of **event notifications** that you can listen to and act upon. These events help you track the lifecycle of payments, payouts, and intents.
+
+### Available Events 🔔
+
+| **Event Name**      | **When does it trigger?**                                     |
+| ------------------- | ------------------------------------------------------------- |
+| `charge.created`    | ✅ Triggered once a payment is successfully completed          |
+| `charge.updated`    | 🔄 Triggered when a payment is refunded or partially refunded |
+| `payout.created`    | 💸 Triggered once a payout is successfully created            |
+| `payout.processing` | ⚙️ Triggered once the payout is processing                    |
+| `payout.paid`       | 💰 Triggered once the payout is paid                          |
+| `payout.failed`     | ❌ Triggered once the payout has failed                        |
+| `payout.canceled`   | 🚫 Triggered once the payout is canceled                      |
+| `intent.created`    | 🛒 Triggered once an intent is created successfully           |
+| `intent.updated`    | 🔄 Triggered once an intent status is updated                 |
+
+### Example Event Payloads - Charge
+
+<CodeGroup>
+
+```json charge.created
+{
+  "event": "charge.created",
+  "data": {
+    "charge_id": "ch_12345",
+    "amount": 5000,
+    "currency": "USD",
+    "status": "succeeded",
+    "created_at": "2025-09-10T12:00:00Z"
+  }
+}
+```
+
+
+```json charge.updated
+{
+  "event": "payout.paid",
+  "data": {
+    "payout_id": "po_67890",
+    "amount": 10000,
+    "currency": "USD",
+    "status": "paid",
+    "paid_at": "2025-09-10T15:00:00Z"
+  }
+}
+```
+
+</CodeGroup>
+
+### Example Event Payloads - Payout
+
+<CodeGroup>
+
+```json payout.created
+{
+  "event": "payout.failed",
+  "data": {
+    "payout_id": "po_67890",
+    "amount": 10000,
+    "currency": "USD",
+    "status": "failed",
+    "reason": "Insufficient funds",
+    "failed_at": "2025-09-10T16:00:00Z"
+  }
+}
+```
+
+
+``` payout.processing
+```
+
+
+``` payout.paid
+```
+
+
+``` payout.failed
+```
+
+
+``` payout.cancelled
+```
+
+</CodeGroup>
+
+### Example Event Payloads - Payment Intent
+
+<CodeGroup>
+
+```json intent.created
+{
+  "event": "payout.failed",
+  "data": {
+    "payout_id": "po_67890",
+    "amount": 10000,
+    "currency": "USD",
+    "status": "failed",
+    "reason": "Insufficient funds",
+    "failed_at": "2025-09-10T16:00:00Z"
+  }
+}
+```
+
+
+``` intent.updated
+```
+
+</CodeGroup>
