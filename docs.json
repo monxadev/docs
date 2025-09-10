@@ -82,8 +82,8 @@
             "pages": [
               "payouts/overview",
               "payouts/payout-network",
-              "payouts/before-payment",
-              "payouts/after-payment"
+              "payouts/before-payout",
+              "payouts/after-payout"
             ]
           },
           {

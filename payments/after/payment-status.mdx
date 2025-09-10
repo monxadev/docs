@@ -1,5 +1,56 @@
 ---
-title: 'New file'
-description: 'Description of your new file.'
+title: "Check Payment Status"
+description: "Actively verify payment status to keep your system synchronized, even when webhook updates are delayed."
 ---
 
+The **Check Status mechanism** allows merchants to actively verify the latest status of a payment by querying the **Get Payment by ID API**.
+
+This ensures your system always reflects the most accurate transaction state, even if webhook updates are delayed or missed due to network issues, server downtime, or other technical factors.
+
+## Why Implement Check Status?
+
+While Monxa provides **real-time notifications via webhooks**, relying solely on them may introduce risks:
+
+- **Webhook Delays** – Network or server issues can slow down updates.
+- **Missed Events** – Downtime or connectivity issues may cause webhooks to fail.
+
+By implementing Check Status, you have a **reliable fallback mechanism** to keep your system synchronized with the actual transaction status.
+
+### How to Implement
+
+<AccordionGroup>
+  <Accordion title="Step 1: Call the Get Payment by ID API" iconType="solid">
+    Use the following endpoint to retrieve the latest status of a payment:
+
+    | Method | Endpoint                                |
+    | :----- | :-------------------------------------- |
+    | GET    | `https://api.monxa.co/v1/payments/{id}` |
+
+    Replace `{id}` with the `payment_id` you want to check.
+
+    <Tip>
+      **Tip:** For better accuracy, implement **interval-based polling** (e.g., retry with exponential backoff) until the transaction reaches a final state.
+    </Tip>
+  </Accordion>
+  <Accordion title="Step 2: Handle the API Response">
+    The API response will include key transaction details.\
+    Most importantly, the `status` parameter indicates the **current state** of the payment.\
+    Your system should use this value to update the order or payment status accordingly.
+
+    **Example Response:**
+
+    ```json
+    {
+      "data": {
+        "id": "pay_123456789",
+        "status": "completed",
+        "order_id": "ord_987654321",
+        "amount": 150000,
+        "currency": "IDR",
+        "created_at": "2025-09-10T10:15:30Z",
+        "updated_at": "2025-09-10T10:17:05Z"
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
