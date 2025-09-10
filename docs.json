@@ -59,7 +59,13 @@
                   "payments/payment-methods/convenience-stores"
                 ]
               },
-              "payments/during-payment",
+              {
+                "group": "During the Payment",
+                "pages": [
+                  "payments/smart-routing",
+                  "payments/cancel-payment"                  
+                ]
+              },
               "payments/after-payment"
             ]
           },
