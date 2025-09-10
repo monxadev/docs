@@ -70,7 +70,7 @@
                 "group": "After the Payment",
                 "pages": [
                   "payments/afer/payment-status",
-                  "payments/after/webhook"                  
+                  "payments/after/webhooks"                  
                 ]
               },
               "payments/settlement",
