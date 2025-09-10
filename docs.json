@@ -62,11 +62,19 @@
               {
                 "group": "During the Payment",
                 "pages": [
-                  "payments/smart-routing",
-                  "payments/cancel-payment"                  
+                  "payments/during/smart-routing",
+                  "payments/during/cancel-payment"                  
                 ]
               },
-              "payments/after-payment"
+              {
+                "group": "After the Payment",
+                "pages": [
+                  "payments/afer/payment-status",
+                  "payments/after/webhook"                  
+                ]
+              },
+              "payments/settlement",
+              "payments/refund"
             ]
           },
           {
