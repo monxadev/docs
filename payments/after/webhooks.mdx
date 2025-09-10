@@ -1,5 +1,127 @@
 ---
-title: 'New file'
-description: 'Description of your new file.'
+title: "Webhooks Events"
+description: "Stay synchronized with every stage of the payment lifecycle through real-time webhook events from Monxa."
 ---
 
+Webhooks allow Monxa to **push real-time updates directly to your server** whenever there is a change in a transaction or order status.\
+Instead of constantly polling our API, you simply provide a **callback URL**, and Monxa will automatically send an event notification to that endpoint whenever something important happens.
+
+For example, if you configure your webhook to listen for `payment.completed`, your system will immediately receive a notification as soon as a payment is successfully processed. This enables you to update your records, trigger downstream workflows, or notify your customers—instantly and reliably.
+
+## Payment Related Webhook Events
+
+Here are the main events Monxa can send to your webhook URL, ensuring your system stays synchronized with every key payment lifecycle update:
+
+| **Event Name**     | **When does it trigger?**                                                                                                                                        |
+| :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `intent.created`   | Triggered when a payment is successfully created.                                                                                                                |
+| `intent.completed` | Triggered when a payment has been fully paid. This means one or more charges have been completed and the total amount has been captured.                         |
+| `charge.completed` | Triggered when a charge is successfully processed and confirmed by Monxa. You can safely use this event to mark the related transaction or payment as completed. |
+| `charge.failed`    | Triggered when a charge attempt fails due to a timeout or other processing error.                                                                                |
+| `charge.cancelled` | Triggered when a charge is cancelled by the customer before it is completed.                                                                                     |
+| `charge.expired`   | Triggered when a charge request expires before completion.                                                                                                       |
+
+### **Example Event Payloads - Payment Intent**
+
+<CodeGroup>
+
+```json intent.created
+{
+  "event": "intent.created”,
+  "data":{
+  "id": "pi_ABC123456789",
+  "amount": 256393200,
+  "status": "started",
+  "is_live": true,
+  "currency": "IDR",
+  "metadata": {
+    "order_ref_id": "OD1726627699282612DO",
+    "payment_ref_id": "P1234567890123"
+  },
+  "signature": "35d10020e4469eb22b3bf956e1ba0eca5f9afcb2f8557fe6e7db85816b8d43cb",
+  "amount_str": "2563932.00",
+  "created_at": "2024-09-18T02:48:35.274789Z",
+  "customer_id": "cus_XYZ987654321",
+  "description": "",
+  "expiry_date": "2024-09-18T03:48:34.488Z",
+  "merchant_id": "mer_DEF123456789",
+  "payment_link_url": "https://checkout.monxa.co/payment-link/S41w1u"
+}
+```
+
+
+```json intent.completed
+{
+  "event": "intent.completed”,
+  "data":{
+  	"id": "pi_ABC123456789",
+	"amount": 4500000,
+  	"status": "completed",
+  	"is_live": true,
+  	"currency": "IDR",
+  	"metadata": {},
+  	"signature": "be9635a6baa184243c23766b3cbb08d72201c396db735b0201a2ae534dbc1895",
+  	"amount_str": "45000.00",
+  	"created_at": "2024-09-11T14:54:32.218432Z",
+  	"customer_id": "cus_XYZ987654321",
+  	"description": "",
+  	"expiry_date": "2024-09-12T03:54:31Z",
+  	"merchant_id": "mer_DEF123456789"
+  }
+}
+```
+
+</CodeGroup>
+
+### **Example Event Payloads - Payment Charge**
+
+<CodeGroup>
+
+```json charge.completed
+{
+  "event": “payment.completed”,
+  "data":{
+  "id": "pay_ABC123456789",
+  "amount": 20400000,
+  "is_live": true,
+  "currency": "IDR",
+  "metadata": {},
+  "order_id": "ord_DEF987654321",
+  "signature": "f6b89ace04f7bf677e8a3df214be8ec71387b2dab79c931270cd1f0cb5682da9",
+  "amount_str": "204000.00",
+  "created_at": "2024-10-10T06:50:30.230085Z",
+  "updated_at": "2024-10-10T06:50:47.378726Z",
+  "customer_id": "cus_XYZ654321987",
+  "merchant_id": "mer_GHI654321987",
+  "order_ref_id": "12345678",
+  "customer_name": "John Doe",
+  "customer_email": "johndoe@example.com",
+  "failure_reason": {},
+  "payment_method": "OVO",
+  "payment_ref_id": ""
+},
+```
+
+
+```json charge.failed
+{
+  "event": "payout.paid",
+  "data": {
+    "payout_id": "po_67890",
+    "amount": 10000,
+    "currency": "USD",
+    "status": "paid",
+    "paid_at": "2025-09-10T15:00:00Z"
+  }
+}
+```
+
+
+``` charge.cancelled
+```
+
+
+``` charge.expired
+```
+
+</CodeGroup>
