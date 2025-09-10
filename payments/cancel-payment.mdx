@@ -1,5 +1,49 @@
 ---
-title: 'New file'
-description: 'Description of your new file.'
+title: "Cancelling a Payment"
+description: "Description of your new file."
 ---
 
+The **Payment Cancellation API** allows merchants to **cancel payments that are still in the “processing” stage**, giving you full control to stop transactions before they reach a final status.
+
+This is particularly useful for scenarios such as:
+
+- Managing inventory when an item is out of stock.
+- Enforcing time-sensitive payment rules.
+- Applying custom business logic to align with operational policies or customer requests.
+
+By providing this capability, the API helps merchants **maintain transaction control, streamline operations, and improve the customer experience**.
+
+## How to Cancel a Payment
+
+<AccordionGroup>
+  <Accordion title="Step 1. Call the Cancel Payment API" defaultOpen iconType="solid">
+    Use the following endpoint to cancel a payment:
+
+    | Method | Endpoint                                        |
+    | :----- | :---------------------------------------------- |
+    | GET    | `https://api.monxa.dev/v1/payments/{id}/cancel` |
+
+    Replace `{id}` with the `payment_id` of the transaction you want to cancel.
+
+    <Tip>
+      Note: You can only cancel a payment if its status is still  `processing` 
+    </Tip>
+  </Accordion>
+  <Accordion title="Step 2. Handle the API Response">
+    After calling the API, the response will indicate the **final status** of the transaction. If the status is `cancelled`, the payment has been successfully cancelled.
+
+    **Example Response:**
+
+    ```json
+    {
+      "data": {
+        "id": "pay_ohXLNm2fPw6868",
+        "status": "cancelled",
+        "order_id": "ord_Dg0Dz9wwKP1602",
+        "created_at": "2020-11-19T22:09:48Z",
+        "updated_at": "2020-11-26T20:02:24.561169Z"
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
