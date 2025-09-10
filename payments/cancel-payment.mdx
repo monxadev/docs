@@ -1,11 +1,8 @@
 ---
 title: "Cancelling a Payment"
-description: "Description of your new file."
 ---
 
-The **Payment Cancellation API** allows merchants to **cancel payments that are still in the “processing” stage**, giving you full control to stop transactions before they reach a final status.
-
-This is particularly useful for scenarios such as:
+The **Payment Cancellation API** allows merchants to **cancel payments that are still in the “processing” stage**, giving you full control to stop transactions before they reach a final status. This is particularly useful for scenarios such as:
 
 - Managing inventory when an item is out of stock.
 - Enforcing time-sensitive payment rules.
@@ -16,7 +13,7 @@ By providing this capability, the API helps merchants **maintain transaction con
 ## How to Cancel a Payment
 
 <AccordionGroup>
-  <Accordion title="Step 1. Call the Cancel Payment API" defaultOpen iconType="solid">
+  <Accordion title="Step 1. Call the Cancel Payment API" iconType="solid">
     Use the following endpoint to cancel a payment:
 
     | Method | Endpoint                                        |
@@ -26,7 +23,7 @@ By providing this capability, the API helps merchants **maintain transaction con
     Replace `{id}` with the `payment_id` of the transaction you want to cancel.
 
     <Tip>
-      Note: You can only cancel a payment if its status is still  `processing` 
+      Note: You can only cancel a payment if its status is still  `processing`
     </Tip>
   </Accordion>
   <Accordion title="Step 2. Handle the API Response">
