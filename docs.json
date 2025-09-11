@@ -26,10 +26,14 @@
             "pages": [
               "integration/overview",              
               {
-                "group": "Payment APIs",
+                "group": "Direct API",
                 "pages": [
+                  "integration/api/buy-now-pay-later",
+                  "integration/api/cards",
+                  "integration/api/convenience-stores",
+                  "integration/api/wallets",                  
                   "integration/api/qr-codes",
-                  "integration/api/digital-wallets"
+                  "integration/api/virtual-account"
                 ]
               },    
               {
@@ -50,13 +54,13 @@
               {
                 "group": "Payment Methods",
                 "pages": [
-                  "payments/payment-methods/cards",
-                  "payments/payment-methods/digital-wallets",
-                  "payments/payment-methods/real-time-payments",
-                  "payments/payment-methods/virtual-accounts",
                   "payments/payment-methods/bank-redirects",
-                  "payments/payment-methods/pay-later",
-                  "payments/payment-methods/convenience-stores"
+                  "payments/payment-methods/bank-transfers",
+                  "payments/payment-methods/buy-now-pay-later",
+                  "payments/payment-methods/cards",
+                  "payments/payment-methods/convenience-stores",
+                  "payments/payment-methods/real-time-payments",
+                  "payments/payment-methods/wallets"
                 ]
               },
               {
