@@ -1,4 +1,93 @@
 ---
 title: "Refund"
-description: "Description of your new file."
+description: "Refunds in Monxa let you seamlessly return full or partial payments to customers through supported methods like Wallets and QRIS."
 ---
+
+Monxa provides a simple and reliable way for merchants to issue refunds directly through our platform. Whether you need to process a **full refund** or a **partial refund**, our system is designed to be flexible, transparent, and easy to manage.
+
+## Why Refunds with Monxa?
+
+1. **Instant Digital Wallet Refunds**\
+   Monxa is directly integrated with leading e-wallets, enabling refunds to be credited back to the customer’s balance almost instantly. This ensures a smooth and fast refund experience, with funds returned using the same payment method.
+2. **Streamlined Management**\
+   Refunds can be created and tracked via the Monxa Dashboard or API. No manual intervention is required, allowing you to resolve refund requests quickly and consistently.
+3. **Flexible Refund Options**\
+   Merchants can issue full or partial refunds, making it easy to handle scenarios like partial returns, cancellations, or service adjustments.
+4. **Detailed Tracking & Transparency**\
+   Every refund is logged with full tracking details, so you can monitor status in real time and keep your customers informed. This also ensures accurate records for reporting and compliance.
+
+## Refund Limitations
+
+Currently, Monxa supports refunds for the following payment methods:
+
+- **Wallets**
+- **QRIS**
+
+## Refund Eligibility
+
+To qualify for a refund:
+
+1. The original payment must be made via **Wallet** or **QRIS**.
+2. Refund requests must be submitted within the allowed refund period.
+3. The refund amount cannot exceed the original payment.
+4. For settled payments, refunds will be deducted from your next available settlement balance for the same payment method. Refunds can only proceed if sufficient balance is available.
+5. QRIS refunds may be subject to restrictions depending on the issuing bank of the payer.
+6. Merchant Discount Rate (MDR) fees applied during settlement are **non-refundable**. Refunds on settled transactions will be adjusted against the settlement amount.
+
+## Integration Guide
+
+### Step 1: Create a Refund
+
+<AccordionGroup>
+  <Accordion title="Endpoint" iconType="solid">
+    Use the following endpoint to retrieve the latest status of a payment:
+
+    | Method | Endpoint                          |
+    | :----- | :-------------------------------- |
+    | POST   | `https://api.monxa.co/v1/refunds` |
+  </Accordion>
+  <Accordion title="Request Example">
+    The following are the sample request body for creating a refund:
+
+    ```
+    curl -X POST \
+      https://api.monxa.co/v1/refunds \
+      -H 'authorization: [Base64({Your_Server_Key}:)]' \
+      -H 'content-type: application/json' \
+      -d '{
+        "ref_id": "abc",
+        "payment_id": "pay_IsL5nOCW4M2790",
+        "amount": "10000",
+        "use_refund_link": "true"
+        "notes": "rejected product"
+    }'
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Step 2: Handle Refund Response
+
+Refund processing is synchronous. The `status` field in the API response indicates the outcome of the request.
+
+**Response Example**
+
+```json
+{
+  "data": {
+    "id": "rfn_abc123",
+    "ref_id": "order_ref_123",
+    "amount": "10000",
+    "refund_type": "partial",
+    "status": "done",
+    "created_at": "2025-09-12T10:43:42Z",
+    "updated_at": "2025-09-12T10:44:01Z",
+    "approved_at": "2025-09-12T10:44:01Z",
+    "source": "api",
+    "customer_name": "John Doe",
+    "customer_email": "john@example.com",
+    "customer_phone": "+628123456789"
+  }
+}
+```
+
+If the status is `done`, the refund has been successfully processed and the customer should see the funds reflected in their account.
