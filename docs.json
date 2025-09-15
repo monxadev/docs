@@ -1,9 +1,9 @@
 {
   "$schema": "https://docs.monxa.co/docs.json",
-  "theme": "mint",
+  "theme": "almond",
   "name": "Monxa Product Guide and API",
   "colors": {
-    "primary": "#16A34A",
+    "primary": "#92FFE5",
     "light": "#07C983",
     "dark": "#15803D"
   },
@@ -14,7 +14,6 @@
         "tab": "Get started",
         "groups": [
           {
-            "group": "GETTING STARTED",
             "pages": [
               "welcome",
               "onboarding",
@@ -26,7 +25,7 @@
             "pages": [
               "integration/overview",              
               {
-                "group": "Direct API",
+                "group": "API",
                 "pages": [
                   "integration/api/buy-now-pay-later",
                   "integration/api/cards",
