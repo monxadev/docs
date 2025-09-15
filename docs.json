@@ -5,7 +5,7 @@
   "colors": {
     "primary": "#009689",
     "light": "#00BBA7",
-    "dark": "#92FFE5"
+    "dark": "#00BBA7"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -29,6 +29,7 @@
                 "group": "API",
                 "pages": [
                   "integration/api/overview",
+                  "integration/api/api-keys",
                   "integration/api/idempotency",
                   "integration/api/rate-limits"                  
                 ]
@@ -49,9 +50,9 @@
                 ]
               },
               {
-                "group": "Testings",
+                "group": "Testing",
                 "pages": [
-                  "integration/testings/overview"
+                  "integration/testing/overview"
                 ]
               }
             ]
