@@ -1,11 +1,11 @@
 {
   "$schema": "https://docs.monxa.co/docs.json",
-  "theme": "almond",
+  "theme": "mint",
   "name": "Monxa Product Guide and API",
   "colors": {
     "primary": "#009689",
     "light": "#00BBA7",
-    "dark": "#009689"
+    "dark": "#92FFE5"
   },
   "favicon": "/favicon.svg",
   "navigation": {
