@@ -49,9 +49,9 @@
                 ]
               },
               {
-                "group": "Testings",
+                "group": "Testing",
                 "pages": [
-                  "integration/testings/overview"
+                  "integration/testing/overview"
                 ]
               }
             ]
