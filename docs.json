@@ -28,12 +28,9 @@
               {
                 "group": "API",
                 "pages": [
-                  "integration/api/buy-now-pay-later",
-                  "integration/api/cards",
-                  "integration/api/convenience-stores",
-                  "integration/api/wallets",                  
-                  "integration/api/qr-codes",
-                  "integration/api/virtual-account"
+                  "integration/api/overview",
+                  "integration/api/idempotency",
+                  "integration/api/rate-limits"                  
                 ]
               },    
               {
@@ -49,6 +46,12 @@
                 "pages": [
                   "integration/webhooks/overview",
                   "integration/webhooks/event-types"
+                ]
+              },
+              {
+                "group": "Testings",
+                "pages": [
+                  "integration/testings/overview"
                 ]
               }
             ]
