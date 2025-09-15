@@ -29,6 +29,7 @@
                 "group": "API",
                 "pages": [
                   "integration/api/overview",
+                  "integration/api/api-keys",
                   "integration/api/idempotency",
                   "integration/api/rate-limits"                  
                 ]
