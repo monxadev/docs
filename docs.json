@@ -44,7 +44,13 @@
                   "integration/checkout/payment-links"
                 ]
               },
-              "integration/webhooks"
+              {
+                "group": "Webhooks",
+                "pages": [
+                  "integration/webhooks/overview",
+                  "integration/webhooks/event-types"
+                ]
+              }
             ]
           },
           {
