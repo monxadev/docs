@@ -1,4 +1,58 @@
 ---
 title: "Rate limits"
-description: "Description of your new file."
+description: "API rate limits help maintain platform stability by controlling request volumes and ensuring fair usage across all clients."
 ---
+
+Monxa applies **API rate limits** to maintain platform stability and ensure fair usage across all clients. These limits help prevent overloads while allowing legitimate traffic to flow smoothly.
+
+## How rate limits work
+
+Monxa uses **adaptive rate limiting**, which means you’ll generally only encounter limits if:
+
+- The platform is under **exceptional load**.
+- Your account exceeds configured thresholds.
+- We detect potential **system abuse**.
+
+<Note>
+  Rate limits apply to your **entire account** (all API keys, users, and sub-entities). They are not applied per credential.
+</Note>
+
+## Default concurrency limits
+
+By default, the maximum **requests per second (RPS)** across all Monxa APIs are:
+
+- **Read operations** → 100 RPS
+- **Write operations** → 100 RPS
+
+Sandbox environments have **lower limits**, since they are designed for testing and not production load. Your limits may differ if:
+
+- You’ve arranged custom limits with Monxa support.
+- Temporary restrictions are applied due to detected misuse.
+
+## Handling rate limits
+
+If you receive a **429 Too Many Requests** response, you’ve hit a rate limit.
+
+To handle this gracefully:
+
+1. **Retry with backoff** – Implement exponential backoff with jitter to retry at increasing intervals.
+2. **Client-side traffic management** – Use algorithms like **token bucket** or **leaky bucket** to control how many requests your system sends at once.
+3. **Monitor frequency** – If 429 responses are frequent, contact Monxa support to discuss your throughput requirements.
+
+## Load testing
+
+Load testing against Monxa APIs will likely trigger rate limiting. To avoid issues:
+
+- Coordinate with Monxa before conducting large-scale or stress testing.
+- We may be able to:
+  - Provide **temporary higher limits**.
+  - Arrange **dedicated testing windows**.
+  - Set up **special sandbox environments** for performance testing.
+
+<Warning>
+  **Important**: Do not use the standard sandbox for load testing—its reduced limits are not designed for stress scenarios.
+</Warning>
+
+<Check>
+  With Monxa’s rate limits, your integrations remain **stable, predictable, and fair across all users**.
+</Check>
