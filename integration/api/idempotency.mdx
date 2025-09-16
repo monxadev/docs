@@ -35,7 +35,9 @@ To make an idempotent request, include a **unique key** in the `Idempotency-Key`
 - If the first request fails due to validation or processing errors, **no idempotent result is stored** and retries will be reprocessed as new requests.
 - If **concurrent requests** are sent with the same key, Monxa processes only one. Others return a `409 Conflict` with the message _“another request is being processed”_.
 
-💡 **Tip**: If you retry after a network failure, wait at least **30 seconds** before sending a new attempt to reduce the chance of overlap.
+<Note>
+  If you retry after a network failure, wait at least **30 seconds** before sending a new attempt to reduce the chance of overlap.
+</Note>
 
 ## Example request
 
@@ -54,4 +56,6 @@ curl -X POST https://api.sandbox.monxa.com/payments \
   }'
 ```
 
-👉 With idempotency, Monxa ensures your payment retries stay **safe, predictable, and duplication-free**.
+<Check>
+  With idempotency, Monxa ensures your payment retries stay **safe, predictable, and duplication-free**.
+</Check>
