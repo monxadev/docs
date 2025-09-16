@@ -1,4 +1,61 @@
 ---
 title: "Idempotency"
-description: "Description of your new file."
+description: "Idempotency ensures safe retries by preventing duplicate charges or actions when API requests are re-sent."
 ---
+
+When building payment flows, network errors, timeouts, or unexpected disruptions can sometimes require you to **retry API requests**. To avoid duplicate charges or duplicated actions, Monxa supports **idempotency keys** on specific endpoints.
+
+## Why it matters
+
+Some merchant-initiated transactions (MIT) and retry logic during downtime (e.g., issuer/acquirer timeouts) may trigger multiple requests. Idempotency ensures only **one unique request is processed**, even if you send it multiple times.
+
+## Supported endpoints
+
+You can safely retry the following API endpoints using idempotency:
+
+- `/payments`
+- `/payments/{id}/authorizations`
+- `/payments/{id}/cancellations`
+- `/payments/{id}/captures`
+- `/payments/{id}/refunds`
+- `/payments/{id}/voids`
+- `/transfers`
+
+## How it works
+
+To make an idempotent request, include a **unique key** in the `Idempotency-Key` HTTP header.
+
+- **Key lifetime**: Idempotency keys are valid for **24 hours** in both sandbox and production. After this period, requests are treated as new.
+- **Custom window**: If you need a longer idempotency window in production, contact Monxa support.
+- **Recommended format**: Use **UUID v4** keys for uniqueness.
+
+### Response behavior
+
+- If the first request succeeds, subsequent retries with the same key return the **same HTTP status code and response body**.
+- If the first request fails due to validation or processing errors, **no idempotent result is stored** and retries will be reprocessed as new requests.
+- If **concurrent requests** are sent with the same key, Monxa processes only one. Others return a `409 Conflict` with the message _“another request is being processed”_.
+
+<Note>
+  If you retry after a network failure, wait at least **30 seconds** before sending a new attempt to reduce the chance of overlap.
+</Note>
+
+## Example request
+
+```bash
+curl -X POST https://api.sandbox.monxa.com/payments \
+  -H "Authorization: sk_test_1234567890" \
+  -H "Idempotency-Key: <YOUR_UNIQUE_KEY>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "source": {
+      "type": "token",
+      "token": "tok_example123"
+    },
+    "amount": 1000,
+    "currency": "USD"
+  }'
+```
+
+<Check>
+  With idempotency, Monxa ensures your payment retries stay **safe, predictable, and duplication-free**.
+</Check>
