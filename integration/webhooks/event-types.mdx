@@ -8,9 +8,18 @@ For each webhook, we provide:
 - **Event type** – the exact code string your webhook endpoint should listen for.
 - **Display name** – the human-readable label shown in the Monxa Dashboard.
 
-## **Gateway**
+## **Balances**
 
-Monxa webhooks notify you of key events across payments, refunds, captures, voids, and batch operations. These events help you track the full payment lifecycle and automate workflows in real time.
+These events help you automate funding flows and monitor account health in real time.
+
+| **Event type**                           | **Display **            | **Description**                                                                    |         |
+| ---------------------------------------- | :---------------------: | ---------------------------------------------------------------------------------- | :-----: |
+| `account_top_up_received`                | Top-up received         | Triggered when funds are successfully added to a account balance.                  | Example |
+| `account_low_balance_threshold_exceeded` | Balance below threshold | Triggered when a account balance falls below its configured low-balance threshold. | Example |
+
+## **Payments**
+
+These events help you track the full payment lifecycle, key events across payments, refunds, captures, voids and automate workflows in real time.
 
 | **Event type**               | Display                    | **Description**                                                                                                                            |         |
 | ---------------------------- | :------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------ | :-----: |
@@ -36,7 +45,7 @@ Monxa webhooks notify you of key events across payments, refunds, captures, void
 
 ## **Settlements**
 
-Monxa settlement webhooks notify you whenever a settlement changes state. These events help you track the full settlement lifecycle, from creation to completion (or rejection).
+These events help you track the full settlement lifecycle, from creation to completion (or rejection).
 
 | **Event type**          | Display               | **Description**                                                                                                                        |         |
 | ----------------------- | :-------------------: | -------------------------------------------------------------------------------------------------------------------------------------- | :-----: |
