@@ -1,4 +1,46 @@
 ---
 title: "Event types"
-description: "Description of your new file."
+description: "Monxa uses webhooks to notify your system of important events in real time."
 ---
+
+For each webhook, we provide:
+
+- **Event type** – the exact code string your webhook endpoint should listen for.
+- **Display name** – the human-readable label shown in the Monxa Dashboard.
+
+## **Gateway**
+
+Monxa webhooks notify you of key events across payments, refunds, captures, voids, and batch operations. These events help you track the full payment lifecycle and automate workflows in real time.
+
+| **Event type**               | Display                    | **Description**                                                                                                                            |         |
+| ---------------------------- | :------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------ | :-----: |
+| `card_verification_declined` | Card verification declined | Triggered when a card verification attempt is declined.                                                                                    | Example |
+| `card_verified`              | Card verified              | Triggered when a card verification is successful.                                                                                          | Example |
+| `payment_approved`           | Payment approved           | Triggered when a payment authorization request is approved.                                                                                | Example |
+| `payment_canceled`           | Payment canceled           | Triggered when a customer cancels a payment through an alternative payment method (APM) provider’s platform.                               | Example |
+| `payment_capture_declined`   | Payment capture declined   | Triggered when a capture request is declined.                                                                                              | Example |
+| `payment_capture_pending`    | Payment capture pending    | Triggered when a customer approves the payment on their banking page, but capture is still pending.                                        | Example |
+| `payment_captured`           | Payment captured           | Triggered when a capture is successfully completed.                                                                                        | Example |
+| `payment_declined`           | Payment declined           | Triggered when a payment authorization request fails (e.g., insufficient funds, issuer rejection, or timeout).                             | Example |
+| `payment_expired`            | Payment expired            | Triggered when an APM payment expires (does not apply to 3DS expiries).                                                                    | Example |
+| `payment_paid`               | Payment paid               | Triggered when a payout is successfully paid.                                                                                              | Example |
+| `payment_pending`            | Payment pending            | Triggered when an asynchronous payment is initiated and awaiting completion (e.g., customer redirect to an APM checkout page).             | Example |
+| `payment_refund_declined`    | Refund declined            | Triggered when a refund request is declined.                                                                                               | Example |
+| `payment_refund_pending`     | Refund pending             | Triggered when a refund request is initiated and awaiting completion.                                                                      | Example |
+| `payment_refunded`           | Refund successful          | Triggered when a refund is successfully processed.                                                                                         | Example |
+| `payment_retry_scheduled`    | Payment retry scheduled    | Triggered when a payment attempt fails and is scheduled for retry, including details of the retry schedule.                                | Example |
+| `payment_returned`           | Payment returned           | Triggered when a payment is returned by a bank or APM (e.g., ACH return, PTB failure). These returns occur outside Monxa’s direct control. | Example |
+| `payment_void_declined`      | Void declined              | Triggered when a void request is rejected by the card scheme after authorization but before capture.                                       | Example |
+| `payment_voided`             | Payment voided             | Triggered when a void request is successfully processed.                                                                                   | Example |
+| `bank_account_updated`       | Bank account updated       | (ACH Direct Debit only) Triggered when a customer’s bank account details are updated and must be used for future payments.                 | Example |
+
+## **Settlements**
+
+Monxa settlement webhooks notify you whenever a settlement changes state. These events help you track the full settlement lifecycle, from creation to completion (or rejection).
+
+| **Event type**          | Display               | **Description**                                                                                                                        |         |
+| ----------------------- | :-------------------: | -------------------------------------------------------------------------------------------------------------------------------------- | :-----: |
+| `settlement_generated`  | Settlement generated  | Triggered when a new settlement is created and ready for processing.                                                                   | Example |
+| `settlement_instructed` | Settlement instructed | Triggered when a settlement is approved and sent for processing—funds are being prepared for transfer.                                 | Example |
+| `settlement_rejected`   | Settlement rejected   | Triggered when a settlement is canceled before processing. Funds are returned to your Monxa balance.                                   | Example |
+| `settlement_returned`   | Settlement returned   | Triggered when a beneficiary bank rejects a settlement and returns the funds (e.g., due to invalid account details or banking issues). | Example |
