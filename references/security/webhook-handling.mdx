@@ -2,3 +2,71 @@
 title: "Webhook Handling"
 description: "Description of your new file."
 ---
+
+## Webhook Best Practices
+
+Webhooks are a core part of Monxa’s payment processing. Since many payment flows require **asynchronous end-user authentication** (especially for local payment methods that may take hours or even days to complete), webhooks are the standard way to keep your system updated in real time.
+
+Because webhooks rely on asynchronous messaging, unexpected behaviors such as duplicates, delays, or out-of-order delivery can occur. To ensure secure and reliable integration, follow these best practices:
+
+### 1. Handle Duplicate Webhooks Safely
+
+Your system may occasionally receive duplicate webhooks for the same event, for example:
+
+- When Monxa retries delivery because no acknowledgement was received.
+- When a payment channel provider goes down and later resends events.
+
+<Check>
+  **Best practice:**
+
+- Always validate incoming webhooks before processing.
+- Use Monxa’s unique IDs (e.g., `payment_id`, `capture_id`) to identify and prevent duplicate event handling.
+- Never deliver goods or services until the webhook is properly verified.
+</Check>
+
+### 2. Authenticate the Sender
+
+Every webhook from Monxa is signed with a token in the `x-callback-token` header.
+
+- Retrieve your token from the **Dashboard \> Webhook Settings**.
+- Always verify the token before processing.
+- Keep the token secret to prevent **man-in-the-middle (MITM) attacks** or fraudulent requests.
+
+### 3. Use Server-Side Handling
+
+Do not process webhooks on the client side.
+
+- Client-side handling exposes sensitive data and increases MITM risks.
+- Always receive and process webhooks securely on your server, then update your client application accordingly.
+
+### 4. Acknowledge Quickly
+
+When a webhook is received:
+
+- Immediately respond with a `2xx` status code.
+- Avoid heavy synchronous logic before sending the response. For example, respond `200` first, then fetch payment history or update dashboards asynchronously.
+
+This ensures your endpoint stays scalable and avoids unnecessary timeouts.
+
+### 5. Understand Retry Behavior
+
+If your system does not respond with `2xx`, Monxa will retry delivery up to **3 times with exponential backoff**.
+
+- If your system is temporarily down, you can rely on retries.
+- You can also manually re-trigger webhooks from the Monxa Dashboard.
+
+### 6. Do Not Assume Event Order
+
+Webhooks may not always arrive in sequence due to network latency or processing delays. For example, you might receive a **subscription cycle success** before a **subscription activation** event.
+
+<Check>
+  **Best practice:**
+
+- Design your system to handle out-of-order events gracefully.
+- Use a **messaging queue** as a buffer if immediate processing is not possible.
+- Implement idempotency in your processing logic.
+</Check>
+
+<Warning>
+   Webhooks are powerful but require careful handling. By authenticating events, preventing duplicate processing, acknowledging quickly, and designing for retries and out-of-order delivery, you’ll build a **secure, reliable, and resilient** integration with Monxa.
+</Warning>
