@@ -1,4 +1,49 @@
 ---
 title: "IP Whitelisting"
-description: "Description of your new file."
+description: "Secure your Monxa API access by restricting traffic to trusted IP addresses and ranges only."
 ---
+
+The **IP whitelisting** feature secures your Monxa API traffic by permitting only specific IP addresses or ranges to access your APIs. Any request from a non-allowlisted IP will be automatically rejected, helping protect your integration from foreign or malicious traffic.
+
+<Danger>
+  - IP Allowlist only applies to **direct API integrations** and does not work with plugins (e.g., Shopify, WooCommerce).
+  - Only **Admin users** can manage IP Allowlist settings in the Dashboard.
+</Danger>
+
+### Key Features
+
+- **IPv4 and CIDR support**: Add single IPs (e.g., `192.168.1.10`) or entire ranges in CIDR format (e.g., `192.0.2.0/24`).
+- **Flexible management**: Add or remove IPs anytime via the Dashboard.
+- **Strict validation**: If no IPs are added, Monxa will not enforce validation. Once IPs are listed, only those are allowed.
+
+### Managing IP Addresses
+
+**Add IPs**
+
+1. Go to **Dashboard \> IP Allowlist**.
+2. Click **Add IP Address**.
+3. Enter one or multiple IPs (one per line).
+4. Save to activate restrictions.
+
+**Delete IPs**
+
+1. Select the IP(s) you want to remove.
+2. Click **Delete** in the top-right corner.
+
+### Testing Your IP Allowlist
+
+To confirm your setup:
+
+1. Find your device or server IP (check [your IP here](#)).
+2. Use Postman or your API client to send requests to Monxa’s API.
+   - If the request originates from an **allowlisted IP**, it will succeed.
+   - If it originates from a **non-allowlisted IP**, it will be rejected.
+
+**Example**
+
+- Allowlisted IP: `yy.yy.yyy.yyy`.
+- Test request from a different IP → API will reject the request.
+
+<Tip>
+  IP Allowlist adds a strong layer of defense by restricting API access to trusted servers only, protecting your business from unauthorized traffic.
+</Tip>
