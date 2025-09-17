@@ -1,0 +1,85 @@
+---
+title: "Integration Security"
+description: "Best practices and guidelines to help you secure your Monxa integrations against fraud, abuse, and data breaches."
+---
+
+## Secure Integration Practices with Monxa
+
+At Monxa, we strongly recommend following secure integration practices to protect your business from potential abuse, fraud, or security breaches. This guide highlights key steps you can take to safeguard your systems, as well as industry standards and best practices to adopt.
+
+We encourage all merchants and partners to follow established security frameworks such as [**OWASP**](https://owasp.org)**, **[**NIST**](https://www.nist.gov)**, and **[**SANS**](https://www.sans.org/emea), and to conduct **regular security assessments** to maintain ongoing protection.
+
+Below are key areas to keep in mind when securing your Monxa integration:
+
+### 1. Always Authenticate Webhook Senders
+
+Monxa signs each webhook event by including a **unique token** in the `x-callback-token` header. This enables you to verify that the webhook is genuinely from Monxa, not a third party.
+
+- Retrieve your webhook token in your **Dashboard’s Webhook settings**.
+- Keep this token private and verify every event to prevent man-in-the-middle attacks and fraudulent activities.
+
+### 2. Protect Your Webhook Endpoint
+
+Your webhook endpoint is a critical touchpoint for processing transactions. To minimize risk:
+
+- Limit knowledge of the endpoint to **trusted personnel only**.
+- Avoid exposing the endpoint in repositories or frontend clients.
+- For additional protection, you may request **IP whitelisting** for webhook deliveries from Monxa.
+
+### 3. Verify Webhook Notification Details
+
+Even if your endpoint is compromised, you can add another layer of defense by validating webhook content:
+
+- Match the **transaction ID** and **amount** with your original request.
+- Confirm that the **status** aligns with the expected outcome.
+- If details do not match, do not proceed with order fulfillment or service provisioning.
+
+### 4. Handle Webhooks on the Server Side
+
+Webhooks should **never be processed on client applications**. Handling them on the frontend exposes sensitive data and increases risks of manipulation. Always:
+
+- Receive webhooks securely on your server.
+- Relay the outcome to your client application only after server-side validation.
+
+### 5. Do Not Confirm Orders from Client Redirections
+
+In some payment flows, users are redirected to a success or failure page. These redirections should **not be treated as proof of payment** because attackers can forge them.
+
+- Confirm payment status only through **webhook notifications** or, in limited cases, via **synchronous HTTP responses**.
+
+### 6. Keep API Keys Secure
+
+API keys must be kept strictly in secure environments. Never:
+
+- Store API keys in frontend clients.
+- Share or expose keys with broader permissions than necessary.\
+  Compromised API keys can allow attackers to exploit your account.
+
+### 7. Use IP Whitelisting
+
+Monxa allows you to **whitelist specific IP addresses** to further restrict system access. This is especially important for payout flows, where stricter controls significantly reduce the risk of abuse.
+
+### 8. Do Not Store Card Data Without PCI Certification
+
+Unless your system is **PCI DSS certified**, never store cardholder data.
+
+- Storing card data without certification leaves you vulnerable to breaches.
+- A data leak could lead to fines, regulatory action, and loss of customer trust.
+
+### 9. Sanitize Transaction Information in Communications
+
+Sensitive information should never be exposed in logs, screenshots, or communications. Always filter out:
+
+- API keys
+- Webhook tokens and endpoints
+- Card details
+- Personally identifiable information (PII)
+- Passwords
+
+<Warning>
+  Common leakage points include **raw system logs, screenshots, video recordings, or screen sharing sessions**. Always sanitize data before sharing internally or externally.
+</Warning>
+
+<Tip>
+  By following these practices, you not only strengthen the security of your Monxa integration but also reduce the risk of fraud, financial loss, and compliance issues.
+</Tip>

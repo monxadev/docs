@@ -105,7 +105,11 @@
             "pages": [
               "security/overview",
               "security/setup-2fa",
-              "security/ip-whitelisting"              
+              "security/users-permissions",
+              "security/api-keys",
+              "security/ip-whitelisting",
+              "security/integration-security",
+              "security/webhook-handling"              
             ]
           },
           {
