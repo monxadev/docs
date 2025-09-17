@@ -99,23 +99,23 @@
               "payouts/before-payout",
               "payouts/after-payout"
             ]
-          },
-          {
-            "group": "SECURITY",
-            "pages": [
-              "security/overview",
-              "security/setup-2fa",
-              "security/users-permissions",
-              "security/api-keys",
-              "security/ip-whitelisting",
-              "security/integration-security",
-              "security/webhook-handling"              
-            ]
-          },
+          },          
           {
             "group": "REFERENCES",
             "pages": [
-              "references/faq"
+              "references/faq",
+              {
+                "group": "Security",
+                "pages": [
+                  "references/security/overview",
+                  "references/security/setup-2fa",
+                  "references/security/users-permissions",
+                  "references/security/api-keys",
+                  "references/security/ip-whitelisting",
+                  "references/security/integration-security",
+                  "references/security/webhook-handling"   
+                ]
+              }
             ]
           }
         ]
