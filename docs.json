@@ -101,10 +101,17 @@
             ]
           },
           {
+            "group": "SECURITY",
+            "pages": [
+              "security/overview",
+              "security/setup-2fa",
+              "security/ip-whitelisting"              
+            ]
+          },
+          {
             "group": "REFERENCES",
             "pages": [
-              "references/faq",
-              "references/security"
+              "references/faq"
             ]
           }
         ]
