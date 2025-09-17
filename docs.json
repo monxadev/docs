@@ -108,11 +108,11 @@
                 "group": "Security",
                 "pages": [
                   "references/security/overview",
-                  "references/security/setup-2fa",
-                  "references/security/users-permissions",
-                  "references/security/api-keys",
-                  "references/security/ip-whitelisting",
                   "references/security/integration-security",
+                  "references/security/setup-2fa",
+                  "references/security/user-permissions",                  
+                  "references/security/api-keys",
+                  "references/security/ip-whitelisting",                  
                   "references/security/webhook-handling"   
                 ]
               }
