@@ -1,6 +1,6 @@
 ---
 title: "Webhook Handling"
-description: "Description of your new file."
+description: "Learn best practices for securely handling Monxa webhooks to ensure reliable, fraud-resistant, and resilient payment integrations."
 ---
 
 ## Webhook Best Practices
@@ -19,9 +19,9 @@ Your system may occasionally receive duplicate webhooks for the same event, for 
 <Check>
   **Best practice:**
 
-- Always validate incoming webhooks before processing.
-- Use Monxa’s unique IDs (e.g., `payment_id`, `capture_id`) to identify and prevent duplicate event handling.
-- Never deliver goods or services until the webhook is properly verified.
+  - Always validate incoming webhooks before processing.
+  - Use Monxa’s unique IDs (e.g., `payment_id`, `capture_id`) to identify and prevent duplicate event handling.
+  - Never deliver goods or services until the webhook is properly verified.
 </Check>
 
 ### 2. Authenticate the Sender
@@ -62,11 +62,11 @@ Webhooks may not always arrive in sequence due to network latency or processing 
 <Check>
   **Best practice:**
 
-- Design your system to handle out-of-order events gracefully.
-- Use a **messaging queue** as a buffer if immediate processing is not possible.
-- Implement idempotency in your processing logic.
+  - Design your system to handle out-of-order events gracefully.
+  - Use a **messaging queue** as a buffer if immediate processing is not possible.
+  - Implement idempotency in your processing logic.
 </Check>
 
 <Warning>
-   Webhooks are powerful but require careful handling. By authenticating events, preventing duplicate processing, acknowledging quickly, and designing for retries and out-of-order delivery, you’ll build a **secure, reliable, and resilient** integration with Monxa.
+  Webhooks are powerful but require careful handling. By authenticating events, preventing duplicate processing, acknowledging quickly, and designing for retries and out-of-order delivery, you’ll build a **secure, reliable, and resilient** integration with Monxa.
 </Warning>
