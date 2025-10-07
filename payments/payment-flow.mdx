@@ -34,16 +34,16 @@ POST /v1/charges
 
 <AccordionGroup>
   <Accordion title="Body Parameters">
-    | Field                | Type    | Required    | Description                                                                                                                            |
-    | :------------------- | :------ | :---------: | :------------------------------------------------------------------------------------------------------------------------------------- |
-    | `amount`             | integer | ✅           | The total amount for which the Order was created. Example: "10000" or "10000.23" for amount with decimal value                         |
-    | `currency`           | string  | ✅           | Currency of payment                                                                                                                    |
-    | `channel_code`       | string  | ✅           | Payment method code used to select the payment method provider.   Use routing payment channels mapping for full list of channel codes. |
-    | `channel_properties` | object  | conditional | Parameters that contain information required by the payment route provider to initiate payment processing.                             |
-    | `reference_id`       | string  | optional    | Merchant's payment reference ID                                                                                                        |
-    | `order_id`           | string  | optional    | Order ID associated with this charge                                                                                                   |
-    | `metadata`           | object  | optional    | Arbitrary key‑value                                                                                                                    |
-    | `description`        | string  | optional    | A custom description for the charge.                                                                                                   |
+    | Field                | Type    | Required    | Description                                                                                                                     |
+    | :------------------- | :------ | :---------: | :------------------------------------------------------------------------------------------------------------------------------ |
+    | `amount`             | integer | ✅           | The total amount for which the payment  was created. Example: "10000" or "10000.23" for amount with decimal value               |
+    | `currency`           | string  | ✅           | Currency of payment                                                                                                             |
+    | `channel_code`       | string  | ✅           | Channel code used to select the payment method provider.   Use routing payment channels mapping for full list of channel codes. |
+    | `channel_properties` | object  | conditional | Parameters that contain information required by the payment route provider to initiate payment processing.                      |
+    | `reference_id`       | string  | optional    | Merchant's payment reference ID                                                                                                 |
+    | `order_id`           | string  | optional    | Order ID associated with this charge                                                                                            |
+    | `metadata`           | object  | optional    | Arbitrary key‑value                                                                                                             |
+    | `description`        | string  | optional    | A custom description for the charge.                                                                                            |
   </Accordion>
   <Accordion title="Example — Charge‑only (QRIS)">
     ```bash
