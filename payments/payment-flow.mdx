@@ -4,7 +4,6 @@ title: "Payment Flow"
 
 Monxa simplifies accepting payments across Asia with a flexible **Order + Charge** model where **Order is optional**. Integrate either as **Charge-only** (fastest path) or **Order + Charge** (for retries, shared expiry, and unified lifecycle).
 
-
 |                    | Description                                                 | Typical Use Case                                                  |
 | :----------------- | :---------------------------------------------------------- | :---------------------------------------------------------------- |
 | **Charge only**    | Create and collect payment directly, **no order required**. | One‑off payments, server‑side billing, fastest integration.       |
@@ -29,8 +28,6 @@ sequenceDiagram
   MX-->>M: webhook charge.succeeded/failed/expired
 ```
 
-### 
-
 ```http
 POST /v1/charges
 ```
@@ -48,42 +45,40 @@ POST /v1/charges
     | `metadata`           | object  | optional    | Arbitrary key‑value                                                                                                                    |
     | `description`        | string  | optional    | A custom description for the charge.                                                                                                   |
   </Accordion>
+  <Accordion title="Example — Charge‑only (QRIS)">
+    ```bash
+    curl https://api.monxa.co/v1/charges \
+      -H "Content-Type: application/json" \
+      -H "Idempotency-Key: chg-12345-unique-key" \
+      -d '{
+        "amount": 150000,
+        "currency": "IDR",
+        "channel_code": "qris",
+        "reference_id": "INV-240001",
+        "metadata": { "field_1": "A1234", field_2: "user@example.com" }
+      }'
+    ```
+  </Accordion>
+  <Accordion title="Sample Response">
+    ```json
+    {
+      "id": "chg_01JAB1XYN01P3",
+      "reference_id": "INV-240001",
+      "amount": 150000,
+      "currency": "IDR",
+      "status": "pending",
+      "channel_code": "qris",
+      "actions": {
+        "type": "PRESENT_TO_CUSTOMER",
+        "qr_data": "00020101021226690012ID...",
+    	"qr_image": "data:image/png:base64,iVBORw0K...",
+        "expires_at": "2025-10-07T09:15:00Z"
+      },
+      "created_at": "2025-10-07T09:10:00Z"
+    }
+    ```
+  </Accordion>
 </AccordionGroup>
-
-**Example — Charge‑only (QRIS)**
-
-```bash
-curl https://api.monxa.co/v1/charges \
-  -H "Content-Type: application/json" \
-  -H "Idempotency-Key: chg-12345-unique-key" \
-  -d '{
-    "amount": 150000,
-    "currency": "IDR",
-    "channel_code": "qris",
-    "reference_id": "INV-240001",
-    "metadata": { "field_1": "A1234", field_2: "user@example.com" }
-  }'
-```
-
-**Sample Response**
-
-```json
-{
-  "id": "chg_01JAB1XYN01P3",
-  "reference_id": "INV-240001",
-  "amount": 150000,
-  "currency": "IDR",
-  "status": "pending",
-  "channel_code": "qris",
-  "actions": {
-    "type": "PRESENT_TO_CUSTOMER",
-    "qr_data": "00020101021226690012ID...",
-	"qr_image": "data:image/png:base64,iVBORw0K...",
-    "expires_at": "2025-10-07T09:15:00Z"
-  },
-  "created_at": "2025-10-07T09:10:00Z"
-}
-```
 
 **Charge Lifecycle & Actions**
 
@@ -137,10 +132,8 @@ POST /v1/orders
     | `metadata`         | object  | optional | Arbitrary key‑value             |
     | `items`            | object  | optional | Order items                     |
   </Accordion>
-</AccordionGroup>
-
-**Sample Response**
-
+  <Accordion title="Sample Response">
+    
 ```json
 {
   "id": "ord_01JAB23PQXYN01P3",
@@ -151,6 +144,10 @@ POST /v1/orders
   "created_at": "2025-10-07T09:00:00Z"
 }
 ```
+  </Accordion>
+  
+</AccordionGroup>
+
 
 Now, create a **Charge** under the order:
 
@@ -190,9 +187,10 @@ curl https://api.monxa.co/v1/charges \
 | `charge.expired`   | Charge window elapsed                 |
 | `charge.canceled`  | Manually canceled by merchant         |
 
-**`Example — charge.succeeded`**
 
-```json
+<AccordionGroup>
+  <Accordion title="Example — charge.succeeded">
+    ```json
 {
   "id": "evt_01WXYZ",
   "type": "charge.succeeded",
@@ -208,6 +206,9 @@ curl https://api.monxa.co/v1/charges \
   "created": "2025-10-07T09:11:22Z"
 }
 ```
+  </Accordion>
+</AccordionGroup>
+
 
 ### Order + Charge events
 
@@ -221,7 +222,9 @@ curl https://api.monxa.co/v1/charges \
 | `charge.succeeded` | Charge under order succeeded         |
 | `charge.failed`    | Charge under order failed            |
 
-**`Example — order.succeeded`**
+<AccordionGroup>
+  <Accordion title="Example — order.succeeded">
+    
 
 ```json
 {
@@ -239,6 +242,9 @@ curl https://api.monxa.co/v1/charges \
   "created": "2025-10-07T09:12:05Z"
 }
 ```
+  </Accordion>
+</AccordionGroup>
+
 
 ---
 
@@ -326,9 +332,9 @@ curl https://api.monxa.co/v1/charges \
 | `rate_limited`       | 429  | Too many requests                        | Backoff and retry                                     |
 | `internal_error`     | 500  | Unexpected error                         | Retry with idempotency; contact support if persistent |
 
-**Error Response Sample**
-
-```json
+<AccordionGroup>
+  <Accordion title="Error Response Sample">
+    ```json
 {
   "error": {
     "code": "invalid_request",
@@ -338,3 +344,5 @@ curl https://api.monxa.co/v1/charges \
   }
 }
 ```
+  </Accordion>
+</AccordionGroup>
