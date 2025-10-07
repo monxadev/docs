@@ -133,21 +133,18 @@ POST /v1/orders
     | `items`            | object  | optional | Order items                     |
   </Accordion>
   <Accordion title="Sample Response">
-    
-```json
-{
-  "id": "ord_01JAB23PQXYN01P3",
-  "amount": 100000,
-  "currency": "SGD",
-  "status": "open",
-  "expires_at": "2025-10-07T12:00:00Z",
-  "created_at": "2025-10-07T09:00:00Z"
-}
-```
+    ```json
+    {
+      "id": "ord_01JAB23PQXYN01P3",
+      "amount": 100000,
+      "currency": "SGD",
+      "status": "open",
+      "expires_at": "2025-10-07T12:00:00Z",
+      "created_at": "2025-10-07T09:00:00Z"
+    }
+    ```
   </Accordion>
-  
 </AccordionGroup>
-
 
 Now, create a **Charge** under the order:
 
@@ -177,122 +174,103 @@ curl https://api.monxa.co/v1/charges \
 
 ## Webhooks
 
-### Charge‑only events
-
-| Event              | Description                           |
-| :----------------- | :------------------------------------ |
-| `charge.pending`   | Charge initiated, awaiting completion |
-| `charge.succeeded` | Funds confirmed captured              |
-| `charge.failed`    | Provider decline or timeout           |
-| `charge.expired`   | Charge window elapsed                 |
-| `charge.canceled`  | Manually canceled by merchant         |
-
-
 <AccordionGroup>
+  <Accordion title="Charge‑only events">
+    | Event              | Description                           |
+    | :----------------- | :------------------------------------ |
+    | `charge.pending`   | Charge initiated, awaiting completion |
+    | `charge.succeeded` | Funds confirmed captured              |
+    | `charge.failed`    | Provider decline or timeout           |
+    | `charge.expired`   | Charge window elapsed                 |
+    | `charge.canceled`  | Manually canceled by merchant         |
+  </Accordion>
   <Accordion title="Example — charge.succeeded">
     ```json
-{
-  "id": "evt_01WXYZ",
-  "type": "charge.succeeded",
-  "data": {
-  	"id": "chg_01JAB1XYN01P3",
+    {
+    "id": "evt_01WXYZ",
+    "type": "charge.succeeded",
+    "data": {
+    "id": "chg_01JAB1XYN01P3",
     "amount": 150000,
     "currency": "IDR",
     "status": "succeeded",
     "collection_type": "qris",
     "reference_id": "INV-240001",
     "captured_at": "2025-10-07T09:11:22Z"
-  },
-  "created": "2025-10-07T09:11:22Z"
-}
-```
+    },
+    "created": "2025-10-07T09:11:22Z"
+    }
+    ```
   </Accordion>
 </AccordionGroup>
-
-
-### Order + Charge events
-
-| Event              | Description                          |
-| :----------------- | :----------------------------------- |
-| `order.created`    | New order created                    |
-| `order.succeeded`  | First charge succeeded; order closed |
-| `order.canceled`   | Order canceled by merchant           |
-| `order.expired`    | Order reached expiry time            |
-| `charge.pending`   | Charge initiated under order         |
-| `charge.succeeded` | Charge under order succeeded         |
-| `charge.failed`    | Charge under order failed            |
 
 <AccordionGroup>
+  <Accordion title="Order + Charge events">
+    | Event              | Description                          |
+    | :----------------- | :----------------------------------- |
+    | `order.created`    | New order created                    |
+    | `order.succeeded`  | First charge succeeded; order closed |
+    | `order.canceled`   | Order canceled by merchant           |
+    | `order.expired`    | Order reached expiry time            |
+    | `charge.pending`   | Charge initiated under order         |
+    | `charge.succeeded` | Charge under order succeeded         |
+    | `charge.failed`    | Charge under order failed            |
+  </Accordion>
   <Accordion title="Example — order.succeeded">
-    
-
-```json
-{
-  "id": "evt_01ABC",
-  "type": "order.succeeded",
-  "data": {
-    "object": {
-      "id": "ord_01JAB23PQXYN01P3",
-      "amount": 100000,
-      "currency": "SGD",
-      "status": "succeeded",
-      "completed_at": "2025-10-07T09:12:05Z"
+    ```json
+    {
+      "id": "evt_01ABC",
+      "type": "order.succeeded",
+      "data": {
+        "object": {
+          "id": "ord_01JAB23PQXYN01P3",
+          "amount": 100000,
+          "currency": "SGD",
+          "status": "succeeded",
+          "completed_at": "2025-10-07T09:12:05Z"
+        }
+      },
+      "created": "2025-10-07T09:12:05Z"
     }
-  },
-  "created": "2025-10-07T09:12:05Z"
-}
-```
+    ```
   </Accordion>
 </AccordionGroup>
-
-
----
 
 ## Objects & Schemas
 
-### Charge Object
-
-| Field                | Type    | Description                                                                        |
-| :------------------- | :------ | :--------------------------------------------------------------------------------- |
-| `id`                 | string  | Charge identifier                                                                  |
-| `amount`             | integer | Minor units                                                                        |
-| `currency`           | string  | ISO 4217                                                                           |
-| `status`             | string  | `pending` \| `succeeded` \| `failed` \| `expired` \| `canceled`                    |
-| `channel_code`       | string  | Please refer to collection type table (e.g.`qris` \| `dana` \| `bca_va` \| `card`) |
-| `channel_properties` | object  | Channel-code specific params (if provided)                                         |
-| `reference_id`       | string  | Merchant‑side reference/trace ID                                                   |
-| `actions`            | object  | See **Actions enum**                                                               |
-| `order_id`           | string  | Present when charge is under an order                                              |
-| `customer_id`        | string  | Optional customer linkage                                                          |
-| `created_at`         | string  | ISO 8601                                                                           |
-| `captured_at`        | string  | ISO 8601 (when succeeded)                                                          |
-| `expires_at`         | string  | ISO 8601 (charge window, if any)                                                   |
-| `metadata`           | object  | Arbitrary key‑value                                                                |
-
-**`actions object`**
-
-| Field          | Type   | Description                                            |
-| :------------- | :----- | :----------------------------------------------------- |
-| `type`         | string | `REDIRECT_CUSTOMER` \| `PRESENT_TO_CUSTOMER` \| `NONE` |
-| `redirect_url` | string | For redirect flows                                     |
-| `qr_data`      | string | For QR flows (e.g., QRIS)                              |
-| `qr_image`     | string | Base64 image                                           |
-| `va_number`    | string | For virtual account/bank transfer                      |
-| `expires_at`   | string | When action becomes invalid                            |
-
-### Order Object
-
-| Field         | Type    | Description                                         |
-| :------------ | :------ | :-------------------------------------------------- |
-| `id`          | string  | Order identifier                                    |
-| `object`      | string  | Always `"order"`                                    |
-| `amount`      | integer | Minor units                                         |
-| `currency`    | string  | ISO 4217                                            |
-| `status`      | string  | `pending` \| `succeeded` \| `canceled` \| `expired` |
-| `expires_at`  | string  | Global expiry across attempts                       |
-| `created_at`  | string  | ISO 8601                                            |
-| `customer_id` | string  | Optional linkage                                    |
-| `metadata`    | object  | Arbitrary key‑value                                 |
+<AccordionGroup>
+  <Accordion title="Charge Object">
+    | Field                | Type    | Description                                                                        |
+    | :------------------- | :------ | :--------------------------------------------------------------------------------- |
+    | `id`                 | string  | Charge identifier                                                                  |
+    | `amount`             | integer | Minor units                                                                        |
+    | `currency`           | string  | ISO 4217                                                                           |
+    | `status`             | string  | `pending` \| `succeeded` \| `failed` \| `expired` \| `canceled`                    |
+    | `channel_code`       | string  | Please refer to collection type table (e.g.`qris` \| `dana` \| `bca_va` \| `card`) |
+    | `channel_properties` | object  | Channel-code specific params (if provided)                                         |
+    | `reference_id`       | string  | Merchant‑side reference/trace ID                                                   |
+    | `actions`            | object  | See **Actions enum**                                                               |
+    | `order_id`           | string  | Present when charge is under an order                                              |
+    | `customer_id`        | string  | Optional customer linkage                                                          |
+    | `created_at`         | string  | ISO 8601                                                                           |
+    | `captured_at`        | string  | ISO 8601 (when succeeded)                                                          |
+    | `expires_at`         | string  | ISO 8601 (charge window, if any)                                                   |
+    | `metadata`           | object  | Arbitrary key‑value                                                                |
+  </Accordion>
+  <Accordion title="Order Object">
+    | Field         | Type    | Description                                         |
+    | :------------ | :------ | :-------------------------------------------------- |
+    | `id`          | string  | Order identifier                                    |
+    | `object`      | string  | Always `"order"`                                    |
+    | `amount`      | integer | Minor units                                         |
+    | `currency`    | string  | ISO 4217                                            |
+    | `status`      | string  | `pending` \| `succeeded` \| `canceled` \| `expired` |
+    | `expires_at`  | string  | Global expiry across attempts                       |
+    | `created_at`  | string  | ISO 8601                                            |
+    | `customer_id` | string  | Optional linkage                                    |
+    | `metadata`    | object  | Arbitrary key‑value                                 |
+  </Accordion>
+</AccordionGroup>
 
 ## Integration Patterns
 
@@ -335,14 +313,14 @@ curl https://api.monxa.co/v1/charges \
 <AccordionGroup>
   <Accordion title="Error Response Sample">
     ```json
-{
-  "error": {
+    {
+    "error": {
     "code": "invalid_request",
     "message": "amount must be >= 1",
     "param": "amount",
     "request_id": "req_01XYZ"
-  }
-}
-```
+    }
+    }
+    ```
   </Accordion>
 </AccordionGroup>
