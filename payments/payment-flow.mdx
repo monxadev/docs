@@ -187,9 +187,10 @@ curl https://api.monxa.co/v1/charges \
 | `charge.expired`   | Charge window elapsed                 |
 | `charge.canceled`  | Manually canceled by merchant         |
 
-**`Example — charge.succeeded`**
 
-```json
+<AccordionGroup>
+  <Accordion title="Example — charge.succeeded">
+    ```json
 {
   "id": "evt_01WXYZ",
   "type": "charge.succeeded",
@@ -205,6 +206,9 @@ curl https://api.monxa.co/v1/charges \
   "created": "2025-10-07T09:11:22Z"
 }
 ```
+  </Accordion>
+</AccordionGroup>
+
 
 ### Order + Charge events
 
@@ -218,7 +222,9 @@ curl https://api.monxa.co/v1/charges \
 | `charge.succeeded` | Charge under order succeeded         |
 | `charge.failed`    | Charge under order failed            |
 
-**`Example — order.succeeded`**
+<AccordionGroup>
+  <Accordion title="Example — order.succeeded">
+    
 
 ```json
 {
@@ -236,6 +242,9 @@ curl https://api.monxa.co/v1/charges \
   "created": "2025-10-07T09:12:05Z"
 }
 ```
+  </Accordion>
+</AccordionGroup>
+
 
 ---
 
@@ -323,9 +332,9 @@ curl https://api.monxa.co/v1/charges \
 | `rate_limited`       | 429  | Too many requests                        | Backoff and retry                                     |
 | `internal_error`     | 500  | Unexpected error                         | Retry with idempotency; contact support if persistent |
 
-**Error Response Sample**
-
-```json
+<AccordionGroup>
+  <Accordion title="Error Response Sample">
+    ```json
 {
   "error": {
     "code": "invalid_request",
@@ -335,3 +344,5 @@ curl https://api.monxa.co/v1/charges \
   }
 }
 ```
+  </Accordion>
+</AccordionGroup>
