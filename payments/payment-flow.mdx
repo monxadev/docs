@@ -9,7 +9,7 @@ Monxa simplifies accepting payments across Asia with a flexible **Order + Charge
 | **Charge‑only**    | Create and collect payment directly — **no order required**. | One‑off payments, server‑side billing, fastest integration.       |
 | **Order + Charge** | Create an order first, then one or more charges under it.    | Checkouts needing retries, shared expiry, consolidated reporting. |
 
-### Option 1: Charge‑only (Quick Start)
+### Option 1: Charge‑only
 
 Create a **Charge** directly (no `order_id`). A charge is a single attempt to collect funds via a specific method (e.g., bank transfer, QRIS, e‑wallet, card).
 
@@ -82,7 +82,7 @@ curl https://api.monxa.co/v1/charges \
 
 ---
 
-### Option 2: Order + Charge (Quick Start)
+### Option 2: Order + Charge
 
 An **Order** represents payment intent and provides a shared lifecycle over multiple attempts (charges). Use when you need retries, consolidated reporting, and global expiry across attempts.
 
