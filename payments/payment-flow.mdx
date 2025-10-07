@@ -45,7 +45,7 @@ POST /v1/charges
     | `metadata`           | object  | optional    | Arbitrary key‑value                                                                                                             |
     | `description`        | string  | optional    | A custom description for the charge.                                                                                            |
   </Accordion>
-  <Accordion title="Example — Charge‑only (QRIS)">
+  <Accordion title="Request Example : Charge‑only (QRIS)">
     ```bash
     curl https://api.monxa.io/v1/charges \
       -H "Content-Type: application/json" \
@@ -59,7 +59,7 @@ POST /v1/charges
       }'
     ```
   </Accordion>
-  <Accordion title="Sample Response">
+  <Accordion title="Response Example">
     ```json
     {
       "id": "chg_01JAB1XYN01P3",
@@ -131,7 +131,38 @@ POST /v1/orders
     | `metadata`         | object  | optional | Arbitrary key‑value             |
     | `items`            | object  | optional | Order items                     |
   </Accordion>
-  <Accordion title="Sample Response">
+  <Accordion title="Request Example : Create Order">
+    ```cUrl
+    curl -X POST "https://api.monxa.co/v1/orders" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer YOUR_API_KEY" \
+    -H "Idempotency-Key: your-unique-idempotency-key" \
+    -d '{
+    "amount": 500000,
+    "currency": "IDR",
+    "customer_id": "cust_abc123",
+    "allowed_channels": ["card", "qris"],
+    "reference_id": "order-ref-0001",
+    "expires_at": "2025-10-30T15:00:00Z",
+    "description": "Purchase of item #1234",
+    "metadata": {
+      "user_id": "user789",
+      "campaign": "fall_sale"
+    },
+    "items": [
+      {
+        "name": "Cool Widget",
+        "quantity": 2,
+        "unit_price": 2500,
+        "metadata": {
+          "sku": "CW-001"
+        }
+      }
+    ]
+    }'
+    ```
+  </Accordion>
+  <Accordion title="Response Example">
     ```json
     {
       "id": "ord_01JAB23PQXYN01P3",
