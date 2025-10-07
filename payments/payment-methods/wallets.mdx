@@ -39,31 +39,9 @@ sequenceDiagram
     Merchant: Show error / fallback  
   end
   Monxa->>Merchant: Later: settlement & reconciliation
-
 ```
+
 ---
-
-### Flowchart (Mermaid)
-
-```markdown
-```mermaid
-flowchart TD
-  A[User selects e-wallet] --> B[Merchant calls Monxa API]
-  B --> C[Monxa requests wallet provider]
-  C --> D[Wallet provider returns approval UI / redirect]
-  D --> E[User authenticates & approves]
-  E --> F[Wallet provider callback to Monxa]
-  F --> G[Monxa notifies Merchant]
-  G --> H{Status?}
-  H -- Success --> I[Fulfill order]
-  H -- Failure --> J[Show error / fallback]
-  G --> K[Later: settlement & reconciliation]
-```
-
-
-
-You can also visualize this as a flowchart:
-
 
 ## API Endpoints & Sample Payloads
 
