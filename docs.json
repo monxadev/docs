@@ -61,6 +61,7 @@
             "group": "ACCEPT PAYMENTS",
             "pages": [
               "payments/overview",
+              "payments/payment-flow",
               {
                 "group": "Payment Methods",
                 "pages": [
