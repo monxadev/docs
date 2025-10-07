@@ -4,6 +4,8 @@ title: "Payment Flow"
 
 Monxa simplifies accepting payments across Asia with a flexible **Order + Charge** model where **Order is optional**. Integrate either as **Charge-only** (fastest path) or **Order + Charge** (for retries, shared expiry, and unified lifecycle).
 
+---
+
 |                    | Description                                                 | Typical Use Case                                                  |
 | :----------------- | :---------------------------------------------------------- | :---------------------------------------------------------------- |
 | **Charge only**    | Create and collect payment directly, **no order required**. | One‑off payments, server‑side billing, fastest integration.       |
@@ -145,7 +147,7 @@ curl https://api.monxa.co/v1/charges \
 
 ---
 
-## 🔔 Webhooks
+## Webhooks
 
 ### Charge‑only events
 
@@ -209,7 +211,7 @@ curl https://api.monxa.co/v1/charges \
 
 ---
 
-## 🧱 Objects & Schemas
+## Objects & Schemas
 
 ### Charge Object
 
@@ -255,9 +257,7 @@ curl https://api.monxa.co/v1/charges \
 | `customer_id` | string  | Optional linkage                                    |
 | `metadata`    | object  | Arbitrary key‑value                                 |
 
----
-
-## 🧩 Integration Patterns
+## Integration Patterns
 
 ### Idempotency
 
@@ -282,9 +282,7 @@ curl https://api.monxa.co/v1/charges \
 
 > **Note**: Currency and amount are fixed **per charge** in Charge‑only mode; fixed **per order** in Order + Charge mode.
 
----
-
-## ❗ Errors
+## Errors
 
 | Code                 | HTTP | Message                                  | What to do                                            |
 | :------------------- | :--: | :--------------------------------------- | :---------------------------------------------------- |
