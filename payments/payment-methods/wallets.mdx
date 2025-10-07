@@ -25,7 +25,7 @@ sequenceDiagram
   participant P as Wallet Provider
 
   C->>M: Initiate purchase, select “e-wallet”
-  M->>MX: POST /payments/ewallet (wallet_provider, amount, return_url, metadata)
+  M->>MX: POST /v1/charges (channel_code, amount, return_url, metadata)
   MX->>P: Create e-wallet payment request
   P-->>MX: Return approval UI / widget token
   MX-->>M: Return redirect / widget data
