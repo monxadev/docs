@@ -22,7 +22,7 @@ sequenceDiagram
   participant C as Customer
   participant M as Merchant
   participant MX as Monxa
-  participant P Wallet Provider
+  participant P as Wallet Provider
 
   C->>M: Initiate purchase, select “e-wallet”
   M->>MX: POST /payments/ewallet (wallet_provider, amount, return_url, metadata)
@@ -33,15 +33,8 @@ sequenceDiagram
   C->>P: Authenticate & approve (PIN / OTP / in-app)
   P-->>MX: Webhook / callback with status (success / failure / pending)
   MX->>M: Webhook / callback to merchant with final status
-  alt success
-    Merchant: Fulfill order
-  else failure
-    Merchant: Show error / fallback  
-  end
   MX->>M: Later: settlement & reconciliation
 ```
-
-
 
 ---
 
