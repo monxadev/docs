@@ -11,7 +11,7 @@ Think of Monxa as your **all-in-one merchant payment hub**. Instead of connectin
 
 ### Behind the scenes:
 
-- Monxa connects with ****banks, digital wallets, card processors andalternative providers**** .
+- Monxa connects with ****banks, digital wallets, card processors ****and****alternative providers****  .
 - Our **smart routing engine** ensures payments are processed through the most reliable path.
 - Built-in redundancy reduces drop-offs and increases success rates.
 
@@ -98,87 +98,12 @@ Monxa supports seven categories of payment methods. These methods are available 
   </Tab>
 </Tabs>
 
-### 💰 Pricing and Fees
+### Pricing and Fees
 
 For details on transaction costs, see our [pricing guide](#).
 
-### 🔗 Simple Integration
+### Simple Integration
 
 Each category shares common features, a unified integration, and similar checkout experiences. Once you’ve integrated one payment method, adding others within the same family requires minimal changes.
 
 👉 To explore which options best fit your business, pelase contact our customer success at [sales@monxa.co](mailto:sales@monxa.co)
-
-## Payment Flow
-
-Monxa makes accepting payments across Asia simple and seamless by organizing the process into **order** and **charge**.
-
-### Step 1: Create an Order
-
-An **Order** represents the **customer’s intention to make a payment** before the actual transaction occurs. It acts as a placeholder or “plan” for a payment, allowing the merchant to prepare and manage the transaction details ahead of time.
-
-<AccordionGroup>
-  <Accordion title="Key Points" icon="star" iconType="solid">
-    - \*\*Represents intent \*\*→ An **order** is only the **_plan_** to pay, no money moves until a charge is created.
-    - **Single source of truth** → It tracks the entire lifecycle of a transaction (pending, succeeded, canceled, expired).
-    - **Supports multiple attempts** → Customers can retry failed payments with different methods under the same **order**.
-    - **Expiry built-in** → Each **order** has an expiry time to prevent indefinite open transactions.
-    - **Locks in details** → Amount and currency are fixed once the **order** is created, ensuring consistency.
-    - **Connects to Charges** → All payment **charges** link back to the same **order**, giving clear traceability.
-    - **Merchant control** → Merchants can cancel **order** if an order is abandoned or invalid.
-  </Accordion>
-  <Accordion title="Important Notes" icon="triangle-exclamation" iconType="solid">
-    When working with **Order**, keep these points in mind:
-
-    - **Expiry Time** → An **order** has a set lifetime. Once expired, no new charges can be created under it.
-    - **One Final State** → An**order**  can only end in **succeeded, canceled, or expired** state — It cannot be reused once closed.
-    - **Amount & Currency Lock** → The amount and currency are fixed at creation and cannot be changed later.
-    - **Multiple Charges** → You can attempt multiple charges under the same **order**, but only one can succeed.
-    - **Cancellation** → Merchants may cancel an **order** manually if the customer abandons checkout or requests cancellation.
-    - **Concurrency** → Avoid creating multiple active **orders** for the same session to prevent double billing.
-    - **Lifecycle Handling** → Always track **order** status (via API or webhooks) to handle cases like failure, expiration, or cancellation.
-  </Accordion>
-</AccordionGroup>
-
-<Tip>
-  **Analogy:** Think of an **Order** as **placing items in a shopping cart**—it shows the intent to purchase, but no money has been transferred yet.
-</Tip>
-
-### Step 2: Create a Charge
-
-A **Charge** represents the **actual attempt to collect money** from the customer, based on an Order.  Each charge is tied to a payment method (e.g., credit card, bank transfer, e-wallet) and processes the transaction.
-
-<AccordionGroup>
-  <Accordion title="Key Points" icon="star" iconType="solid">
-    - **Linked to an Order:** A **charge** can only exist within an active order.
-    - **Execution of payment:** It’s the step where the system tries to move money from the customer to the merchant.
-    - **Has its own expiry:** A **charge** attempt must be completed within its allowed time, and cannot exceed the order's expiry.
-    - **Retry allowed:** If a **charge** fails, another charge can be created under the same order.
-    - **Completion:** When a **charge** succeeds, the **order**  is marked as completed, and the transaction is finalized.
-  </Accordion>
-  <Accordion title="Important Notes" icon="triangle-exclamation">
-    When working with **charges**, please keep the following in mind to avoid errors or duplicate payments:
-
-    - **Charge Expiry** → Each **charge** has its own expiry, but it cannot extend beyond the parent **order’s expiry**.
-    - **Avoid Duplicates** → Always check the **charge** status before retrying. Do not create multiple charges at the same time for the same intent.
-    - **Failed Charges** → A failed **charge** does **not** complete the order. Customers can retry with another method until the order expires.
-    - **Pending Status** → Some methods (e.g., bank transfers, QRIS, wallets) may return a **pending** status. Always use **webhooks** or polling to track updates.
-    - **Idempotency** → Use **idempotency keys** (if supported) to prevent accidental duplicate charges when resending API requests.
-    - **Currency & Amount Lock** → Once an order is created, its **amount and currency are fixed**; all charges must match.
-    - **Declines & Fraud Checks** → Be ready to handle declines from insufficient funds, fraud screening, or restrictions from payment providers.
-  </Accordion>
-</AccordionGroup>
-
-<Tip>
-  **Analogy:** Think of an ****order as the plan, and acharge as the action****  of swiping the card or confirming the transfer.
-</Tip>
-
-### Step 3: Charge Processing
-
-A **charge** represents the actual attempt to collect money. Once created, it will either succeed and finalize the transaction, or fail and allow the customer to retry.
-
-- **When a charge succeeds:**
-  - The **charge** status is updated to **completed**.
-  - The linked **order** is also marked as **completed**, finalizing the transaction.
-- **When a charge fails:**
-  - The **order** stays active.
-  - Customers can retry the payment **charge** with the same or a different method until the **order** expires.
