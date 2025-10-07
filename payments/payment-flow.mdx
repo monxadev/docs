@@ -15,6 +15,21 @@ Monxa simplifies accepting payments across Asia with a flexible **Order + Charge
 
 Create a **Charge** directly (no `order_id`). A charge is a single attempt to collect funds via a specific method (e.g., bank transfer, QRIS, e‑wallet, card).
 
+```mermaid
+sequenceDiagram
+  participant M as Merchant Backend
+  participant MX as Monxa API
+  participant P as Payment Provider
+  M->>MX: POST /v1/charges (Idempotency-Key)
+  MX-->>M: 200 OK {status: pending, actions}
+  M->>Customer: Show redirect/QR (if any)
+  Customer->>P: Complete action
+  P->>MX: Notify result
+  MX-->>M: webhook charge.succeeded/failed/expired
+```
+
+### 
+
 ```http
 POST /v1/charges
 ```
@@ -311,19 +326,6 @@ curl https://api.monxa.co/v1/charges \
 ## High‑Level Flows
 
 ### Charge‑only
-
-```mermaid
-sequenceDiagram
-  participant M as Merchant Backend
-  participant MX as Monxa API
-  participant P as Payment Provider
-  M->>MX: POST /v1/charges (Idempotency-Key)
-  MX-->>M: 200 OK {status: pending, actions}
-  M->>Customer: Show redirect/QR (if any)
-  Customer->>P: Complete action
-  P->>MX: Notify result
-  MX-->>M: webhook charge.succeeded/failed/expired
-```
 
 ### Order + Charge
 
