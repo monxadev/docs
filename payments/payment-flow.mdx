@@ -1,13 +1,10 @@
 ---
 title: "Payment Flow"
-description: "Description of your new file."
 ---
 
 Monxa simplifies accepting payments across Asia with a flexible **Order + Charge** model where **Order is optional**. Integrate either as **Charge-only** (fastest path) or **Order + Charge** (for retries, shared expiry, and unified lifecycle).
 
-### Modes at a Glance
-
-| Mode               | Description                                                  | Typical Use Case                                                  |
+| Options            | Description                                                  | Typical Use Case                                                  |
 | :----------------- | :----------------------------------------------------------- | :---------------------------------------------------------------- |
 | **Charge‑only**    | Create and collect payment directly — **no order required**. | One‑off payments, server‑side billing, fastest integration.       |
 | **Order + Charge** | Create an order first, then one or more charges under it.    | Checkouts needing retries, shared expiry, consolidated reporting. |
@@ -54,7 +51,7 @@ curl https://api.monxa.co/v1/charges \
 
 ```json
 {
-  "id": "cha_01JAB1XYN01P3",
+  "id": "chg_01JAB1XYN01P3",
   "reference_id": "INV-240001",
   "amount": 150000,
   "currency": "IDR",
@@ -72,10 +69,10 @@ curl https://api.monxa.co/v1/charges \
 
 **Charge Lifecycle & Actions**
 
-- **Statuses**: `pending`, `requires_action`, `succeeded`, `failed`, `expired`, `canceled`
+- **Statuses**: `pending`, `succeeded`, `failed`, `expired`, `canceled`
 - **Actions enum**
-  - `REDIRECT_CUSTOMER` → send user to provider/3DS page
-  - `PRESENT_TO_CUSTOMER` → display QR/VA/instructions
+  - `REDIRECT_CUSTOMER` → send user to provider / 3DS page
+  - `PRESENT_TO_CUSTOMER` → display QR / VA / instructions
   - `NONE` → no action needed
 
 > **Rules**\
@@ -152,13 +149,13 @@ curl https://api.monxa.co/v1/charges \
 
 ### Charge‑only events
 
-| Event                    | Description                           |
-| :----------------------- | :------------------------------------ |
-| `charge.action_required` | Charge initiated, awaiting completion |
-| `charge.succeeded`       | Funds confirmed captured              |
-| `charge.failed`          | Provider decline or timeout           |
-| `charge.expired`         | Charge window elapsed                 |
-| `charge.canceled`        | Manually canceled by merchant         |
+| Event              | Description                           |
+| :----------------- | :------------------------------------ |
+| `charge.pending`   | Charge initiated, awaiting completion |
+| `charge.succeeded` | Funds confirmed captured              |
+| `charge.failed`    | Provider decline or timeout           |
+| `charge.expired`   | Charge window elapsed                 |
+| `charge.canceled`  | Manually canceled by merchant         |
 
 **`Example — charge.succeeded`**
 
@@ -167,18 +164,15 @@ curl https://api.monxa.co/v1/charges \
   "id": "evt_01WXYZ",
   "type": "charge.succeeded",
   "data": {
-    "object": {
-      "id": "chg_01JAB1XYN01P3",
-      "amount": 150000,
-      "currency": "IDR",
-      "status": "succeeded",
-      "payment_method_type": "qris",
-      "client_reference_id": "INV-240001",
-      "captured_at": "2025-10-07T09:11:22Z"
-    }
+  	"id": "chg_01JAB1XYN01P3",
+    "amount": 150000,
+    "currency": "IDR",
+    "status": "succeeded",
+    "collection_type": "qris",
+    "reference_id": "INV-240001",
+    "captured_at": "2025-10-07T09:11:22Z"
   },
-  "created": "2025-10-07T09:11:22Z",
-  "signature": "t=1696660282,v1=af3c..."
+  "created": "2025-10-07T09:11:22Z"
 }
 ```
 
@@ -209,8 +203,7 @@ curl https://api.monxa.co/v1/charges \
       "completed_at": "2025-10-07T09:12:05Z"
     }
   },
-  "created": "2025-10-07T09:12:05Z",
-  "signature": "t=1696660325,v1=93df..."
+  "created": "2025-10-07T09:12:05Z"
 }
 ```
 
@@ -220,23 +213,22 @@ curl https://api.monxa.co/v1/charges \
 
 ### Charge Object
 
-| Field                 | Type    | Description                                                                          |
-| :-------------------- | :------ | :----------------------------------------------------------------------------------- |
-| `id`                  | string  | Charge identifier                                                                    |
-| `object`              | string  | Always `"charge"`                                                                    |
-| `amount`              | integer | Minor units                                                                          |
-| `currency`            | string  | ISO 4217                                                                             |
-| `status`              | string  | `pending` \| `requires_action` \| `succeeded` \| `failed` \| `expired` \| `canceled` |
-| `payment_method_type` | string  | `qris` \| `bank_transfer` \| `ewallet` \| `card` (future)                            |
-| `payment_method`      | object  | Method‑specific params (if provided)                                                 |
-| `client_reference_id` | string  | Merchant‑side reference/trace ID                                                     |
-| `actions`             | object  | See **Actions enum**                                                                 |
-| `order_id`            | string  | Present when charge is under an order                                                |
-| `customer_id`         | string  | Optional customer linkage                                                            |
-| `created_at`          | string  | ISO 8601                                                                             |
-| `captured_at`         | string  | ISO 8601 (when succeeded)                                                            |
-| `expires_at`          | string  | ISO 8601 (charge window, if any)                                                     |
-| `metadata`            | object  | Arbitrary key‑value                                                                  |
+| Field                | Type    | Description                                                                        |
+| :------------------- | :------ | :--------------------------------------------------------------------------------- |
+| `id`                 | string  | Charge identifier                                                                  |
+| `amount`             | integer | Minor units                                                                        |
+| `currency`           | string  | ISO 4217                                                                           |
+| `status`             | string  | `pending` \| `succeeded` \| `failed` \| `expired` \| `canceled`                    |
+| `channel_code`       | string  | Please refer to collection type table (e.g.`qris` \| `dana` \| `bca_va` \| `card`) |
+| `channel_properties` | object  | Channel-code specific params (if provided)                                         |
+| `reference_id`       | string  | Merchant‑side reference/trace ID                                                   |
+| `actions`            | object  | See **Actions enum**                                                               |
+| `order_id`           | string  | Present when charge is under an order                                              |
+| `customer_id`        | string  | Optional customer linkage                                                          |
+| `created_at`         | string  | ISO 8601                                                                           |
+| `captured_at`        | string  | ISO 8601 (when succeeded)                                                          |
+| `expires_at`         | string  | ISO 8601 (charge window, if any)                                                   |
+| `metadata`           | object  | Arbitrary key‑value                                                                |
 
 **`actions object`**
 
@@ -244,7 +236,8 @@ curl https://api.monxa.co/v1/charges \
 | :------------- | :----- | :----------------------------------------------------- |
 | `type`         | string | `REDIRECT_CUSTOMER` \| `PRESENT_TO_CUSTOMER` \| `NONE` |
 | `redirect_url` | string | For redirect flows                                     |
-| `qr_string`    | string | For QR flows (e.g., QRIS)                              |
+| `qr_data`      | string | For QR flows (e.g., QRIS)                              |
+| `qr_image`     | string | Base64 image                                           |
 | `va_number`    | string | For virtual account/bank transfer                      |
 | `expires_at`   | string | When action becomes invalid                            |
 
@@ -304,7 +297,7 @@ curl https://api.monxa.co/v1/charges \
 | `rate_limited`       | 429  | Too many requests                        | Backoff and retry                                     |
 | `internal_error`     | 500  | Unexpected error                         | Retry with idempotency; contact support if persistent |
 
-**Error Response Shape**
+**Error Response Sample**
 
 ```json
 {
@@ -317,9 +310,7 @@ curl https://api.monxa.co/v1/charges \
 }
 ```
 
----
-
-## 🧭 Mermaid — High‑Level Flows
+## High‑Level Flows
 
 ### Charge‑only
 
