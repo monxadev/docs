@@ -19,27 +19,29 @@ Below is a simplified architecture showing how Monxa, the merchant, and the wall
 
 ```mermaid
 sequenceDiagram
-  participant User
-  participant Merchant
-  participant Monxa
-  participant WalletProvider
+  participant C as Customer
+  participant M as Merchant
+  participant MX as Monxa
+  participant P Wallet Provider
 
-  User->>Merchant: Initiate purchase, select “e-wallet”
-  Merchant->>Monxa: POST /payments/ewallet (wallet_provider, amount, return_url, metadata)
-  Monxa->>WalletProvider: Create e-wallet payment request
-  WalletProvider-->>Monxa: Return approval UI / widget token
-  Monxa-->>Merchant: Return redirect / widget data
-  Merchant->>User: Redirect or render wallet UI
-  User->>WalletProvider: Authenticate & approve (PIN / OTP / in-app)
-  WalletProvider-->>Monxa: Webhook / callback with status (success / failure / pending)
-  Monxa->>Merchant: Webhook / callback to merchant with final status
+  C->>M: Initiate purchase, select “e-wallet”
+  M->>MX: POST /payments/ewallet (wallet_provider, amount, return_url, metadata)
+  MX->>P: Create e-wallet payment request
+  P-->>MX: Return approval UI / widget token
+  MX-->>M: Return redirect / widget data
+  M->>C: Redirect or render wallet UI
+  C->>P: Authenticate & approve (PIN / OTP / in-app)
+  P-->>MX: Webhook / callback with status (success / failure / pending)
+  MX->>M: Webhook / callback to merchant with final status
   alt success
     Merchant: Fulfill order
   else failure
     Merchant: Show error / fallback  
   end
-  Monxa->>Merchant: Later: settlement & reconciliation
+  MX->>M: Later: settlement & reconciliation
 ```
+
+
 
 ---
 
