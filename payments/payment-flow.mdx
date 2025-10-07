@@ -141,7 +141,7 @@ POST /v1/orders
     "amount": 500000,
     "currency": "IDR",
     "customer_id": "cust_abc123",
-    "allowed_channels": ["card", "qris"],
+    "allowed_channels": ["dana", "qris"],
     "reference_id": "order-ref-0001",
     "expires_at": "2025-10-30T15:00:00Z",
     "description": "Purchase of item #1234",
@@ -189,8 +189,8 @@ curl https://api.monxa.io/v1/charges \
   -d '{
     "order_id": "ord_01JAB23PQXYN01P3",
     "channel_code": "dana",
-    "amount": 100000,
-    "currency": "SGD"
+    "amount": 500000,
+    "currency": "IDR"
   }'
 ```
 
