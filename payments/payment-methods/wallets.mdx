@@ -1,4 +1,66 @@
 ---
-title: "Wallets"
-description: "Description of your new file."
+title: "e-Wallets"
+description: "This page describes how merchants integrate e-Wallets as a payment option via Monxa: the API endpoints, integration flows, merchant responsibilities, and best practices."
 ---
+
+## Overview
+
+An **e-wallet** (digital wallet) allows users to store value or link funding sources and authorize payments using the stored wallet or linked instruments. In many markets, e-wallets are a preferred method due to convenience, familiarity, and strong authentication.
+
+By offering e-wallet payments via Monxa, merchants can:
+
+- Provide a frictionless checkout experience
+- Tap into local wallet popularity in Asia
+- Leverage Monxa’s settlement, reconciliation, and refund capabilities in one unified system
+
+## Integration Architecture
+
+Below is a simplified architecture showing how Monxa, the merchant, and the wallet provider interact:
+
+```mermaid
+sequenceDiagram
+  participant User
+  participant Merchant
+  participant Monxa
+  participant WalletProvider
+
+  User->>Merchant: Initiate purchase, selects “e-wallet”
+  Merchant->>Monxa: POST /payments/ewallet (wallet_provider, amount, return_url, metadata)
+  Monxa->>WalletProvider: Create e-wallet payment request
+  WalletProvider-->>Monxa: Respond with approval URL / widget token
+  Monxa-->>Merchant: Return redirect / widget embed data
+  Merchant->>User: Redirect / show wallet UI
+  User->>WalletProvider: Authenticate & approve payment (PIN, OTP, app)
+  WalletProvider-->>Monxa: Webhook / callback (status = success / failure / pending)
+  Monxa->>Merchant: Webhook notify / callback with final status
+  alt success
+    Merchant: Fulfill order
+  else failure
+    Merchant: Show error / fallback
+  end
+  Monxa->>Merchant: Settlement / reconciliation later
+```
+
+You can also visualize this as a flowchart:
+
+```flow
+flowchart TD
+  A[User selects e-wallet] --> B[Merchant calls Monxa API]
+  B --> C[Monxa requests wallet provider]
+  C --> D[Wallet provider returns approval UI / redirect]
+  D --> E[User authenticates & approves]
+  E --> F[Wallet provider callback to Monxa]
+  F --> G[Monxa notifies Merchant]
+  G --> H{Status?}
+  H -- Success --> I[Fulfill order]
+  H -- Failure --> J[Show error / fallback]
+  G --> K[Later: settlement & reconciliation]
+```
+
+## API Endpoints & Sample Payloads
+
+(_Note: these are illustrative. Confirm actual parameter names with Monxa’s API Reference._)
+
+### Initiate e-wallet Payment
+
+**Request**
