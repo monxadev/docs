@@ -22,42 +22,6 @@
             ]
           },
           {
-            "group": "INTEGRATION",
-            "pages": [
-              "integration/overview",              
-              {
-                "group": "API",
-                "pages": [
-                  "integration/api/overview",
-                  "integration/api/api-keys",
-                  "integration/api/idempotency",
-                  "integration/api/rate-limits"                  
-                ]
-              },    
-              {
-                "group": "Monxa Checkout",
-                "pages": [
-                  "integration/checkout/sdks",
-                  "integration/checkout/plugins",
-                  "integration/checkout/payment-links"
-                ]
-              },
-              {
-                "group": "Webhooks",
-                "pages": [
-                  "integration/webhooks/overview",
-                  "integration/webhooks/event-types"
-                ]
-              },
-              {
-                "group": "Testing",
-                "pages": [
-                  "integration/testing/overview"
-                ]
-              }
-            ]
-          },
-          {
             "group": "ACCEPT PAYMENTS",
             "pages": [
               "payments/overview",
