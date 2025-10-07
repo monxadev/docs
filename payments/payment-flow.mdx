@@ -78,10 +78,8 @@ POST /v1/charges
     }
     ```
   </Accordion>
-</AccordionGroup>
-
-**Charge Lifecycle & Actions**
-
+  <Accordion title="Charge Lifecycle & Actions">
+    
 - **Statuses**: `pending`, `succeeded`, `failed`, `expired`, `canceled`
 - **Actions enum**
   - `REDIRECT_CUSTOMER` → send user to provider / 3DS page
@@ -92,6 +90,9 @@ POST /v1/charges
 > • A charge has its **own expiry** (`actions.expires_at` where applicable).\
 > • Avoid multiple concurrent charges for the **same intent**.\
 > • Use **idempotency** and **webhooks** to finalize outcome.
+
+  </Accordion>
+</AccordionGroup>
 
 ---
 
