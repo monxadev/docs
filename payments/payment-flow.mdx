@@ -79,18 +79,16 @@ POST /v1/charges
     ```
   </Accordion>
   <Accordion title="Charge Lifecycle & Actions">
-    
-- **Statuses**: `pending`, `succeeded`, `failed`, `expired`, `canceled`
-- **Actions enum**
-  - `REDIRECT_CUSTOMER` → send user to provider / 3DS page
-  - `PRESENT_TO_CUSTOMER` → display QR / VA / instructions
-  - `NONE` → no action needed
+    - **Statuses**: `pending`, `succeeded`, `failed`, `expired`, `canceled`
+    - **Actions enum**
+      - `REDIRECT_CUSTOMER` → send user to provider / 3DS page
+      - `PRESENT_TO_CUSTOMER` → display QR / VA / instructions
+      - `NONE` → no action needed
 
-> **Rules**\
-> • A charge has its **own expiry** (`actions.expires_at` where applicable).\
-> • Avoid multiple concurrent charges for the **same intent**.\
-> • Use **idempotency** and **webhooks** to finalize outcome.
-
+    > **Rules**\
+    > • A charge has its **own expiry** (`actions.expires_at` where applicable).\
+    > • Avoid multiple concurrent charges for the **same intent**.\
+    > • Use **idempotency** and **webhooks** to finalize outcome.
   </Accordion>
 </AccordionGroup>
 
@@ -270,58 +268,5 @@ curl https://api.monxa.co/v1/charges \
     | `created_at`  | string  | ISO 8601                                            |
     | `customer_id` | string  | Optional linkage                                    |
     | `metadata`    | object  | Arbitrary key‑value                                 |
-  </Accordion>
-</AccordionGroup>
-
-## Integration Patterns
-
-### Idempotency
-
-- Send `Idempotency-Key` for all POST creates.
-- **Same key + same payload** → safe retry returns the original result.
-- New attempt → use a **new key** (and optionally reuse `client_reference_id` for logical grouping).
-
-### Duplicate Prevention
-
-- Never create multiple concurrent charges for the same intent.
-- Before retry, **fetch existing charge** to confirm terminal state.
-
-### Pending Methods
-
-- QRIS/VA/Bank transfer may remain `pending` for minutes–hours.
-- Always rely on **webhooks**; add mild polling with backoff if needed.
-
-### Security
-
-- Verify webhook signature (`x-monxa-signature` or similar) with your dashboard secret.
-- Enforce TLS 1.2+, HTTPS‑only callbacks, and IP allowlist if needed.
-
-> **Note**: Currency and amount are fixed **per charge** in Charge‑only mode; fixed **per order** in Order + Charge mode.
-
-## Errors
-
-| Code                 | HTTP | Message                                  | What to do                                            |
-| :------------------- | :--: | :--------------------------------------- | :---------------------------------------------------- |
-| `invalid_request`    | 400  | Missing or invalid parameter             | Validate payload; check types/formats                 |
-| `conflict`           | 409  | Duplicate request detected               | Use unique `Idempotency-Key` per create               |
-| `not_found`          | 404  | Resource not found                       | Check `order_id` / `charge_id` correctness            |
-| `method_not_allowed` | 405  | Operation not permitted in current state | Check status and flow rules                           |
-| `provider_declined`  | 402  | Payment declined by provider             | Show retry/alternate method                           |
-| `expired`            | 410  | Order/Charge expired                     | Create a new order/charge                             |
-| `rate_limited`       | 429  | Too many requests                        | Backoff and retry                                     |
-| `internal_error`     | 500  | Unexpected error                         | Retry with idempotency; contact support if persistent |
-
-<AccordionGroup>
-  <Accordion title="Error Response Sample">
-    ```json
-    {
-    "error": {
-    "code": "invalid_request",
-    "message": "amount must be >= 1",
-    "param": "amount",
-    "request_id": "req_01XYZ"
-    }
-    }
-    ```
   </Accordion>
 </AccordionGroup>
