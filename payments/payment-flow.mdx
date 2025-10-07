@@ -47,7 +47,7 @@ POST /v1/charges
   </Accordion>
   <Accordion title="Example — Charge‑only (QRIS)">
     ```bash
-    curl https://api.monxa.co/v1/charges \
+    curl https://api.monxa.io/v1/charges \
       -H "Content-Type: application/json" \
       -H "Idempotency-Key: chg-12345-unique-key" \
       -d '{
@@ -81,7 +81,7 @@ POST /v1/charges
   <Accordion title="Charge Lifecycle & Actions">
     - **Statuses**: `pending`, `succeeded`, `failed`, `expired`, `canceled`
     - **Actions enum**
-      - `REDIRECT_CUSTOMER` → send user to provider / 3DS page
+      - `REDIRECT_CUSTOMER` → send customer to provider / 3DS page
       - `PRESENT_TO_CUSTOMER` → display QR / VA / instructions
       - `NONE` → no action needed
 
@@ -152,9 +152,9 @@ POST /v1/charges
 ```
 
 ```bash
-curl https://api.monxa.co/v1/charges \
+curl https://api.monxa.io/v1/charges \
   -H "Content-Type: application/json" \
-  -H "Idempotency-Key: cha-ord-123" \
+  -H "Idempotency-Key: chg-ord-123" \
   -d '{
     "order_id": "ord_01JAB23PQXYN01P3",
     "channel_code": "dana",
@@ -174,7 +174,7 @@ curl https://api.monxa.co/v1/charges \
 ## Webhooks
 
 <AccordionGroup>
-  <Accordion title="Charge‑only events">
+  <Accordion title="Charge‑only Events">
     | Event              | Description                           |
     | :----------------- | :------------------------------------ |
     | `charge.pending`   | Charge initiated, awaiting completion |
@@ -183,28 +183,28 @@ curl https://api.monxa.co/v1/charges \
     | `charge.expired`   | Charge window elapsed                 |
     | `charge.canceled`  | Manually canceled by merchant         |
   </Accordion>
-  <Accordion title="Example — charge.succeeded">
+  <Accordion title="Example : charge.succeeded">
     ```json
     {
-    "id": "evt_01WXYZ",
-    "type": "charge.succeeded",
-    "data": {
-    "id": "chg_01JAB1XYN01P3",
-    "amount": 150000,
-    "currency": "IDR",
-    "status": "succeeded",
-    "collection_type": "qris",
-    "reference_id": "INV-240001",
-    "captured_at": "2025-10-07T09:11:22Z"
-    },
-    "created": "2025-10-07T09:11:22Z"
+    	"id": "evt_01WXYZ",
+    	"type": "charge.succeeded",
+    	"data": {
+    		"id": "chg_01JAB1XYN01P3",
+    		"amount": 150000,
+    		"currency": "IDR",
+    		"status": "succeeded",
+    		"channel_code": "qris",
+    		"reference_id": "INV-240001",
+    		"captured_at": "2025-10-07T09:11:22Z"
+    	},
+    	"created": "2025-10-07T09:11:22Z"
     }
     ```
   </Accordion>
 </AccordionGroup>
 
 <AccordionGroup>
-  <Accordion title="Order + Charge events">
+  <Accordion title="Order + Charge Events">
     | Event              | Description                          |
     | :----------------- | :----------------------------------- |
     | `order.created`    | New order created                    |
@@ -215,7 +215,7 @@ curl https://api.monxa.co/v1/charges \
     | `charge.succeeded` | Charge under order succeeded         |
     | `charge.failed`    | Charge under order failed            |
   </Accordion>
-  <Accordion title="Example — order.succeeded">
+  <Accordion title="Example : order.succeeded">
     ```json
     {
       "id": "evt_01ABC",
