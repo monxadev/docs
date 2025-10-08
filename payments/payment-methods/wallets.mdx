@@ -1,17 +1,70 @@
 ---
-title: "e-Wallets"
-description: "This page describes how merchants integrate e-Wallets as a payment option via Monxa: the API endpoints, integration flows, merchant responsibilities, and best practices."
+title: "Wallets"
+description: "This page describes how merchants integrate digital Wallets as a payment option via Monxa"
 ---
 
 ## Overview
 
-An **e-wallet** (digital wallet) allows users to store value or link funding sources and authorize payments using the stored wallet or linked instruments. In many markets, e-wallets are a preferred method due to convenience, familiarity, and strong authentication.
+A digital **Wallet** (e-wallet) allows users to store value or link funding sources and authorize payments using the stored wallet or linked instruments. In many markets, digital wallets are a preferred method due to convenience, familiarity, and strong authentication.
 
-By offering e-wallet payments via Monxa, merchants can:
+By offering digital wallet payments via Monxa, merchants can:
 
 - Provide a frictionless checkout experience
 - Tap into local wallet popularity in Asia
 - Leverage Monxa’s settlement, reconciliation, and refund capabilities in one unified system
+
+## Supported Channels
+
+<Tabs>
+  <Tab title="Indonesia">
+    | Channel                                | Code                | **Currency** | **Activation**    | **Settlement** | Min Amount | Max  Amount |
+    | :------------------------------------- | ------------------- | :----------- | :---------------- | :------------- | ---------- | :---------- |
+    | [DANA](https://www.dana.id/)           | `dana_wallet`       | IDR          | 3-5 business days | T+2            | 100        | 20,000,000  |
+    | [OVO](https://www.ovo.id/)             | `ovo_wallet`        | IDR          | 3-5 business days | T+2            | 100        | 20,000,000  |
+    | [ShoppeePay](https://shopeepay.co.id/) | `shoppeepay_wallet` | IDR          | 3-5 business days | T+2            | 100        | 20,000,000  |
+    | [LinkAja](https://linkaja.id/)         | `linkaja_wallet`    | IDR          | 3-5 business days | T+2            | 100        | 20,000,000  |
+  </Tab>
+  <Tab title="Singapore">
+    | **Channel**      | **Supported Currencies** | **Activation Time** | **Charge Confirmation** |                   |
+    | :--------------- | :----------------------- | :------------------ | :---------------------- | :---------------- |
+    | GrabPay          | SGD                      | 3-5 business days   | T+1                     | [**See More**](#) |
+    | GrabPay PayLater | SGD                      | 3-5 business days   | T+1                     | [**See More**](#) |
+    | Shopeepay        | SGD                      | 3-5 business days   | T+1                     | [**See More**](#) |
+    | SPayLater        | SGD                      | 3-5 business days   | T+1                     | [**See More**](#) |
+    | ShopBack Pay     | SGD                      | 3-5 business days   | T+1                     | [**See More**](#) |
+    | Atome            | SGD                      | 3-5 business days   | T+1                     | [**See More**](#) |
+    | WeChatPay        | SGD                      | 3-5 business days   | T+1                     | [**See More**](#) |
+    | UPI              | SGD                      | 3-5 business days   | T+1                     | [**See More**](#) |
+    | QRPH             | PHP                      | Instant             | Instant                 | [**See More**](#) |
+    | QRIS             | IDR                      | 3-5 business days   | T+1                     | [**See More**](#) |
+  </Tab>
+  <Tab title="Malaysia">
+    | **Payment Method** | **Supported Currencies** | **Activation Time** | **Charge Confirmation** |                   |
+    | :----------------- | :----------------------- | :------------------ | :---------------------- | :---------------- |
+    | Cards              | All                      | Instant             | Instant                 |                   |
+    | FPX                | MYR                      | Instant             | Instant                 | [**See More**](#) |
+    | TouchNGo           | MYR                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | GrabPay            | MYR                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | GrabPay PayLater   | MYR                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | Shopeepay          | MYR                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | SPayLater          | MYR                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | ShopBack Pay       | MYR                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | Atome              | MYR                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | WeChatPay          | MYR                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | DuitNow            | MYR                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | Boost              | MYR                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | Maybank QR         | MYR                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | Alipay             | MYR                      | 3-5 business days   | T+2                     | [**See More**](#) |
+  </Tab>
+  <Tab title="Thailand">
+    | **Payment Method** | **Supported Currencies** | **Activation Time** | **Charge Confirmation** |                   |
+    | :----------------- | :----------------------- | :------------------ | :---------------------- | :---------------- |
+    | Cards              | All                      | 3-5 business days   | Instant                 |                   |
+    | PromptPay          | THB                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | TrueMoney          | THB                      | 3-5 business days   | T+2                     | [**See More**](#) |
+    | Rabbit LINE Pay    | THB                      | 3-5 business days   | T+2                     | [**See More**](#) |
+  </Tab>
+</Tabs>
 
 ## Integration Architecture
 
