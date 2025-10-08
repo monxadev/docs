@@ -30,12 +30,12 @@
                 "group": "Payment Methods",
                 "pages": [
                   "payments/payment-methods/bank-redirects",
-                  "payments/payment-methods/bank-transfers",
-                  "payments/payment-methods/buy-now-pay-later",
-                  "payments/payment-methods/cards",
                   "payments/payment-methods/convenience-stores",
-                  "payments/payment-methods/real-time-payments",
-                  "payments/payment-methods/wallets"
+                  "payments/payment-methods/cards",
+                  "payments/payment-methods/wallets",
+                  "payments/payment-methods/buy-now-pay-later",
+                  "payments/payment-methods/qr-payments",                  
+                  "payments/payment-methods/virtual-accounts"                 
                 ]
               },
               {
