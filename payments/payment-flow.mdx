@@ -104,6 +104,7 @@ sequenceDiagram
   participant M as Merchant Backend
   participant MX as Monxa API
   participant P as Payment Provider
+  autonumber
   M->>MX: POST /v1/orders
   MX-->>M: 200 OK {order: pending}
   M->>MX: POST /v1/charges {order_id}
