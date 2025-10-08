@@ -14,13 +14,13 @@ By offering digital wallet payments via Monxa, merchants can:
 - Leverage Monxa’s settlement, reconciliation, and refund capabilities in one unified system
 
 <Columns cols={2}>
-  <Card title="1. Create a Charge" icon="star" iconType="solid" href="#">
+  <Card title="1. Create a Charge" icon="star" iconType="solid" href="#step_1">
     Initiate the payment by creating a **charge** in your system with the transaction details.
   </Card>
-  <Card title="2. Redirect Customer to e-Wallet" icon="diamond-turn-right" iconType="solid" href="#">
+  <Card title="2. Redirect Customer to e-Wallet" icon="diamond-turn-right" iconType="solid" href="#step_2">
     Use the `return_url` from Monxa to send the customer to their e-wallet app or hosted page.
   </Card>
-  <Card title="3. Customer Authorizes Payment" icon="mobile-screen-button" iconType="solid" href="#">
+  <Card title="3. Customer Authorizes Payment" icon="mobile-screen-button" iconType="solid" href="#step_3">
     The customer confirms the transaction by entering their **PIN/OTP** or using biometric authentication in their e-wallet.
   </Card>
   <Card title="4. Handle Webhooks" icon="anchor" iconType="solid" href="#">
@@ -117,7 +117,8 @@ The diagram below illustrates a simplified architecture of how Monxa, the mercha
   </Tab>
 </Tabs>
 
-### Step 1: Create a Charge
+<a id="step_1">
+Step 1: Create a Charge</a>
 
 (_Note: these are illustrative. Confirm actual parameter names with Monxa’s API Reference._)
 
@@ -163,7 +164,16 @@ The diagram below illustrates a simplified architecture of how Monxa, the mercha
   </Accordion>
 </AccordionGroup>
 
-## Webhook Notification
+<a id="step_2">
+Step 2: Redirect User to Wallet</a>
+
+After creating the payment request, use the response data to generate a QR code and present it to the user.
+
+<a id="step_3">
+Step 3: Customer Authorizes Payment</a>
+
+<a id="step_4">
+Step 4: Handle Webhooks & Update Payment Status</a>
 
 Monxa will send an asynchronous webhook to your configured endpoint:
 
