@@ -181,14 +181,19 @@ Monxa will send an asynchronous webhook to your configured endpoint:
 
 ## Refunds / Reversal
 
-If the e-wallet provider supports refunds back to wallet:
+Refunds for e-wallet payments depend on the **capabilities of the wallet provider**.\
+Some wallets support **full or partial refunds** through Monxa’s API, while others **do not allow refunds** and require a manual refund process outside the system.
+
+- **Supported wallets** → You can request a **full or partial refund** via Monxa’s `/v1/refunds` endpoint. The provider will process the reversal and return the funds to the customer’s wallet balance.
+- **Unsupported wallets** → Refunds are **not available through the API**. Merchants must perform a **manual refund** (e.g., bank transfer, store credit, or direct arrangement with the customer).
+- **Webhook notifications** → For supported wallets, Monxa will notify you of refund status updates via events such as `refund.succeeded` or `refund.failed`.
 
 <Tip>
   **Endpoint: POST v1/refunds**
 </Tip>
 
 <AccordionGroup>
-  <Accordion title="Request Example : Refund">
+  <Accordion title="Refund Request Example">
     ```bash
     curl https://api.monxa.io/v1/refunds \
       -H "Content-Type: application/json" \
@@ -203,7 +208,7 @@ If the e-wallet provider supports refunds back to wallet:
       }'
     ```
   </Accordion>
-  <Accordion title="Response Example">
+  <Accordion title="Response Example (refund.succeeded)">
     ```json
     {
       "id": "ref_01JAB1XYN01P3",
@@ -222,6 +227,10 @@ If the e-wallet provider supports refunds back to wallet:
     ```
   </Accordion>
 </AccordionGroup>
+
+<Warning>
+  **Important**: Always check the wallet’s capabilities in Monxa’s dashboard or API documentation. The refund feature may vary by provider and by country.
+</Warning>
 
 ## Merchant Best Practices
 
