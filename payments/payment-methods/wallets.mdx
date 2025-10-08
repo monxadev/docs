@@ -75,29 +75,32 @@ The diagram below illustrates a simplified architecture of how Monxa, the mercha
 <Tabs>
   <Tab title="Redirection Flow">
     ```mermaid
+    ---
+    config:
+      look: neo
+    ---
     sequenceDiagram
-        participant Customer
-        participant Merchant
-        participant Monxa
-        participant Wallet as E-Wallet Provider
-    
-        Customer ->> Merchant: 1. Checkout a transaction using E-Wallet
-        Merchant ->> Monxa: 2. Create E-Wallet transaction
-        Monxa ->> Wallet: 3. Initiate payment
-        Wallet ->> Monxa: 4. Return e-wallet URL
-        Monxa ->> Merchant: 5. Return e-wallet URL
-        Merchant ->> Customer: 6. Return e-wallet URL
-        Customer ->> Wallet: 7. Open e-wallet URL & input PIN/OTP
-        Wallet ->> Wallet: 8. Process the payment
-    
-        alt Success
-            Wallet ->> Monxa: 9. Notify success (callback)
-            Monxa ->> Wallet: 10. Update transaction to success
-            Monxa ->> Merchant: 11. Notify success (callback)
-            Merchant ->> Monxa: 12. Update transaction to success
-            Monxa ->> Merchant: 14. Settle fund to balance
-            Merchant ->> Customer: 13. Show transaction successful
-        end
+      participant Customer as Customer
+      participant Merchant as Merchant
+      participant Monxa as Monxa
+      participant Wallet as E-Wallet Provider
+      autonumber
+      Customer ->> Merchant: Checkout a transaction using E-Wallet
+      Merchant ->> Monxa: Create E-Wallet transaction
+      Monxa ->> Wallet: Initiate payment
+      Wallet ->> Monxa: Return e-wallet URL
+      Monxa ->> Merchant: Return e-wallet URL
+      Merchant ->> Customer: Return e-wallet URL
+      Customer ->> Wallet: Open e-wallet URL & input PIN/OTP
+      Wallet ->> Wallet: Process the payment
+      alt Success
+        Wallet ->> Monxa: Notify success (callback)
+        Monxa ->> Monxa: Update transaction to success
+        Monxa ->> Merchant: Notify success (callback)
+        Merchant ->> Monxa: Update transaction to success
+        Monxa ->> Merchant: Settle fund to balance
+        Merchant ->> Customer: Show transaction successful
+      end
     ```
   </Tab>
   <Tab title="Push Notification Flow">
