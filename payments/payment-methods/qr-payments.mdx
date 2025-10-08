@@ -24,26 +24,56 @@ At a broad level, incorporating QR code payments into your system follows a four
   </Card>
 </Columns>
 
-### Supported Methods
+## Supported Channels
 
 Not all payment methods support embedded QR payments. The following methods are available:
 
-| Payment Channel  | Channel Code   | Country                      |
-| ---------------- | -------------- | ---------------------------- |
-| PayNow           | `qr_paynow`    | 🇸🇬 Singapore               |
-| ShopeePay        | `qr_shopeepay` | 🇸🇬🇮🇩 Singapore/Indonesia |
-| QRIS (Indonesia) | `qr_qris`      | 🇮🇩 Indonesia               |
-| WeChat Pay       | `qr_wechatpay` | 🇨🇳 China                   |
-| VietQR           | `qr_vietqr`    | 🇻🇳 Vietnam                 |
-| PromptPay        | `qr_promptpay` | 🇹🇭 Thailand                |
-| TrueMoney        | `qr_truemoney` | 🇹🇭 Thailand                |
-| GrabPay          | `qr_grabpay`   | 🇸🇬 Singapore               |
-| UPI              | `qr_upi`       | 🇮🇳 India                   |
-| GCash            | `qr_gcash`     | 🇵🇭 Philippines             |
-| QRPH             | `qr_qrph`      | 🇵🇭 Philippines             |
-| Touch ’n Go      | `qr_touchngo`  | 🇲🇾 Malaysia                |
+<Tabs>
+  <Tab title="🇮🇩 Indonesia">
+    | Channel   | Code        | **Currency** | **Refund**    | **Settlement** | Min Amount | Max  Amount |
+    | :-------- | ----------- | :----------- | :------------ | :------------- | ---------- | :---------- |
+    | QRIS      | `qris_qr`   | IDR          | Not supported | T+2            | 100        | 20,000,000  |
+    | ShopeePay | `shopee_qr` | IDR          | Not supported | T+2            | 100        | 20,000,000  |
+  </Tab>
+  <Tab title="🇹🇭 Thailand">
+    | **Channel** | Code           | **Currency** | **Refund**    | **Settlement** | Min Amount | Max Amount |
+    | :---------- | -------------- | :----------- | :------------ | :------------- | :--------- | ---------- |
+    | PromptPay   | `promptay_qr`  | THB          | Not supported | T+2            | 1          | 50,000     |
+    | TrueMoney   | `truemoney_qr` | THB          | Not supported | T+2            | 1          | 70,000     |
+  </Tab>
+</Tabs>
 
 ## Integration Flow
+
+```mermaid
+sequenceDiagram
+    participant Customer
+    participant Merchant
+    participant Monxa
+    participant QRProvider as QR Provider
+    autonumber
+    Customer ->> Merchant: Checkout with QR payment
+    Merchant ->> Monxa: Create QR payment request
+    Monxa ->> QRProvider: Initiate QR code generation
+    QRProvider ->> Monxa: Return QR data (QR string, expiry)
+    Monxa ->> Merchant: Return QR data & QR image
+    Merchant ->> Customer: Display QR code for scanning
+    Customer ->> QRProvider: Scan QR code & approve payment
+    QRProvider ->> QRProvider: Process payment
+
+    alt Success
+        QRProvider ->> Monxa: Notify success (callback)
+        Monxa ->> Monxa: Update transaction to success
+        Monxa ->> Merchant: Notify success (callback)
+        Merchant ->> Monxa: Update transaction to success
+        Monxa ->> Merchant: Settle fund to balance
+        Merchant ->> Customer: Show transaction successful
+    else Failure/Timeout
+        QRProvider ->> Monxa: Notify failure/expired
+        Monxa ->> Merchant: Notify failure/expired
+        Merchant ->> Customer: Show transaction failed/expired
+    end
+```
 
 ### Step 1: Create a Charge
 
