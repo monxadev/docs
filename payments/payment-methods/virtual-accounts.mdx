@@ -4,12 +4,15 @@ title: "Virtual Accounts"
 
 ## Overview
 
-Virtual Accounts allow customers to pay by transferring funds into a **unique bank account number** assigned by Monxa. The VA can be **dynamic** (single-use) or **static** (reusable). When the customer makes a transfer, the provider notifies Monxa, and Monxa updates the merchant via webhook.
+Virtual Accounts (VAs) allow customers to complete payments by making a **bank transfer** into a unique account number issued for their transaction.\
+This method is widely used across Asia because it is **familiar, trusted, and supports large-value payments**.
 
-✅ High-value transfers (enterprise/B2B)\
-✅ ATM or mobile-banking–friendly markets\
-✅ Offline customers with no card/e-wallet\
-✅ Need for strong reconciliation (invoice-to-VA mapping)
+Monxa simplifies VA payments by:
+
+- **Issuing dynamic or static VA numbers** through integrated banks and providers.
+- **Returning ready-to-display VA details** (bank code, account number, expiry, instructions).
+- **Listening for provider notifications** when funds are credited.
+- **Sending webhook events** so your system always knows the real-time status.
 
 <Columns cols={2}>
   <Card title="1. Create a Charge" icon="star" iconType="solid" href="#">
@@ -127,6 +130,16 @@ sequenceDiagram
 </AccordionGroup>
 
 ### Step 2: Display VA Information
+
+Once the charge is created, show the returned **bank name, account number, expiry date, and instructions** to the customer.
+
+This allows the customer to transfer funds using their preferred channel:
+
+- ATM
+- Mobile banking app
+- Internet banking
+
+<Tip>👉 Make sure to clearly show the **exact amount** if you are using a **closed/exact VA**.</Tip>
 
 ### Step 3: Customer Transfers Funds
 
