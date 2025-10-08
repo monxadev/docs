@@ -29,9 +29,9 @@ sequenceDiagram
   MX-->>M: webhook charge.succeeded/failed/expired
 ```
 
-```http
-POST /v1/charges
-```
+<Tip>
+  **POST /v1/charges**
+</Tip>
 
 <AccordionGroup>
   <Accordion title="Body Parameters">
@@ -115,9 +115,9 @@ sequenceDiagram
   MX-->>M: webhook order.succeeded
 ```
 
-```http
-POST /v1/orders
-```
+<Tip>
+  **POST /v1/orders**
+</Tip>
 
 <AccordionGroup>
   <Accordion title="Body Parameters">
@@ -180,9 +180,9 @@ POST /v1/orders
 
 Now, create a **Charge** under the order:
 
-```http
-POST /v1/charges
-```
+<Tip>
+  **POST /v1/charges**
+</Tip>
 
 ```bash
 curl https://api.monxa.io/v1/charges \
