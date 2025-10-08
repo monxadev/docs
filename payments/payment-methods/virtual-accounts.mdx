@@ -139,10 +139,27 @@ This allows the customer to transfer funds using their preferred channel:
 - Mobile banking app
 - Internet banking
 
-<Tip>👉 Make sure to clearly show the **exact amount** if you are using a **closed/exact VA**.</Tip>
+<Tip>
+  Make sure to clearly show the **exact amount** if you are using a **closed/exact VA**.
+</Tip>
 
 ### Step 3: Customer Transfers Funds
 
+The customer proceeds to their banking channel and makes a transfer to the VA account number provided.
+
+- For **dynamic/exact VAs**, the amount must match exactly.
+- For **static/open VAs**, any incoming payment is accepted and must be reconciled against the customer/order.
+
+<Tip>
+  The bank / VA provider will notify Monxa once funds are received.
+</Tip>
+
 ### Step 4: Handle Webhooks & Update Payment Status
+
+When the VA provider confirms the credit, Monxa updates the charge status and sends a **webhook notification** to your server.
+
+- Typical webhook events:
+  - `charge.succeeded` → funds received successfully
+  - `charge.expired` → VA expired without payment
 
 ## Refunds / Reversal
