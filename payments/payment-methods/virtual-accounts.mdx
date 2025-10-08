@@ -1,4 +1,112 @@
 ---
 title: "Virtual Accounts"
-description: "Description of your new file."
 ---
+
+Virtual Accounts allow customers to pay by transferring funds into a **unique bank account number** assigned by Monxa. The VA can be **dynamic** (single-use) or **static** (reusable). When the customer makes a transfer, the provider notifies Monxa, and Monxa updates the merchant via webhook.
+
+## When to Use Virtual Accounts
+
+✅ High-value transfers (enterprise/B2B)\
+✅ ATM or mobile-banking–friendly markets\
+✅ Offline customers with no card/e-wallet\
+✅ Need for strong reconciliation (invoice-to-VA mapping)
+
+## Supported Channels
+
+<Tabs>
+  <Tab title="🇮🇩 Indonesia">
+    | Channel  | Code          | **Currency** | **Refund** | **Settlement** | Min Amount | Max  Amount |
+    | :------- | ------------- | :----------- | :--------- | :------------- | ---------- | :---------- |
+    | BCA      | `bca_va`      | IDR          | N/A        | T+1            | 1          | 50,000,000  |
+    | BJB      | `bjb_va`      | IDR          | N/A        | T+1            | 1          | 500,000,000 |
+    | BNC      | `bnc_va`      | IDR          | N/A        | T+1            | 1          | 500,000,000 |
+    | BNI      | `bni_va`      | IDR          | N/A        | T+1            | 1          | 50,000,000  |
+    | BRI      | `bri_va`      | IDR          | N/A        | T+1            | 1          | 500,000,000 |
+    | BSI      | `bsi_va`      | IDR          | N/A        | T+1            | 1          | 500,000,000 |
+    | BSS      | `bss_va`      | IDR          | N/A        | T+1            | 1          | 500,000,000 |
+    | CIMB     | `cimb_va`     | IDR          | N/A        | T+1            | 1          | 500,000,000 |
+    | MANDIRI  | `mandiri_va`  | IDR          | N/A        | T+1            | 1          | 500,000,000 |
+    | MUALAMAT | `mualamat_va` | IDR          | N/A        | T+1            | 1          | 500,000,000 |
+    | PERMATA  | `permata_va`  | IDR          | N/A        | T+1            | 1          | 500,000,000 |
+  </Tab>
+  <Tab title="🇹🇭 Thailand">
+    | **Channel** | Code     | **Currency** | **Refund** | **Settlement** | Min Amount | Max Amount |
+    | :---------- | -------- | :----------- | :--------- | :------------- | :--------- | ---------- |
+    | SCB         | `scb_va` | THB          | N/A        | T+1            | 20         | 700,000    |
+  </Tab>
+</Tabs>
+
+## Payment Flow
+
+```mermaid
+sequenceDiagram
+    participant Customer
+    participant Merchant
+    participant Monxa
+    participant VA as VA Provider (Bank)
+    autonumber
+    Customer ->> Merchant: Select Virtual Account
+    Merchant ->> Monxa: Create VA charge (amount, expiry)
+    Monxa ->> VA: Request VA issuance
+    VA ->> Monxa: Return VA details (account no, bank, expiry)
+    Monxa ->> Merchant: Return VA info + instructions
+    Merchant ->> Customer: Show VA account number & payment instructions
+
+    Customer ->> VA: Transfers funds via ATM / mobile banking
+    VA ->> Monxa: Notify credit received
+    Monxa ->> Merchant: Webhook: charge.succeeded
+    Monxa ->> Merchant: Settle funds into balance
+    Merchant ->> Customer: Show success confirmation
+```
+
+## API Endpoints & Sample Payloads
+
+<Tip>
+  **Endpoint: POST v1/charges**
+</Tip>
+
+<AccordionGroup>
+  <Accordion title="Request Example : Dynamic VA">
+    ```bash
+    curl -X POST https://api.monxa.co/v1/charges \
+      -H "Authorization: Bearer sk_test_***" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "amount": 250000,
+        "currency": "IDR",
+        "payment_method": "virtual_account",
+        "va": {
+          "bank_code": "BCA",
+          "account_type": "dynamic",
+          "amount_type": "exact",
+          "expires_at": "2025-10-15T23:59:59Z"
+        },
+        "metadata": { "invoice_id": "INV-10092" }
+      }'
+    ```
+  </Accordion>
+  <Accordion title="Response Example">
+    ```json
+    {
+      "id": "ch_001",
+      "object": "charge",
+      "status": "PENDING",
+      "amount": 250000,
+      "currency": "IDR",
+      "payment_method": "virtual_account",
+      "va": {
+        "bank_code": "BCA",
+        "account_number": "1234567890123",
+        "account_name": "MONXA COLLECTION",
+        "expires_at": "2025-10-15T23:59:59Z",
+        "instructions": [
+          "Open BCA mobile app or ATM.",
+          "Choose Virtual Account transfer.",
+          "Enter account number: 1234567890123",
+          "Confirm amount: 250,000 IDR"
+        ]
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
