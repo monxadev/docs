@@ -66,28 +66,66 @@ By offering digital wallet payments via Monxa, merchants can:
   </Tab>
 </Tabs>
 
-## Integration Architecture
+## Payment Flow
 
-Below is a simplified architecture showing how Monxa, the merchant, and the wallet provider interact:
+Generally, wallet payments follow two types of flows: **redirection (jump app)** or **push notification**.
 
-```mermaid
-sequenceDiagram
-  participant C as Customer
-  participant M as Merchant
-  participant MX as Monxa
-  participant P as Wallet Provider
+The diagram below illustrates a simplified architecture of how Monxa, the merchant, and the wallet provider interact.
 
-  C->>M: Initiate purchase, select “e-wallet”
-  M->>MX: POST /v1/charges (channel_code, amount, return_url, metadata)
-  MX->>P: Create e-wallet payment request
-  P-->>MX: Return approval UI / widget token
-  MX-->>M: Return redirect / widget data
-  M->>C: Redirect or render wallet UI
-  C->>P: Authenticate & approve (PIN / OTP / in-app)
-  P-->>MX: Webhook / callback with status (success / failure / pending)
-  MX->>M: Webhook / callback to merchant with final status
-  MX->>M: Later: settlement & reconciliation
-```
+<Tabs>
+  <Tab title="Redirection Flow">
+    ```mermaid
+    sequenceDiagram
+        participant Customer
+        participant Merchant
+        participant Monxa
+        participant Wallet as E-Wallet Provider
+    
+        Customer ->> Merchant: 1. Checkout a transaction using E-Wallet
+        Merchant ->> Monxa: 2. Create E-Wallet transaction
+        Monxa ->> Wallet: 3. Initiate payment
+        Wallet ->> Monxa: 4. Return e-wallet URL
+        Monxa ->> Merchant: 5. Return e-wallet URL
+        Merchant ->> Customer: 6. Return e-wallet URL
+        Customer ->> Wallet: 7. Open e-wallet URL & input PIN/OTP
+        Wallet ->> Wallet: 8. Process the payment
+    
+        alt Success
+            Wallet ->> Monxa: 9. Notify success (callback)
+            Monxa ->> Wallet: 10. Update transaction to success
+            Monxa ->> Merchant: 11. Notify success (callback)
+            Merchant ->> Monxa: 12. Update transaction to success
+            Monxa ->> Merchant: 14. Settle fund to balance
+            Merchant ->> Customer: 13. Show transaction successful
+        end
+    ```
+  </Tab>
+  <Tab title="Push Notification Flow">
+    ```mermaid
+    sequenceDiagram
+        participant Customer
+        participant Merchant
+        participant Monxa
+        participant Wallet as E-Wallet Provider
+    
+        Customer ->> Merchant: 1. Checkout a transaction using E-Wallet
+        Merchant ->> Monxa: 2. Create E-Wallet transaction
+        Monxa ->> Wallet: 3. Initiate payment
+        Wallet ->> Customer: 4. Push notification to mobile app
+        Customer ->> Wallet: 5. Approve payment via app (PIN/OTP/biometric)
+        Wallet ->> Wallet: 6. Process the payment
+    
+        alt Success
+            Wallet ->> Monxa: 7. Notify success (callback)
+            Monxa ->> Wallet: 8. Update transaction to success
+            Monxa ->> Merchant: 9. Notify success (callback)
+            Merchant ->> Monxa: 10. Update transaction to success
+            Monxa ->> Merchant: 11. Settle fund to balance
+            Merchant ->> Customer: 12. Show transaction successful
+        end
+    ```
+  </Tab>
+</Tabs>
 
 ---
 
