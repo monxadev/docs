@@ -13,6 +13,21 @@ By offering digital wallet payments via Monxa, merchants can:
 - Tap into local wallet popularity in Asia
 - Leverage Monxa’s settlement, reconciliation, and refund capabilities in one unified system
 
+<Columns cols={2}>
+  <Card title="1. Create a Charge" icon="star" iconType="solid" href="#">
+    Initiate the payment by creating a **charge** in your system with the transaction details.
+  </Card>
+  <Card title="2. Redirect Customer to e-Wallet" icon="qrcode" iconType="solid" href="#">
+    Use the `return_url` from Monxa to send the customer to their e-wallet app or page to continue the payment.
+  </Card>
+  <Card title="3. Customer Authorizes Payment" icon="camera" iconType="solid" href="#">
+    The customer confirms the transaction by entering their **PIN/OTP** or using biometric authentication in their e-wallet.
+  </Card>
+  <Card title="4. Handle Webhooks" icon="anchor" iconType="solid" href="#">
+    Once the e-wallet provider processes the payment, Monxa sends a **webhook notification** to update your system with the final status.
+  </Card>
+</Columns>
+
 ## Supported Channels
 
 <Tabs>
@@ -102,7 +117,7 @@ The diagram below illustrates a simplified architecture of how Monxa, the mercha
   </Tab>
 </Tabs>
 
-## API Endpoints & Sample Payloads
+### Step 1: Create a Charge
 
 (_Note: these are illustrative. Confirm actual parameter names with Monxa’s API Reference._)
 

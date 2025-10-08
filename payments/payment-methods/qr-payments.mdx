@@ -3,7 +3,7 @@ title: "QR Payments"
 description: "Guide to integrating embedded QR code payments via Monxa API"
 ---
 
-## Introduction
+## Overview
 
 Embedded QR code payments let you accept QR-based transactions **directly inside your platform** without redirecting customers to external pages.
 
@@ -43,7 +43,7 @@ Not all payment methods support embedded QR payments. The following methods are 
   </Tab>
 </Tabs>
 
-## Integration Flow
+## Payment Flow
 
 ```mermaid
 sequenceDiagram
@@ -97,7 +97,7 @@ This is the initial stage of the payment process. After gathering all the userâ€
     | description            | string | optional    | A custom description for the charge.                                                                                                                                                                                          |
     | metadata               | object | optional    | Key-value entries for your custom data.   You can specify up to 50 keys, with key names up to 40 characters and values up to 500 characters.   This is for your convenience. Monxa will not use this data for any processing. |
   </Accordion>
-  <Accordion title="Example Request">
+  <Accordion title="Request Example">
     ```json
     {
     	"reference_id" : "TRX-983921-221A",
@@ -108,14 +108,10 @@ This is the initial stage of the payment process. After gathering all the userâ€
     }
     ```
   </Accordion>
-</AccordionGroup>
-
-### Response
-
-The response includes a qr_data that contains the information needed to generate a scannable QR code (qr_data).
-
-<AccordionGroup>
-  <Accordion title="Example Response">
+  <Accordion title="Response Example">
+    <Tip>
+      The response includes a qr_data that contains the information needed to generate a scannable QR code (qr_data).
+    </Tip>
     ```json
     {
     	"charge_id": "chg_9c262fb5-f3cd-4187",
