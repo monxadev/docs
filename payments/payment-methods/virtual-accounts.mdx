@@ -4,18 +4,21 @@ title: "Virtual Accounts"
 
 ## Overview
 
-Virtual Accounts allow customers to pay by transferring funds into a **unique bank account number** assigned by Monxa. The VA can be **dynamic** (single-use) or **static** (reusable). When the customer makes a transfer, the provider notifies Monxa, and Monxa updates the merchant via webhook.
+Virtual Accounts (VAs) allow customers to complete payments by making a **bank transfer** into a unique account number issued for their transaction.\
+This method is widely used across Asia because it is **familiar, trusted, and supports large-value payments**.
 
-✅ High-value transfers (enterprise/B2B)\
-✅ ATM or mobile-banking–friendly markets\
-✅ Offline customers with no card/e-wallet\
-✅ Need for strong reconciliation (invoice-to-VA mapping)
+Monxa simplifies VA payments by:
+
+- **Issuing dynamic or static VA numbers** through integrated banks and providers.
+- **Returning ready-to-display VA details** (bank code, account number, expiry, instructions).
+- **Listening for provider notifications** when funds are credited.
+- **Sending webhook events** so your system always knows the real-time status.
 
 <Columns cols={2}>
   <Card title="1. Create a Charge" icon="star" iconType="solid" href="#">
     Create a **charge** with virtual account channel code. Monxa requests a VA from the provider.
   </Card>
-  <Card title="2. Display VA Details" icon="building-columns" iconType="solid" href="#">
+  <Card title="2. Display VA Information" icon="building-columns" iconType="solid" href="#">
     Show the customer the **bank name, VA number, and expiry** along with transfer instructions.
   </Card>
   <Card title="3. Customer Transfers Funds" icon="money-bill-transfer" iconType="solid" href="#">
@@ -125,3 +128,73 @@ sequenceDiagram
     ```
   </Accordion>
 </AccordionGroup>
+
+### Step 2: Display VA Information
+
+Once the charge is created, show the returned **bank name, account number, expiry date, and instructions** to the customer.
+
+This allows the customer to transfer funds using their preferred channel:
+
+- ATM
+- Mobile banking app
+- Internet banking
+
+<Tip>
+  Make sure to clearly show the **exact amount** if you are using a **closed/exact VA**.
+</Tip>
+
+### Step 3: Customer Transfers Funds
+
+The customer proceeds to their banking channel and makes a transfer to the VA account number provided.
+
+- For **dynamic/exact VAs**, the amount must match exactly.
+- For **static/open VAs**, any incoming payment is accepted and must be reconciled against the customer/order.
+
+<Tip>
+  The bank / VA provider will notify Monxa once funds are received.
+</Tip>
+
+### Step 4: Handle Webhooks & Update Payment Status
+
+When the VA provider confirms the credit, Monxa updates the charge status and sends a **webhook notification** to your server.
+
+- Typical webhook events:
+  - `charge.succeeded` → funds received successfully
+  - `charge.expired` → VA expired without payment
+
+<Tip>
+  Your system should always rely on Monxa webhooks for final confirmation, then update the order / payment status shown to the customer.
+</Tip>
+
+<AccordionGroup>
+  <Accordion title="Webhook Response Parameters">
+    | **Parameter**        | **Description**                                                                  | **Example Value**              |
+    | :------------------- | :------------------------------------------------------------------------------- | :----------------------------- |
+    | `payment_id`         | Unique identifier of the payment.                                                | `pay_1234567890`               |
+    | `payment_request_id` | Unique identifier of the payment request.                                        | `req_0987654321`               |
+    | `phone`              | Buyer’s phone number.                                                            | `+6591234567`                  |
+    | `amount`             | Amount related to the payment.                                                   | `100.00`                       |
+    | `currency`           | Currency of the payment.                                                         | `SGD`                          |
+    | `status`             | Payment status (`completed` / `failed`).                                         | `completed`                    |
+    | `reference_number`   | Custom reference number mapped during payment request creation.                  | `ORDER12345`                   |
+    | `hmac`               | Message Authentication Code (MAC) of this webhook request (used for validation). | `a1b2c3d4e5f67890abcdef123456` |
+  </Accordion>
+  <Accordion title="Sample Webhook (charge.succeeded)">
+    
+  </Accordion>
+  <Accordion title="Sample Webhook (charge.expired)">
+    
+  </Accordion>
+</AccordionGroup>
+
+## Refunds / Reversal
+
+Unlike cards or wallets, **Virtual Account payments are bank transfers**. Because they are **push-based payments** initiated by the customer, **refunds or reversals cannot be processed automatically through Monxa**.
+
+- Once a customer transfers funds into the VA, the transaction is **final and irreversible** via the API.
+- If a refund is required (e.g., order cancellation, overpayment), the merchant must arrange a **manual bank transfer** back to the customer’s account outside of Monxa’s system.
+- Monxa will still provide full **reporting, settlement, and reconciliation data** to help you identify the payment, but **no automated payout or refund request** is available.
+
+<Warning>
+  **Important**: Always inform customers clearly that payments made via Virtual Accounts are non-reversible. If you wish to offer refunds, set up an offline/manual refund policy (e.g., customer provides bank details and you process a transfer).
+</Warning>
