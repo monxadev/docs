@@ -24,7 +24,7 @@ At a broad level, incorporating QR code payments into your system follows a four
   </Card>
 </Columns>
 
-### Supported Methods
+### Supported Channels
 
 Not all payment methods support embedded QR payments. The following methods are available:
 
@@ -44,6 +44,36 @@ Not all payment methods support embedded QR payments. The following methods are 
 | Touch ’n Go      | `qr_touchngo`  | 🇲🇾 Malaysia                |
 
 ## Integration Flow
+
+```mermaid
+sequenceDiagram
+    participant Customer
+    participant Merchant
+    participant Monxa
+    participant QRProvider as QR Provider
+    autonumber
+    Customer ->> Merchant: Checkout with QR payment
+    Merchant ->> Monxa: Create QR payment request
+    Monxa ->> QRProvider: Initiate QR code generation
+    QRProvider ->> Monxa: Return QR data (QR string, expiry)
+    Monxa ->> Merchant: Return QR data & QR image
+    Merchant ->> Customer: Display QR code for scanning
+    Customer ->> QRProvider: Scan QR code & approve payment
+    QRProvider ->> QRProvider: Process payment
+
+    alt Success
+        QRProvider ->> Monxa: Notify success (callback)
+        Monxa ->> Monxa: Update transaction to success
+        Monxa ->> Merchant: Notify success (callback)
+        Merchant ->> Monxa: Update transaction to success
+        Monxa ->> Merchant: Settle fund to balance
+        Merchant ->> Customer: Show transaction successful
+    else Failure/Timeout
+        QRProvider ->> Monxa: Notify failure/expired
+        Monxa ->> Merchant: Notify failure/expired
+        Merchant ->> Customer: Show transaction failed/expired
+    end
+```
 
 ### Step 1: Create a Charge
 
