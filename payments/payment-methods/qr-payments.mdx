@@ -11,16 +11,16 @@ At a broad level, incorporating QR code payments into your system follows a four
 
 <Columns cols={2}>
   <Card title="1. Create a Charge" icon="star" iconType="solid" href="#">
-    Start by creating an **charge** in your system with the required details.
+    Create a **charge** with QR channel code. Monxa will return both the **QR string** and **QR image**.
   </Card>
-  <Card title="2. Generate & Display the QR Code" icon="qrcode" iconType="solid" href="#">
-    Use the **charge** to generate a QR code and present it to the customer.
+  <Card title="2. Display the QR Code" icon="qrcode" iconType="solid" href="#">
+    Show the QR code to the customer on your checkout page.
   </Card>
-  <Card title="3. Customer Scans to Pay" icon="camera" iconType="solid" href="#">
-    The customer scans the QR code and completes payment through their banking or wallet app.
+  <Card title="3. Customer Scans & Pays" icon="camera" iconType="solid" href="#">
+    The customer scans the QR code and authorizes payment via their bank or wallet app.
   </Card>
   <Card title="4. Handle Webhooks" icon="anchor" iconType="solid" href="#">
-    After processing, Monxa sends a webhook notification. Use this to update your server and client with the final payment status.
+    Monxa notifies you via **webhook** when the payment succeeds or fails. Update your system accordingly.
   </Card>
 </Columns>
 
