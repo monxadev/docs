@@ -167,7 +167,7 @@ After the payment is completed, your system must handle **webhooks** to receive 
 </Tip>
 
 <AccordionGroup>
-  <Accordion title="Webhook Response Parameters">
+  <Accordion title="Webhook Parameters">
     | **Parameter**        | **Description**                                                                  | **Example Value**              |
     | -------------------- | -------------------------------------------------------------------------------- | ------------------------------ |
     | `payment_id`         | Unique identifier of the payment.                                                | `pay_1234567890`               |
@@ -179,7 +179,19 @@ After the payment is completed, your system must handle **webhooks** to receive 
     | `reference_number`   | Custom reference number mapped during payment request creation.                  | `ORDER12345`                   |
     | `hmac`               | Message Authentication Code (MAC) of this webhook request (used for validation). | `a1b2c3d4e5f67890abcdef123456` |
   </Accordion>
-  <Accordion title="Sample Webhook">
+  <Accordion title="Sample Webhook (charge.succeeded)">
     
   </Accordion>
 </AccordionGroup>
+
+## Refunds / Reversal
+
+QR payments are **push-based transfers**, meaning the customer initiates the payment from their banking or wallet app by scanning the QR code. Because of this, **refunds or reversals are not supported through Monxa’s API**.
+
+- Once the customer confirms the payment, the transaction is **final** and cannot be automatically reversed.
+- If a refund is required (e.g., order cancellation, duplicate payment, or overpayment), the merchant must process a **manual refund** by transferring the funds back to the customer’s bank or wallet account outside of Monxa.
+- Monxa provides complete **reporting and webhook notifications** to track the payment lifecycle, but it does not support automated refunds for QR transactions.
+
+<Warning>
+  **Important**: Always make it clear to your customers that QR payments are non-reversible. If you need to support refunds, set up a manual refund workflow where you collect customer bank/wallet details and process the refund directly.
+</Warning>
