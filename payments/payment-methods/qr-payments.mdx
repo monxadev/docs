@@ -3,7 +3,7 @@ title: "QR Payments"
 description: "Guide to integrating embedded QR code payments via Monxa API"
 ---
 
-## Introduction
+## Overview
 
 Embedded QR code payments let you accept QR-based transactions **directly inside your platform** without redirecting customers to external pages.
 
@@ -11,16 +11,16 @@ At a broad level, incorporating QR code payments into your system follows a four
 
 <Columns cols={2}>
   <Card title="1. Create a Charge" icon="star" iconType="solid" href="#">
-    Start by creating an **charge** in your system with the required details.
+    Create a **charge** with QR channel code. Monxa will return both the **QR string** and **QR image**.
   </Card>
-  <Card title="2. Generate & Display the QR Code" icon="qrcode" iconType="solid" href="#">
-    Use the **charge** to generate a QR code and present it to the customer.
+  <Card title="2. Display the QR Code" icon="qrcode" iconType="solid" href="#">
+    Show the QR code to the customer on your checkout page.
   </Card>
-  <Card title="3. Customer Scans to Pay" icon="camera" iconType="solid" href="#">
-    The customer scans the QR code and completes payment through their banking or wallet app.
+  <Card title="3. Customer Scans & Pays" icon="camera" iconType="solid" href="#">
+    The customer scans the QR code and authorizes payment via their bank or wallet app.
   </Card>
   <Card title="4. Handle Webhooks" icon="anchor" iconType="solid" href="#">
-    After processing, Monxa sends a webhook notification. Use this to update your server and client with the final payment status.
+    Monxa notifies you via **webhook** when the payment succeeds or fails. Update your system accordingly.
   </Card>
 </Columns>
 
@@ -43,7 +43,7 @@ Not all payment methods support embedded QR payments. The following methods are 
   </Tab>
 </Tabs>
 
-## Integration Flow
+## Payment Flow
 
 ```mermaid
 sequenceDiagram
@@ -97,7 +97,7 @@ This is the initial stage of the payment process. After gathering all the userâ€
     | description            | string | optional    | A custom description for the charge.                                                                                                                                                                                          |
     | metadata               | object | optional    | Key-value entries for your custom data.   You can specify up to 50 keys, with key names up to 40 characters and values up to 500 characters.   This is for your convenience. Monxa will not use this data for any processing. |
   </Accordion>
-  <Accordion title="Example Request">
+  <Accordion title="Request Example">
     ```json
     {
     	"reference_id" : "TRX-983921-221A",
@@ -108,14 +108,10 @@ This is the initial stage of the payment process. After gathering all the userâ€
     }
     ```
   </Accordion>
-</AccordionGroup>
-
-### Response
-
-The response includes a qr_data that contains the information needed to generate a scannable QR code (qr_data).
-
-<AccordionGroup>
-  <Accordion title="Example Response">
+  <Accordion title="Response Example">
+    <Tip>
+      The response includes a qr_data that contains the information needed to generate a scannable QR code (qr_data).
+    </Tip>
     ```json
     {
     	"charge_id": "chg_9c262fb5-f3cd-4187",
