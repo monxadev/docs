@@ -1,4 +1,33 @@
 ---
-title: "Pay Later"
-description: "Buy Now Pay Later"
+title: "Buy Now Pay Later"
+description: "Let customers split payments into instalments while you get paid once the provider confirms the transaction. "
 ---
+
+**Buy Now, Pay Later (BNPL)** allows your customers to split their purchases into multiple instalments — while you receive the payment in full once the provider confirms the transaction.\
+It’s a popular financing option that improves conversion rates and average order values by offering customers greater payment flexibility without upfront burden.
+
+Monxa’s BNPL integration simplifies the process by standardizing diverse provider APIs into a unified **Charge API** experience. Developers can enable multiple BNPL providers (e.g., Atome, Kredivo, PayLater) using the same flow, parameters, and webhook structure — without worrying about each provider’s technical nuances.
+
+BNPL payments on Monxa are **direct-capture only**, meaning that once the customer confirms the payment plan with the provider, the transaction is immediately captured. There is no authorisation or delayed capture step. Refunds, if supported, are handled through Monxa’s **Refund API**, and settlement follows the provider’s remittance schedule to your Monxa Balance or bank account.
+
+## Key Benefits
+
+- 💳 **Increase conversion:** Offer instalment options at checkout for affordability.
+- 🛒 **Higher order value:** Customers are more likely to spend more when paying later.
+- ⚙️ **Unified API:** Same request/response structure across providers and regions.
+- 🧾 **Automatic capture:** Simplifies fulfilment since funds are captured immediately.
+- 🔄 **Refund support:** Full or partial refunds available depending on provider policy.
+- 🌏 **Regional reach:** Support for major BNPL providers in Southeast Asia and beyond
+
+## Supported Channels
+
+<Tabs>
+  <Tab title="🇮🇩 Indonesia">
+    | Channel  | Code            | **Currency** | **Refund** | **Settlement** | Min Amount | Max  Amount |
+    | :------- | --------------- | :----------- | :--------- | :------------- | ---------- | :---------- |
+    | Kredivo  | `kredivo_bnpl`  | IDR          | Full       | T+4            | 1,000      | 30,000,000  |
+    | Akulaku  | `akulaku_bnpl`  | IDR          | Full       | T+2            | 1,000      | 25,000,000  |
+    | Atome    | `atome_bnpl`    | IDR          | Full       | T+2            | 50,000     | 6,000,000   |
+    | Indodana | `indodana_bnpl` | IDR          | Full       | T+2            | 10,000     | 25,000,000  |
+  </Tab>
+</Tabs>
