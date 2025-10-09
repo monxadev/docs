@@ -22,16 +22,12 @@ BNPL payments on Monxa are **direct-capture only**, meaning that once the custom
 <Columns cols={2}>
   <Card title="1. Create a Charge" icon="star" iconType="solid" href="#">
     Initiate the payment by creating a **charge** in your system with the transaction details.
-
-       
   </Card>
   <Card title="2. Redirect Customer to e-Wallet" icon="diamond-turn-right" iconType="solid" href="#">
     Use the `return_url` from Monxa to send the customer to their e-wallet app or hosted page.
   </Card>
   <Card title="3. Customer Authorizes Payment" icon="mobile-screen-button" iconType="solid" href="#">
     The customer confirms the transaction by entering their **PIN/OTP** or using biometric authentication in their e-wallet.
-
-      
   </Card>
   <Card title="4. Handle Webhooks" icon="anchor" iconType="solid" href="#">
     Once the e-wallet provider processes the payment, Monxa sends a **webhook notification** to update your system with the final status.
@@ -44,10 +40,10 @@ BNPL payments on Monxa are **direct-capture only**, meaning that once the custom
   <Tab title="🇮🇩 Indonesia">
     | Channel  | Code            | **Currency** | **Refund** | **Settlement** | Min Amount | Max  Amount |
     | :------- | --------------- | :----------- | :--------- | :------------- | ---------- | :---------- |
-    | Kredivo  | `kredivo_bnpl`  | IDR          | Full       | T+4            | 1,000      | 30,000,000  |
-    | Akulaku  | `akulaku_bnpl`  | IDR          | Full       | T+2            | 1,000      | 25,000,000  |
-    | Atome    | `atome_bnpl`    | IDR          | Full       | T+2            | 50,000     | 6,000,000   |
-    | Indodana | `indodana_bnpl` | IDR          | Full       | T+2            | 10,000     | 25,000,000  |
+    | Kredivo  | `bnpl_kredivo`  | IDR          | Full       | T+4            | 1,000      | 30,000,000  |
+    | Akulaku  | `bnpl_akulaku`  | IDR          | Full       | T+2            | 1,000      | 25,000,000  |
+    | Atome    | `bnpl_atome`    | IDR          | Full       | T+2            | 50,000     | 6,000,000   |
+    | Indodana | `bnpl_indodana` | IDR          | Full       | T+2            | 10,000     | 25,000,000  |
   </Tab>
 </Tabs>
 
@@ -58,26 +54,35 @@ sequenceDiagram
   autonumber
   participant U as Customer
   participant M as Merchant
-  participant MX as Monxa
-  participant P as BNPL Provider
+  participant X as Monxa
+  participant B as BNPL Provider
   autonumber
-  U->>M: Choose BNPL at checkout
-  M->>MX: POST /v1/charges (payment_method=bnpl)
-  MX->>P: Create BNPL session (amount, currency, plan)
-  P-->>MX: Session created (auth_url/deeplink)
-  MX-->>M: actions=REDIRECT_CUSTOMER (url/deeplink)
-  M-->>U: Redirect / open provider app
-  U->>P: Authenticate & confirm plan
-  P-->>MX: Result (approved & captured / declined)
-  MX-->>M: Webhook charge.succeeded or charge.failed
+  U->>M: Click "Pay with BNPL"
+  M->>X: POST /v1/charges (channel_code=bnpl_xxx, return_url)
+  X-->>M: 201 Created (status=pending, actions.redirect_url)
+  M->>U: Redirect to actions.redirect_url
+  U->>B: Authenticate, eligibility, select plan
+  B-->>X: Payment result (approve/capture or fail/expire)
+  X-->>M: Webhook (charge.succeeded | charge.failed | charge.expired)
+  M->>X: GET /v1/charges/{id} (optional verify)
+  M-->>U: Show result & finalize order
 ```
+
+### Status Lifecycle (BNPL)
+
+| Monxa Status  | When it Occurs                                 | Merchant Action                     |
+| :------------ | :--------------------------------------------- | :---------------------------------- |
+| **pending**   | Charge created; awaiting provider approval     | Redirect customer; wait for webhook |
+| **succeeded** | Provider approved & captured                   | Fulfill order                       |
+| **failed**    | Provider rejected / canceled / technical error | Offer retry or alternate method     |
+| **expired**   | Customer did not complete within session       | Create a new charge if neede        |
 
 ### Step 1: Create a Charge
 
-This is the initial stage of the payment process. After gathering all the user’s details and preparing to collect payment, use this API to generate a **charge**.
+Create a charge with a BNPL `channel_code` (examples: `bnpl_atome`, `bnpl_kredivo`, etc.) and include a `return_url` so we can return customers to your site/app after they complete the BNPL flow.
 
 <Tip>
-  **Endpoint: POST v1/charges**
+  **Endpoint: POST /v1/charges**
 </Tip>
 
 <AccordionGroup>
@@ -95,14 +100,24 @@ This is the initial stage of the payment process. After gathering all the user�
     | metadata               | object | optional    | Key-value entries for your custom data.   You can specify up to 50 keys, with key names up to 40 characters and values up to 500 characters.   This is for your convenience. Monxa will not use this data for any processing. |
   </Accordion>
   <Accordion title="Request Example">
-    ```json
-    {
-    	"reference_id" : "TRX-983921-221A",
-    	"amount" : "124000.00",
-    	"currency" : "IDR",
-    	"channel_code" : "QR_QRIS",
-    	"description" : "Simple description for the payment"
-    }
+    ```bash
+    curl https://api.monxa.io/v1/charges \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer sk_test_***" \
+      -H "Idempotency-Key: chg-12345-unique-key" \
+      -d '{
+        "amount": 150000,
+        "currency": "IDR",
+        "reference_id": "INV-240001",
+        "channel_code": "bnpl_atome",
+        "channel_properties": {
+          "return_url": "https://merchant.example.com/checkout/return"
+        },
+        "metadata": {
+          "field_1": "A1234",
+          "field_2": "user@example.com"
+        }
+      }'
     ```
   </Accordion>
   <Accordion title="Response Example">
@@ -111,28 +126,112 @@ This is the initial stage of the payment process. After gathering all the user�
     </Tip>
     ```json
     {
-    	"charge_id": "chg_9c262fb5-f3cd-4187",
-      	"reference_id": "TRX-983921-221A",
-    	"order_id": null,
-    	"customer_id": null,
-    	"currency": "IDR",
-    	"amount": 124000.00,
-    	"channel_code": "QR_QRIS",
-    	"channel_properties": {
-    		"expires_at" : "2026-05-28T14:37:11"
-    	},
-    	"metadata": null,
-    	"status": "ACTION_REQUIRED",
-    	"actions": {
-    		"type": "PRESENT_TO_CUSTOMER",
-    		"qr_data": "000201010212266CO.MONXAxxx",
-    		"qr_image": "data:image/png;base64,iVBORw0Kxxxx",
-    	},
-    	"created": "2024-05-28T14:37:11",
-    	"updated": "2024-05-28T14:37:11"
+      "id": "chg_01JAB1XYN01P3",
+      "object": "charge",
+      "reference_id": "INV-240001",
+      "amount": 150000,
+      "currency": "IDR",
+      "status": "pending",
+      "channel_code": "bnpl_atome",
+      "actions": {
+        "type": "REDIRECT_CUSTOMER",
+        "redirect_url": "https://bnpl.example.com/checkout/SESSION_abc123",
+        "expires_at": "2025-10-07T09:15:00Z"
+      },
+      "created_at": "2025-10-07T09:10:00Z"
     }
     ```
   </Accordion>
 </AccordionGroup>
 
-### 
+### Step 2: Redirect the Customer
+
+Use `actions.redirect_url` to send the customer to the BNPL provider’s hosted checkout. Do **not** generate a QR code—BNPL is a **redirect + hosted authentication** flow (KYC/eligibility and plan selection happen on the provider’s side).
+
+- **Web:** HTTP 302 or client-side redirect.
+- **Mobile:** Open in an in-app webview or external browser; handle the `return_url` to resume your flow.
+
+### Step 3: Customer Authorizes & Selects a Plan
+
+On the provider page, the customer:
+
+1. Logs in or signs up (provider KYC/eligibility).
+2. Selects an installment plan (tenor/fees shown by the provider).
+3. Confirms the payment.
+
+If approved, the provider **captures** the amount (direct capture) and we update the charge status.
+
+### Step 4: Handle Webhooks & Update Your Order
+
+Rely on webhooks to make authoritative updates to your order or fulfillment state.
+
+**Key events**
+
+- `charge.succeeded` — BNPL approved & **captured**; safe to deliver goods/services.
+- `charge.failed` — Rejected, canceled, or provider error.
+- `charge.expired` — Customer didn’t complete within the session window.
+- `refund.succeeded` / `refund.failed` — If you initiate a refund later (subject to provider rules).
+
+<Tip>
+  Always verify the event by fetching the charge (**GET /v1/charges/**) before updating your system.
+</Tip>
+
+<AccordionGroup>
+  <Accordion title="Sample Webhook (charge.succeeded)">
+    ```json
+    {
+    	"id": "evt_01JAB9ABCDEF",
+    	"type": "charge.succeeded",
+    	"data": {
+    		"id": "chg_01JAB1XYN01P3",
+    		"reference_id": "INV-240001",
+    		"amount": 150000,
+    		"currency": "IDR",
+    		"status": "succeeded",
+    		"channel_code": "bnpl_atome",
+    		"captured_at": "2025-10-07T09:11:45Z"
+    	},
+    	"created_at": "2025-10-07T09:11:46Z"
+    }
+    ```
+  </Accordion>
+  <Accordion title="Sample Webhook (charge.failed)">
+    ```json
+    {
+    	"id": "evt_01JAB9FAIL001",
+    	"type": "charge.failed",
+    	"data": {
+    		"id": "chg_01JAB1XYN01P3",
+    		"reference_id": "INV-240001",
+    		"status": "failed",
+    		"failure_code": "provider_declined",
+    		"failure_message": "Customer not eligible for requested plan"
+    	},
+    	"created_at": "2025-10-07T09:12:10Z"
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+| d |
+| --- |
+
+## Refunds (Provider-Dependent)
+
+- **Supported:** Usually allowed post-capture; **partial** refunds may be supported depending on the BNPL provider and time window.
+- **Not Supported / Window Lapsed:** Some providers restrict partial refunds or disallow refunds beyond a certain number of days.
+- **API:** Use `POST /v1/refunds` with `charge_id`, `amount` (optional for partial), and `reason`. Monitor `refund.succeeded` / `refund.failed`.
+
+  <Tip>
+    For operational certainty, maintain a BNPL provider matrix in your ops/wallet config (flags for supports_partial_refund, refund_window_days, fees, etc.).
+  </Tip>
+
+## Error Handling & Retries
+
+- **Idempotency:** Always set a unique `Idempotency-Key` per create attempt. Reuse the same key on client/network retries to avoid double charges.
+- **Common errors:**
+  - `400 invalid_channel_properties` — Missing/invalid `return_url`.
+  - `400 unsupported_channel` — BNPL provider not enabled for your account/country.
+  - `402 provider_declined` — Eligibility/credit check failed.
+  - `409 duplicate_reference` — If your environment enforces unique `reference_id`.
+- **Recovery:** On `failed`/`expired`, offer retry (create a **new** charge with a fresh `Idempotency-Key`).

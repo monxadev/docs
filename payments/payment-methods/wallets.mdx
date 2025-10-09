@@ -34,18 +34,18 @@ By offering digital wallet payments via Monxa, merchants can:
   <Tab title="🇮🇩 Indonesia">
     | Channel                               | Code             | **Currency** | **Refund**    | **Settlement** | Min Amount | Max  Amount |
     | :------------------------------------ | ---------------- | :----------- | :------------ | :------------- | ---------- | :---------- |
-    | [DANA](https://www.dana.id/)          | `dana_wallet`    | IDR          | Full, Partial | T+2            | 100        | 20,000,000  |
-    | [OVO](https://www.ovo.id/)            | `ovo_wallet`     | IDR          | Not Supported | T+2            | 100        | 20,000,000  |
-    | [ShopeePay](https://shopeepay.co.id/) | `shopee_wallet`  | IDR          | Full          | T+2            | 100        | 20,000,000  |
-    | [LinkAja](https://linkaja.id/)        | `linkaja_wallet` | IDR          | Full          | T+2            | 100        | 20,000,000  |
+    | [DANA](https://www.dana.id/)          | `wallet_dana`    | IDR          | Full, Partial | T+2            | 100        | 20,000,000  |
+    | [OVO](https://www.ovo.id/)            | `wallet_ovo`     | IDR          | Not Supported | T+2            | 100        | 20,000,000  |
+    | [ShopeePay](https://shopeepay.co.id/) | `wallet_shopee`  | IDR          | Full          | T+2            | 100        | 20,000,000  |
+    | [LinkAja](https://linkaja.id/)        | `wallet_linkaja` | IDR          | Full          | T+2            | 100        | 20,000,000  |
   </Tab>
   <Tab title="🇹🇭 Thailand">
     | **Channel** | Code               | **Currency** | **Refund**        | **Settlement** | Min Amount | Max Amount |
     | :---------- | ------------------ | :----------- | :---------------- | :------------- | :--------- | ---------- |
-    | Alipay      | `ali_wallet`       | THB          | Not supported     | T+2            | 1          | 50,000     |
-    | WeChat Pay  | `wechat_wallet`    | THB          | Not supported     | T+2            | 1          | 70,000     |
-    | TrueMoney   | `truemoney_wallet` | THB          | Not supported     | T+2            | 1          | 50,000     |
-    | LINE Pay    | `line_wallet`      | THB          | 3-5 business days | T+2            | 1          | 50,000     |
+    | Alipay      | `wallet_ali`       | THB          | Not supported     | T+2            | 1          | 50,000     |
+    | WeChat Pay  | `wallet_wechat`    | THB          | Not supported     | T+2            | 1          | 70,000     |
+    | TrueMoney   | `wallet_truemoney` | THB          | Not supported     | T+2            | 1          | 50,000     |
+    | LINE Pay    | `wallet_line`      | THB          | 3-5 business days | T+2            | 1          | 50,000     |
   </Tab>
 </Tabs>
 
@@ -161,7 +161,7 @@ The diagram below illustrates a simplified architecture of how Monxa, the mercha
   </Accordion>
 </AccordionGroup>
 
-### Step 2: Redirect User to Wallet
+### Step 2: Redirect Customer to Wallet
 
 After creating the payment request, use the response data to generate a QR code and present it to the user.
 
