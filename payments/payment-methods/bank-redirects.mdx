@@ -29,7 +29,7 @@ This method is widely used across Asia for its **security, customer familiarity,
   <Card title="2. Redirect the Customer" icon="diamond-turn-right" iconType="solid" href="#">
     Use the `return_url` from Monxa to send the customer to their bank app.
   </Card>
-  <Card title="3. Customer Approves at Bank" icon="mobile-screen-button" iconType="solid" href="#">
+  <Card title="3. Customer Approves at Bank App" icon="mobile-screen-button" iconType="solid" href="#">
     The customer confirms the transaction by entering their **PIN/OTP** or using biometric authentication in their bank app.
   </Card>
   <Card title="4. Handle Webhooks" icon="anchor" iconType="solid" href="#">
@@ -134,11 +134,10 @@ Create a charge with a bank-redirect `channel_code`. Include a `return_url` (req
         "amount": 2500,
         "currency": "MYR",
         "reference_id": "INV-2025-1009-001",
-        "channel_code": "bank_redirect_fpx",
+        "channel_code": "bank_fpx",
         "channel_properties": {
           "return_url": "https://merchant.example.com/checkout/return",
-          "cancel_url": "https://merchant.example.com/checkout/cancel",
-          "bank_code": "MBBEMYKL"               // optional: preselect a bank if supported
+          "cancel_url": "https://merchant.example.com/checkout/cancel"
         },
         "metadata": {
           "order_note": "Black Friday order #8841"
