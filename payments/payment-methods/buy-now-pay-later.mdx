@@ -23,11 +23,11 @@ BNPL payments on Monxa are **direct-capture only**, meaning that once the custom
   <Card title="1. Create a Charge" icon="star" iconType="solid" href="#">
     Initiate the payment by creating a **charge** in your system with the transaction details.
   </Card>
-  <Card title="2. Redirect Customer to e-Wallet" icon="diamond-turn-right" iconType="solid" href="#">
-    Use the `return_url` from Monxa to send the customer to their e-wallet app or hosted page.
+  <Card title="2. Redirect Customer to BNPL App" icon="diamond-turn-right" iconType="solid" href="#">
+    Use the `redirect_url` from Monxa to send the customer to their BNPL app or platform.
   </Card>
   <Card title="3. Customer Authorizes Payment" icon="mobile-screen-button" iconType="solid" href="#">
-    The customer confirms the transaction by entering their **PIN/OTP** or using biometric authentication in their e-wallet.
+    The customer confirms the transaction by entering their **PASSWORD / PIN / OTP** or using biometric authentication in their BNPL app.
   </Card>
   <Card title="4. Handle Webhooks" icon="anchor" iconType="solid" href="#">
     Once the e-wallet provider processes the payment, Monxa sends a **webhook notification** to update your system with the final status.
@@ -111,7 +111,7 @@ Create a charge with a BNPL `channel_code` (examples: `bnpl_atome`, `bnpl_krediv
         "reference_id": "INV-240001",
         "channel_code": "bnpl_atome",
         "channel_properties": {
-          "return_url": "https://merchant.example.com/checkout/return"
+          "redirect_url": "https://merchant.example.com/checkout/return"
         },
         "metadata": {
           "field_1": "A1234",
