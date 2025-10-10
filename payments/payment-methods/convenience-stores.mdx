@@ -32,10 +32,10 @@ Convenience Store (C-Store) payments let customers generate a payment code onlin
 
 <Tabs>
   <Tab title="🇮🇩 Indonesia">
-    | Channel   | Code               | **Currency** | **Refund** | **Settlement** | Min Amount | Max  Amount |
-    | :-------- | :----------------- | :----------- | :--------- | :------------- | :--------- | :---------- |
-    | Alfamart  | `cstore_alfamart`  | IDR          | N.A        | T+5            | 10,000     | 5,000,000   |
-    | Indomaret | `cstore_indomaret` | IDR          | N.A        | T+5            | 10,000     | 2,500,000   |
+    | Channel   | Code              | **Currency** | **Refund** | **Settlement** | Min Amount | Max  Amount |
+    | :-------- | :---------------- | :----------- | :--------- | :------------- | :--------- | :---------- |
+    | Alfamart  | `store_alfamart`  | IDR          | N.A        | T+5            | 10,000     | 5,000,000   |
+    | Indomaret | `store_indomaret` | IDR          | N.A        | T+5            | 10,000     | 2,500,000   |
   </Tab>
 </Tabs>
 
@@ -87,7 +87,7 @@ Create a charge with a C-Store `channel_code`. Specify amount, currency, and `re
         "amount": 100000,
         "currency": "IDR",
         "reference_id": "INV-2025-1009-001",
-        "channel_code": "cstore_alfamart",
+        "channel_code": "store_alfamart",
         "channel_properties": {
           "customer_name": "Andi Setiawan"
         },
@@ -106,7 +106,7 @@ Create a charge with a C-Store `channel_code`. Specify amount, currency, and `re
     	"amount": 100000,
     	"currency": "IDR",
     	"status": "pending",
-    	"channel_code": "cstore_alfamart",
+    	"channel_code": "store_alfamart",
     	"actions": {
       		"type": "PRESENT_TO_CUSTOMER",
         	"display_code": "123456789012",
@@ -150,7 +150,7 @@ Customer visits the selected convenience store, presents the code to cashier or 
     		"amount": 100000,
     		"currency": "IDR",
     		"status": "succeeded",
-    		"channel_code": "cstore_alfamart",
+    		"channel_code": "store_alfamart",
     		"paid_at": "2025-10-09T15:22:33Z"
     	},
     	"created_at": "2025-10-09T15:22:34Z"
