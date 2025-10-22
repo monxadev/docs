@@ -3025,7 +3025,11 @@
       }
     }
   },
-  "servers": [],
+  "servers": [
+    {
+      "url": "https://api.monxa.dev/v1"
+    }
+  ],
   "security": [
     {
       "oauth21": [

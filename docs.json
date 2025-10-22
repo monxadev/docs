@@ -86,7 +86,7 @@
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API reference",        
         "groups": [
           {
             "group": "API documentation",
@@ -95,13 +95,11 @@
             ]
           },
           {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
+            "group": "Endpoints",
+            "openapi": {
+              "source": "/api-reference/openapi.json",
+              "directory": "api-reference"
+            }
           }
         ]
       },
