@@ -86,9 +86,17 @@
         ]
       },
       {
-        "tab": "API reference",        
-        "openapi": "openapi.json"        
-      },
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "Charges",
+            "openapi": {
+              "source": "openapi.json",
+              "directory": "api-reference"
+            }            
+          }
+        ]        
+      },      
       {
         "tab": "Changelog",
         "groups": [
