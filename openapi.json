@@ -1,0 +1,3042 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Monxa API",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "balances"
+    },
+    {
+      "name": "customers"
+    },
+    {
+      "name": "merchants"
+    },
+    {
+      "name": "charges"
+    },
+    {
+      "name": "payouts"
+    }
+  ],
+  "paths": {
+    "/v1/balances": {
+      "get": {
+        "summary": "/v1/balances",
+        "deprecated": false,
+        "description": "The Balance API allows merchants to retrieve real-time information about their account balance, including available funds, pending funds, reserved amounts, and transaction counts.\nThis endpoint is commonly used to determine payout eligibility, monitor settlement status, or display wallet/balance information in merchant dashboards.",
+        "tags": [
+          "balances"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "merchant_id": {
+                        "type": "string",
+                        "description": "Unique identifier of the merchant account."
+                      },
+                      "reserved_amount": {
+                        "type": "integer",
+                        "description": "Funds reserved and not available for payout (e.g., unsettled, held for compliance checks)."
+                      },
+                      "total_amount": {
+                        "type": "integer",
+                        "description": "Total funds recorded under the merchant account (available + pending)."
+                      },
+                      "available_amount": {
+                        "type": "integer",
+                        "description": "Funds available for payout/withdrawal."
+                      },
+                      "fee_amount": {
+                        "type": "integer",
+                        "description": "Accumulated transaction fees deducted from the account."
+                      },
+                      "pending_amount": {
+                        "type": "integer",
+                        "description": "Funds pending settlement (e.g., in-progress or clearing transactions)."
+                      },
+                      "available_count": {
+                        "type": "integer",
+                        "description": "Number of transactions that are already settled and available."
+                      },
+                      "pending_count": {
+                        "type": "integer",
+                        "description": "Number of transactions still pending settlement."
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "Currency code (ISO-4217), e.g., IDR, SGD."
+                      },
+                      "last_modified_by": {
+                        "type": "string",
+                        "description": "User or system identifier of the last update action."
+                      },
+                      "last_modified_on": {
+                        "type": "string",
+                        "description": "Timestamp when the record was last updated."
+                      },
+                      "created_by": {
+                        "type": "string",
+                        "description": "User or system identifier that created the record."
+                      },
+                      "created_on": {
+                        "type": "string",
+                        "description": "Timestamp when the record was created."
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Unique identifier for this balance record."
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "merchant_id": "019a0423-2941-735f-9a93-819df469ad39",
+                    "reserved_amount": 0,
+                    "total_amount": 16995,
+                    "available_amount": 0,
+                    "fee_amount": 0,
+                    "pending_amount": 16995,
+                    "available_count": 0,
+                    "pending_count": 7,
+                    "currency": "IDR",
+                    "last_modified_by": "System",
+                    "last_modified_on": "2025-10-21T00:22:40.8945126+00:00",
+                    "created_by": "System",
+                    "created_on": "2025-10-21T00:22:40.8945126+00:00",
+                    "id": "63c3e1cc-8a94-4613-9b4d-9c72e46ef254"
+                  }
+                ]
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/balances/{currency}": {
+      "get": {
+        "summary": "/v1/balances/{currency}",
+        "deprecated": false,
+        "description": "Retrieve the balance information for a specified currency.",
+        "tags": [
+          "balances"
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "IDR",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "merchant_id": {
+                      "type": "string",
+                      "description": "Unique identifier of the merchant account."
+                    },
+                    "reserved_amount": {
+                      "type": "integer",
+                      "description": "Funds reserved and not available for payout (e.g., unsettled, held for compliance checks)."
+                    },
+                    "total_amount": {
+                      "type": "integer",
+                      "description": "Total funds recorded under the merchant account (available + pending)."
+                    },
+                    "available_amount": {
+                      "type": "integer",
+                      "description": "Funds available for payout/withdrawal."
+                    },
+                    "fee_amount": {
+                      "type": "integer",
+                      "description": "Accumulated transaction fees deducted from the account."
+                    },
+                    "pending_amount": {
+                      "type": "integer",
+                      "description": "Funds pending settlement (e.g., in-progress or clearing transactions)."
+                    },
+                    "available_count": {
+                      "type": "integer",
+                      "description": "Number of transactions that are already settled and available."
+                    },
+                    "pending_count": {
+                      "type": "integer",
+                      "description": "Number of transactions still pending settlement."
+                    },
+                    "currency": {
+                      "type": "string",
+                      "description": "Currency code (ISO-4217), e.g., IDR, SGD."
+                    },
+                    "last_modified_by": {
+                      "type": "string",
+                      "description": "User or system identifier of the last update action."
+                    },
+                    "last_modified_on": {
+                      "type": "string",
+                      "description": "Timestamp when the record was last updated."
+                    },
+                    "created_by": {
+                      "type": "string",
+                      "description": "User or system identifier that created the record."
+                    },
+                    "created_on": {
+                      "type": "string",
+                      "description": "Timestamp when the record was created."
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier for this balance record."
+                    }
+                  },
+                  "required": [
+                    "merchant_id",
+                    "reserved_amount",
+                    "total_amount",
+                    "available_amount",
+                    "fee_amount",
+                    "pending_amount",
+                    "available_count",
+                    "pending_count",
+                    "currency",
+                    "last_modified_by",
+                    "last_modified_on",
+                    "created_by",
+                    "created_on",
+                    "id"
+                  ]
+                },
+                "example": {
+                  "merchant_id": "019a0423-2941-735f-9a93-819df469ad39",
+                  "reserved_amount": 0,
+                  "total_amount": 16995,
+                  "available_amount": 0,
+                  "fee_amount": 0,
+                  "pending_amount": 16995,
+                  "available_count": 0,
+                  "pending_count": 7,
+                  "currency": "IDR",
+                  "last_modified_by": "System",
+                  "last_modified_on": "2025-10-21T00:22:40.8945126+00:00",
+                  "created_by": "System",
+                  "created_on": "2025-10-21T00:22:40.8945126+00:00",
+                  "id": "63c3e1cc-8a94-4613-9b4d-9c72e46ef254"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/customers": {
+      "post": {
+        "summary": "/v1/customers",
+        "deprecated": false,
+        "description": "Create a new customer. An idempotent key is required in the request header.",
+        "tags": [
+          "customers"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCustomer"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDto"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "headers": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      },
+      "get": {
+        "summary": "/v1/customers",
+        "deprecated": false,
+        "description": "List all customer with pagination support.",
+        "tags": [
+          "customers"
+        ],
+        "parameters": [
+          {
+            "name": "SearchText",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "OrderBy",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IsDescending",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomerDto"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "headers": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "summary": "/v1/customers",
+        "deprecated": false,
+        "description": "Delete a customer by its unique identifier.",
+        "tags": [
+          "customers"
+        ],
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "headers": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "summary": "/v1/customers",
+        "deprecated": false,
+        "description": "Update a customer by its unique identifier.",
+        "tags": [
+          "customers"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCustomer"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDto"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "headers": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/customers/{id}": {
+      "get": {
+        "summary": "/v1/customers/{id}",
+        "deprecated": false,
+        "description": "Retrieve a customer by its unique identifier.",
+        "tags": [
+          "customers"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDto"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "headers": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/merchants/me": {
+      "get": {
+        "summary": "/v1/merchants/me",
+        "deprecated": false,
+        "description": "Retrieve the merchant info.",
+        "tags": [
+          "merchants"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/merchants/me/channels": {
+      "get": {
+        "summary": "/v1/merchants/me/channels",
+        "deprecated": false,
+        "description": "Retrieve all available currencies.",
+        "tags": [
+          "merchants"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChannelDto"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "headers": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/merchants/me/web-hook": {
+      "post": {
+        "summary": "/v1/merchants/me/web-hook",
+        "deprecated": false,
+        "description": "Update the WebHook settings for a specific merchant by its unique identifier.",
+        "tags": [
+          "merchants"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWebHookWithoutIdRequest"
+              },
+              "example": {
+                "signature_key": "steven",
+                "web_hook_uri": "https://webhook.site/7a400998-3ebe-466c-a51a-5fa8bac75ecd",
+                "events": []
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/charges": {
+      "get": {
+        "summary": "/v1/charges",
+        "deprecated": false,
+        "description": "Retrieve a paginated list of charges.\nThis endpoint returns all charge objects created under the merchant account, optionally filtered by date range, currency, status, payment method, or search text.\nUse pagination parameters to navigate through results efficiently.\n\nKey Notes:\n- Supports flexible filtering and sorting via query parameters.\n- Results include both succeeded and pending charges.\n- Useful for reconciliation, reporting, and transaction monitoring dashboards.",
+        "tags": [
+          "charges"
+        ],
+        "parameters": [
+          {
+            "name": "Currency",
+            "in": "query",
+            "description": "Filter results by ISO-4217 currency code (e.g., SGD, MYR, THB).",
+            "required": false,
+            "example": "IDR",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DateFrom",
+            "in": "query",
+            "description": "Start date for filtering charges (inclusive). Example: 2025-10-01T00:00:00Z.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DateTo",
+            "in": "query",
+            "description": "End date for filtering charges (inclusive). Example: 2025-10-21T23:59:59Z.",
+            "required": false,
+            "example": "2025-10-21T23:59:59Z.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "Id",
+            "in": "query",
+            "description": "Retrieve a specific charge by its unique ID (e.g., chg_01JAB1XYN01P3).",
+            "required": false,
+            "example": "chg_01JAB1XYN01P3",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ChannelCode",
+            "in": "query",
+            "description": "Filter by payment channel (e.g., qr-qris, wallet_dana).",
+            "required": false,
+            "example": "qr_qris",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Status",
+            "in": "query",
+            "description": "Filter by charge status (pending, succeeded, failed, expired, cancelled).",
+            "required": false,
+            "example": "pending",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SearchText",
+            "in": "query",
+            "description": "Keyword search across charge fields such as code, reference_id, or description.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "OrderBy",
+            "in": "query",
+            "description": "Field to sort results by (e.g., created_on, amount, status).",
+            "required": false,
+            "example": "status",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IsDescending",
+            "in": "query",
+            "description": "When true, sorts results in descending order. Default is false.",
+            "required": false,
+            "example": "false",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "description": "Page number for paginated results. Default is 1.",
+            "required": false,
+            "example": 1,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "description": "Number of records per page. Maximum allowed is 100.",
+            "required": false,
+            "example": 100,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "page_number": {
+                      "type": "integer",
+                      "description": "Current page number of the paginated result set."
+                    },
+                    "page_size": {
+                      "type": "integer",
+                      "description": "Number of records returned per page."
+                    },
+                    "page_count": {
+                      "type": "integer",
+                      "description": "Total number of pages available."
+                    },
+                    "total_item_count": {
+                      "type": "integer",
+                      "description": "Total number of charge records that match the query filters."
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Unique identifier for the charge object (e.g.,"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "Unique charge code generated by Monxa. (e.g., chg_01JAB1XYN01P3)."
+                          },
+                          "reference_id": {
+                            "type": "string",
+                            "description": "Merchant’s reference identifier (e.g., invoice or order number)."
+                          },
+                          "merchant_id": {
+                            "type": "string",
+                            "description": "Unique identifier of the merchant who created the charge."
+                          },
+                          "amount": {
+                            "type": "integer",
+                            "description": "Amount charged, expressed in minor units (e.g., 10000 = 100.00)."
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "ISO-4217 currency code (e.g., SGD, MYR, THB, IDR)."
+                          },
+                          "channel_code": {
+                            "type": "string",
+                            "description": "Payment channel used for this charge (e.g., qr_qris,  wallet_dana)."
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Current status of the charge (pending, succeeded, failed, expired, cancelled)."
+                          },
+                          "fee_amount": {
+                            "type": "integer",
+                            "description": "Total fee deducted for processing the charge."
+                          },
+                          "net_amount": {
+                            "type": "integer",
+                            "description": "Net amount credited to the merchant after fees."
+                          },
+                          "settlement_status": {
+                            "type": "string",
+                            "description": "Settlement progress (pending, settled, reversed)."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Optional description provided by the merchant."
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {},
+                            "description": "Additional key–value pairs attached to the charge for reconciliation or analytics."
+                          },
+                          "created_by": {
+                            "type": "string",
+                            "description": "Identifier of the user or API key that created the charge."
+                          },
+                          "created_on": {
+                            "type": "string",
+                            "description": "Timestamp when the charge was created."
+                          },
+                          "updated_by": {
+                            "type": "string",
+                            "description": "Identifier of the user or API key that last modified the charge."
+                          },
+                          "updated_on": {
+                            "type": "string",
+                            "description": "Timestamp of the last update to the charge."
+                          },
+                          "failed_on": {
+                            "type": "string",
+                            "description": "Timestamp when the charge failed, if applicable."
+                          },
+                          "settlement_on": {
+                            "type": "string",
+                            "description": "Timestamp when the chage is settled"
+                          }
+                        },
+                        "required": [
+                          "fee_amount",
+                          "net_amount",
+                          "settlement_status",
+                          "amount",
+                          "channel_code",
+                          "code",
+                          "currency",
+                          "status",
+                          "created_by",
+                          "created_on",
+                          "id",
+                          "reference_id",
+                          "merchant_id",
+                          "description",
+                          "updated_by",
+                          "updated_on",
+                          "settlement_on"
+                        ]
+                      },
+                      "description": "List of charge objects. Each object represents one transaction record."
+                    }
+                  },
+                  "required": [
+                    "page_number",
+                    "page_size",
+                    "page_count",
+                    "total_item_count",
+                    "items"
+                  ]
+                },
+                "example": {
+                  "page_number": 1,
+                  "page_size": 100,
+                  "page_count": 1,
+                  "total_item_count": 5,
+                  "items": [
+                    {
+                      "fee_amount": 50,
+                      "net_amount": 950,
+                      "settlement_status": "UNKNOWN",
+                      "meta_data": {
+                        "name": "the value"
+                      },
+                      "action_flow": "PAYLOAD",
+                      "amount": 1000,
+                      "channel_code": "QR_QRIS",
+                      "code": "CHG_251095D600C40328C247",
+                      "currency": "IDR",
+                      "description": "New description for the Charge.",
+                      "merchant_id": "019a0423-2941-735f-9a93-819df469ad39",
+                      "reference_id": "Your Reference Id",
+                      "status": "PENDING",
+                      "created_by": "drunk@sandbox.dev",
+                      "created_on": "2025-10-21T05:17:13.6507292+00:00",
+                      "updated_by": "drunk@sandbox.dev",
+                      "updated_on": "2025-10-21T05:49:07.1573109+00:00",
+                      "id": "019a0533-3632-772a-95d6-00c40328c247"
+                    },
+                    {
+                      "failed_on": "2025-10-21T01:05:40.5145731+00:00",
+                      "fee_amount": 100,
+                      "net_amount": 900,
+                      "settlement_status": "UNKNOWN",
+                      "meta_data": {},
+                      "action_flow": "REDIRECTION",
+                      "amount": 1000,
+                      "channel_code": "QR_QRIS",
+                      "code": "CHG_2510A87B019974399F1C",
+                      "currency": "IDR",
+                      "description": "hello",
+                      "merchant_id": "019a0423-2941-735f-9a93-819df469ad39",
+                      "reference_id": "steven",
+                      "status": "FAILED",
+                      "created_by": "drunk@sandbox.dev",
+                      "created_on": "2025-10-21T00:35:47.9006924+00:00",
+                      "updated_by": "System",
+                      "updated_on": "2025-10-21T01:05:40.514819+00:00",
+                      "id": "019a0431-8e3c-79ee-a87b-019974399f1c"
+                    },
+                    {
+                      "fee_amount": 100,
+                      "net_amount": 900,
+                      "paid_on": "2025-10-21T03:06:54.7019641+00:00",
+                      "settlement_date": "2025-10-23T03:06:54.7019641+00:00",
+                      "settlement_status": "PENDING",
+                      "meta_data": {},
+                      "action_flow": "EMBEDDED",
+                      "amount": 1000,
+                      "channel_code": "QR_QRIS",
+                      "code": "CHG_2510A4A536F6CCD43176",
+                      "currency": "IDR",
+                      "description": "",
+                      "merchant_id": "019a0423-2941-735f-9a93-819df469ad39",
+                      "reference_id": "",
+                      "status": "SUCCEEDED",
+                      "created_by": "drunk@sandbox.dev",
+                      "created_on": "2025-10-21T03:06:44.4340741+00:00",
+                      "updated_by": "System",
+                      "updated_on": "2025-10-21T03:06:54.7023067+00:00",
+                      "id": "019a04bb-bf52-7aea-a4a5-36f6ccd43176"
+                    },
+                    {
+                      "fee_amount": 100,
+                      "net_amount": 900,
+                      "paid_on": "2025-10-21T00:27:58.9597338+00:00",
+                      "settlement_date": "2025-10-23T00:27:58.9597338+00:00",
+                      "settlement_status": "PENDING",
+                      "meta_data": {},
+                      "action_flow": "REDIRECTION",
+                      "amount": 1000,
+                      "channel_code": "QR_QRIS",
+                      "code": "CHG_2510B55639243FBD761F",
+                      "currency": "IDR",
+                      "description": "hello",
+                      "merchant_id": "019a0423-2941-735f-9a93-819df469ad39",
+                      "reference_id": "hello",
+                      "status": "SUCCEEDED",
+                      "created_by": "drunk@sandbox.dev",
+                      "created_on": "2025-10-21T00:22:39.3040746+00:00",
+                      "updated_by": "System",
+                      "updated_on": "2025-10-21T00:27:58.9651536+00:00",
+                      "id": "019a0425-85c7-76d2-b556-39243fbd761f"
+                    },
+                    {
+                      "fee_amount": 200,
+                      "net_amount": 1800,
+                      "paid_on": "2025-10-21T02:44:22.6329921+00:00",
+                      "settlement_date": "2025-10-23T02:44:22.6329921+00:00",
+                      "settlement_status": "PENDING",
+                      "meta_data": {},
+                      "action_flow": "PAYLOAD",
+                      "amount": 2000,
+                      "channel_code": "QR_QRIS",
+                      "code": "CHG_2510BEF48B4721EC7E93",
+                      "currency": "IDR",
+                      "description": "The payment for Steven",
+                      "merchant_id": "019a0423-2941-735f-9a93-819df469ad39",
+                      "reference_id": "Steven",
+                      "status": "SUCCEEDED",
+                      "created_by": "drunk@sandbox.dev",
+                      "created_on": "2025-10-21T02:35:17.8509877+00:00",
+                      "updated_by": "System",
+                      "updated_on": "2025-10-21T02:44:22.6400573+00:00",
+                      "id": "019a049e-f5da-7c68-bef4-8b4721ec7e93"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "summary": "/v1/charges",
+        "deprecated": false,
+        "description": "Create a new charge.\nAn idempotency key is required in the request header to ensure safe retries without creating duplicate charges.\nThis endpoint initializes a payment attempt for the specified amount and channel, returning a charge object that represents the transaction status and payment instructions (e.g., QR string or redirect URL).",
+        "tags": [
+          "charges"
+        ],
+        "parameters": [
+          {
+            "name": "x-idempotency-key",
+            "in": "header",
+            "description": "",
+            "required": false,
+            "example": "0XGGG99RP0D90",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCharge"
+              },
+              "example": {
+                "amount": 5300,
+                "currency": "IDR",
+                "channel_code": "qr_qris",
+                "reference_id": "merchant_26",
+                "description": "Viridis cogo aureus. Tollo eum antepono administratio cupressus dolore uredo. Amissio decet vir subvenio asperiores. Degusto vesper aer.",
+                "metadata": {
+                  "qui6": "culpa elit",
+                  "cillum9b": "amet in dolore",
+                  "dolor74": "deserunt reprehenderit magna do"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier of the charge"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "nique charge code generated by Monxa for tracking or reconciliation. (e.g. chg_2510BBFC2A3A6CE22F1B)."
+                    },
+                    "reference_id": {
+                      "type": "string",
+                      "description": "Merchant-provided identifier such as invoice or order number."
+                    },
+                    "merchant_id": {
+                      "type": "string",
+                      "description": "Unique ID of the merchant who created the charge."
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "description": "Charge amount in minor units (e.g., 3500 = IDR 35.00)."
+                    },
+                    "currency": {
+                      "type": "string",
+                      "description": "ISO 4217 currency code (e.g., IDR, MYR, SGD)."
+                    },
+                    "channel_code": {
+                      "type": "string",
+                      "description": "The selected payment channel (e.g., qr_qris, bank_redirect_fpx, wallet_dana)."
+                    },
+                    "action_flow": {
+                      "type": "string",
+                      "description": "Defines how the charge is presented — e.g., payload, redirection, or embedded."
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Current charge status (PENDING, SUCCEEDED, FAILED, etc.)."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Merchant’s description of the charge or transaction."
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {},
+                      "description": "Custom key–value pairs provided in the request for additional context."
+                    },
+                    "action": {
+                      "type": "object",
+                      "properties": {
+                        "qr_image_url": {
+                          "type": "string",
+                          "description": "URL to a hosted QR image to be displayed for payment."
+                        },
+                        "qr_payload": {
+                          "type": "string",
+                          "description": "The QR string payload used for QR-based payment apps (e.g., QRIS)."
+                        },
+                        "simulation_url": {
+                          "type": "string",
+                          "description": "Sandbox/testing link to simulate the payment flow (only returned in sandbox environment)."
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Instruction type for client handling. For example, PRESENT_TO_CUSTOMER indicates the merchant should display or redirect the user to complete payment."
+                        }
+                      },
+                      "required": [
+                        "qr_image_url",
+                        "qr_payload",
+                        "simulation_url",
+                        "type"
+                      ],
+                      "description": "Contains payment instructions or URLs to be presented to the customer."
+                    },
+                    "embedded_url": {
+                      "type": "string"
+                    },
+                    "created_by": {
+                      "type": "string",
+                      "description": "Identifier of the user or API key that created the charge."
+                    },
+                    "created_on": {
+                      "type": "string",
+                      "description": "Timestamp when the charge was created."
+                    },
+                    "updated_by": {
+                      "type": "string",
+                      "description": "Identifier of the user or process that last updated the charge."
+                    },
+                    "updated_on": {
+                      "type": "string",
+                      "description": "Timestamp of the last update to this charge."
+                    }
+                  },
+                  "required": [
+                    "action",
+                    "metadata",
+                    "action_flow",
+                    "amount",
+                    "channel_code",
+                    "code",
+                    "currency",
+                    "description",
+                    "merchant_id",
+                    "reference_id",
+                    "status",
+                    "created_by",
+                    "created_on",
+                    "updated_by",
+                    "updated_on",
+                    "id",
+                    "embedded_url"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "action": {
+                        "embedded_url": "https://checkout.monxa.dev/payments/019a058a-0a86-7c35-969e-f883a56f1e10",
+                        "simulation_url": "https://checkout.monxa.dev/payments/simulation/019a058a-0a86-7c35-969e-f883a56f1e10",
+                        "type": "PRESENT_TO_CUSTOMER"
+                      },
+                      "meta_data": {
+                        "qui6": "culpa elit",
+                        "cillum9b": "amet in dolore",
+                        "dolor74": "deserunt reprehenderit magna do"
+                      },
+                      "action_flow": "EMBEDDED",
+                      "amount": 4300,
+                      "channel_code": "QR_QRIS",
+                      "code": "CHG_2510969EF883A56F1E10",
+                      "currency": "IDR",
+                      "description": "Viridis cogo aureus. Tollo eum antepono administratio cupressus dolore uredo. Amissio decet vir subvenio asperiores. Degusto vesper aer.",
+                      "merchant_id": "019a0423-2941-735f-9a93-819df469ad39",
+                      "reference_id": "merchant_26",
+                      "status": "PENDING",
+                      "created_by": "drunk@sandbox.dev",
+                      "created_on": "2025-10-21T06:52:04.1021719+00:00",
+                      "updated_by": "drunk@sandbox.dev",
+                      "updated_on": "2025-10-21T06:52:04.365363+00:00",
+                      "id": "019a058a-0a86-7c35-969e-f883a56f1e10"
+                    }
+                  },
+                  "3": {
+                    "summary": "Success",
+                    "value": {
+                      "action": {
+                        "checkout_url": "https://checkout.monxa.dev/payments/019a0625-3a69-7279-99a4-50ac66afa159",
+                        "embedded_url": "https://checkout.monxa.dev/payments/019a0625-3a69-7279-99a4-50ac66afa159",
+                        "qr_image_url": "https://checkout.monxa.dev/api/payments/qr/019a0625-3a69-7279-99a4-50ac66afa159",
+                        "qr_payload": "000THIS IS A DUMMY QR00012345000GO TO SIMULATE PAGE ON DASHBOARD TO COMPLETE PAYMENT00012345000COM.PROVIDER.WWW00012345000ID.CO.QRIS.WWW000123000THIS IS A DUMMY QR00012345000GO TO SIMULATE PAGE ON DASHBOARD TO COMPLETE PAYMENT00012345.0001234ID1234Durianpay1234KOTA JAKARTA12345000",
+                        "type": "PRESENT_TO_CUSTOMER"
+                      },
+                      "metadata": {
+                        "qui6": "culpa elit",
+                        "cillum9b": "amet in dolore",
+                        "dolor74": "deserunt reprehenderit magna do"
+                      },
+                      "amount": 5300,
+                      "channel_code": "QR_QRIS",
+                      "code": "CHG_251099A450AC66AFA159",
+                      "currency": "IDR",
+                      "description": "Viridis cogo aureus. Tollo eum antepono administratio cupressus dolore uredo. Amissio decet vir subvenio asperiores. Degusto vesper aer.",
+                      "merchant_id": "019a0423-2941-735f-9a93-819df469ad39",
+                      "reference_id": "merchant_26",
+                      "status": "PENDING",
+                      "created_by": "drunk@sandbox.dev",
+                      "created_on": "2025-10-21T09:41:34.4412661+00:00",
+                      "updated_by": "drunk@sandbox.dev",
+                      "updated_on": "2025-10-21T09:41:35.1766779+00:00",
+                      "id": "019a0625-3a69-7279-99a4-50ac66afa159"
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the error type, following RFC 9110. Usually points to a documentation reference for this error class."
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "A short, human-readable summary of the error (e.g., \"Bad Request\")."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code associated with this error (e.g., 400, 401, 404, 500)."
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A detailed explanation of what caused the error, typically describing the missing or invalid field."
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "The specific API endpoint or operation where the error occurred."
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request trace, used for internal debugging and log correlation."
+                    },
+                    "trace-id": {
+                      "type": "string",
+                      "description": "An alternative field name used by some systems for backward compatibility with tracing tools."
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail",
+                    "instance",
+                    "traceId",
+                    "trace-id"
+                  ]
+                },
+                "example": {
+                  "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "x-idempotency-key header is required.",
+                  "instance": "POST /v1/charges",
+                  "traceId": "00-4ea955e3444de0f268b5b8cb03d3a4f9-5e01236bea69f1b9-00",
+                  "trace-id": "0HNGG99RP0D72:00000001"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/charges/{id}": {
+      "get": {
+        "summary": "/v1/charges/{id}",
+        "deprecated": false,
+        "description": "Retrieve the details of a specific charge by its unique Charge ID.\nThis endpoint returns the full charge object, including its current status, amounts, payment channel, timestamps, and metadata.\nUse this endpoint to check the latest state of a transaction — for example, whether a payment has succeeded, failed, or is still pending.",
+        "tags": [
+          "charges"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "{{chargeId}}",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier for the charge record."
+                    },
+                    "reference_id": {
+                      "type": "string",
+                      "description": "Merchant’s own reference (e.g., invoice number or transaction ID)."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Internal or external transaction code associated with the charge."
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "description": "Total charge amount in minor units (e.g., 100000 for IDR 1000.00)."
+                    },
+                    "currency": {
+                      "type": "string",
+                      "description": "ISO-4217 currency code (e.g., IDR, SGD, MYR)."
+                    },
+                    "channel_code": {
+                      "type": "string",
+                      "description": "Payment channel used (e.g., qr_qris, wallet_dana, bank_redirect_fpx)."
+                    },
+                    "action_flow": {
+                      "type": "string",
+                      "description": "Describes what Monxa returns based on the channel type (e.g., payload, redirect, deeplink)."
+                    },
+                    "merchant_id": {
+                      "type": "string",
+                      "description": "Unique identifier of the merchant who created this charge."
+                    },
+                    "settlement_status": {
+                      "type": "string",
+                      "description": "Settlement progress status — pending, processing, or settled."
+                    },
+                    "fee_amount": {
+                      "type": "integer",
+                      "description": "Total fee amount deducted from this charge (in minor units)."
+                    },
+                    "net_amount": {
+                      "type": "integer",
+                      "description": "Amount credited to merchant after fees (in minor units)."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Human-readable description of the charge (optional)."
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Charge status: pending, succeeded, failed, or expired."
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "qui6": {
+                          "type": "string"
+                        },
+                        "cillum9b": {
+                          "type": "string"
+                        },
+                        "dolor74": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "qui6",
+                        "cillum9b",
+                        "dolor74"
+                      ],
+                      "description": "Additional custom key-value pairs defined by the merchant."
+                    },
+                    "created_by": {
+                      "type": "string",
+                      "description": "User or system identifier that created the record."
+                    },
+                    "created_on": {
+                      "type": "string",
+                      "description": "ISO-8601 timestamp when the record was created."
+                    },
+                    "updated_by": {
+                      "type": "string",
+                      "description": "User or system that last updated the record."
+                    },
+                    "updated_on": {
+                      "type": "string",
+                      "description": "ISO-8601 timestamp of the last update."
+                    },
+                    "last_modified_by": {
+                      "type": "string",
+                      "description": "Alias field showing who last modified the charge."
+                    },
+                    "last_modified_on": {
+                      "type": "string",
+                      "description": "Alias field showing when it was last modified."
+                    }
+                  },
+                  "required": [
+                    "metadata",
+                    "action_flow",
+                    "amount",
+                    "channel_code",
+                    "code",
+                    "currency",
+                    "description",
+                    "fee_amount",
+                    "merchant_id",
+                    "net_amount",
+                    "reference_id",
+                    "settlement_status",
+                    "status",
+                    "last_modified_by",
+                    "last_modified_on",
+                    "created_by",
+                    "created_on",
+                    "updated_by",
+                    "updated_on",
+                    "id"
+                  ]
+                },
+                "example": {
+                  "fee": {
+                    "type": "PERCENTAGE",
+                    "value": 5
+                  },
+                  "meta_data": {
+                    "qui6": "culpa elit",
+                    "cillum9b": "amet in dolore",
+                    "dolor74": "deserunt reprehenderit magna do"
+                  },
+                  "action_flow": "PAYLOAD",
+                  "amount": 5300,
+                  "channel_code": "QR_QRIS",
+                  "charge_statement_id": "56e6ab16-89bd-4c9c-9097-cb8abfcd3bfc",
+                  "code": "CHG_2510901795BC4E7E0A36",
+                  "currency": "IDR",
+                  "description": "Viridis cogo aureus. Tollo eum antepono administratio cupressus dolore uredo. Amissio decet vir subvenio asperiores. Degusto vesper aer.",
+                  "fee_amount": 265,
+                  "merchant_id": "019a0423-2941-735f-9a93-819df469ad39",
+                  "net_amount": 5035,
+                  "processor": "DURIAN_PAY",
+                  "reference_id": "merchant_26",
+                  "settlement_cycle": "T+2",
+                  "settlement_status": "UNKNOWN",
+                  "status": "PENDING",
+                  "owned_by": "019a0423-2941-735f-9a93-819df469ad39",
+                  "last_modified_by": "drunk@sandbox.dev",
+                  "last_modified_on": "2025-10-21T07:27:33.4560862+00:00",
+                  "created_by": "drunk@sandbox.dev",
+                  "created_on": "2025-10-21T07:27:33.1272876+00:00",
+                  "updated_by": "drunk@sandbox.dev",
+                  "updated_on": "2025-10-21T07:27:33.4560862+00:00",
+                  "id": "019a05aa-8707-747c-9017-95bc4e7e0a36"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/charges/{id}/description": {
+      "patch": {
+        "summary": "/v1/charges/{id}/description",
+        "deprecated": false,
+        "description": "Update only the description of a charge.",
+        "tags": [
+          "charges"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id parameter",
+            "required": true,
+            "example": "{{chargeId}}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMonxaChargeDescription"
+              },
+              "example": {
+                "id": "{{chargeId}}",
+                "description": "New description for the Charge."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier for the charge record."
+                    },
+                    "reference_id": {
+                      "type": "string",
+                      "description": "Merchant’s own reference (e.g., invoice number or transaction ID)."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Internal or external transaction code associated with the charge."
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "description": "Total charge amount in minor units (e.g., 100000 for IDR 1000.00)."
+                    },
+                    "currency": {
+                      "type": "string",
+                      "description": "ISO-4217 currency code (e.g., IDR, SGD, MYR)."
+                    },
+                    "channel_code": {
+                      "type": "string",
+                      "description": "Payment channel used (e.g., qr_qris, wallet_dana, bank_redirect_fpx)."
+                    },
+                    "action_flow": {
+                      "type": "string",
+                      "description": "Describes what Monxa returns based on the channel type (e.g., payload, redirect, embedded)."
+                    },
+                    "merchant_id": {
+                      "type": "string",
+                      "description": "Unique identifier of the merchant who created this charge."
+                    },
+                    "settlement_status": {
+                      "type": "string",
+                      "description": "Settlement progress status — pending, processing, or settled."
+                    },
+                    "fee_amount": {
+                      "type": "integer",
+                      "description": "Total fee amount deducted from this charge (in minor units)."
+                    },
+                    "net_amount": {
+                      "type": "integer",
+                      "description": "Amount credited to merchant after fees (in minor units)."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Human-readable description of the charge (optional)."
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Charge status: pending, succeeded, failed, or expired."
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {},
+                      "description": "Additional custom key-value pairs defined by the merchant."
+                    },
+                    "created_by": {
+                      "type": "string",
+                      "description": "User or system identifier that created the record."
+                    },
+                    "created_on": {
+                      "type": "string",
+                      "description": "ISO-8601 timestamp when the record was created."
+                    },
+                    "updated_by": {
+                      "type": "string",
+                      "description": "User or system that last updated the record."
+                    },
+                    "updated_on": {
+                      "type": "string",
+                      "description": "ISO-8601 timestamp of the last update."
+                    }
+                  },
+                  "required": [
+                    "fee_amount",
+                    "net_amount",
+                    "settlement_status",
+                    "metadata",
+                    "action_flow",
+                    "amount",
+                    "channel_code",
+                    "code",
+                    "currency",
+                    "description",
+                    "merchant_id",
+                    "reference_id",
+                    "status",
+                    "created_by",
+                    "created_on",
+                    "updated_by",
+                    "updated_on",
+                    "id"
+                  ]
+                },
+                "example": {
+                  "fee_amount": 265,
+                  "net_amount": 5035,
+                  "settlement_status": "UNKNOWN",
+                  "meta_data": {
+                    "qui6": "culpa elit",
+                    "cillum9b": "amet in dolore",
+                    "dolor74": "deserunt reprehenderit magna do"
+                  },
+                  "action_flow": "PAYLOAD",
+                  "amount": 5300,
+                  "channel_code": "QR_QRIS",
+                  "code": "CHG_2510901795BC4E7E0A36",
+                  "currency": "IDR",
+                  "description": "New description for the Charge.",
+                  "merchant_id": "019a0423-2941-735f-9a93-819df469ad39",
+                  "reference_id": "merchant_26",
+                  "status": "PENDING",
+                  "created_by": "drunk@sandbox.dev",
+                  "created_on": "2025-10-21T07:27:33.1272876+00:00",
+                  "updated_by": "drunk@sandbox.dev",
+                  "updated_on": "2025-10-21T09:15:41.4134662+00:00",
+                  "id": "019a05aa-8707-747c-9017-95bc4e7e0a36"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/charges/{id}/metadata": {
+      "patch": {
+        "summary": "/v1/charges/{id}/metadata",
+        "deprecated": false,
+        "description": "Merge metadata entries for a charge. Empty values remove keys.",
+        "tags": [
+          "charges"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id parameter",
+            "required": true,
+            "example": "{{chargeId}}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMonxaChargeMetadata"
+              },
+              "example": {
+                "id": "{{chargeId}}",
+                "metadata": {
+                  "name": "the value"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Charge"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "headers": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/payouts": {
+      "post": {
+        "summary": "/v1/payouts",
+        "deprecated": false,
+        "description": "Create a new payout. An idempotent key is required in the request header.",
+        "tags": [
+          "payouts"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePayoutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutDto"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "headers": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      },
+      "get": {
+        "summary": "/v1/payouts",
+        "deprecated": false,
+        "description": "List all payouts with pagination support.",
+        "tags": [
+          "payouts"
+        ],
+        "parameters": [
+          {
+            "name": "SearchText",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "OrderBy",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IsDescending",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PayoutDto"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "headers": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/payouts/{id}": {
+      "get": {
+        "summary": "/v1/payouts/{id}",
+        "deprecated": false,
+        "description": "Retrieve a payout by Id.",
+        "tags": [
+          "payouts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The Payout ID.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutDto"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "headers": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "oauth21": [
+              "openid",
+              "profile",
+              "Monxa-api"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActionFlows": {
+        "type": "string",
+        "enum": [
+          "payload",
+          "redirection",
+          "embedded"
+        ]
+      },
+      "Address": {
+        "required": [
+          "country",
+          "line1"
+        ],
+        "type": "object",
+        "properties": {
+          "line1": {
+            "type": "string",
+            "description": "Primary address line (e.g., street name, building number)."
+          },
+          "line2": {
+            "type": "string",
+            "description": "Secondary address line (e.g., apartment, suite, or block).",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "description": "City, town, or locality.",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "description": "State, province, or region (if applicable).",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "description": "Two-letter ISO 3166-1 alpha-2 country code (e.g., SG, MY, TH)."
+          },
+          "postal_code": {
+            "type": "string",
+            "description": "Postal or ZIP code of the address.",
+            "nullable": true
+          }
+        }
+      },
+      "ChannelCodes": {
+        "type": "string",
+        "enum": [
+          "qr_qris"
+        ]
+      },
+      "ChannelDto": {
+        "required": [
+          "country",
+          "currency",
+          "name",
+          "settlement",
+          "last_modified_by"
+        ],
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ChannelCodes"
+          },
+          "max_amount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "min_amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "settlement": {
+            "type": "string"
+          },
+          "last_modified_by": {
+            "type": "string"
+          },
+          "last_modified_on": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ChargeStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "succeeded",
+          "failed",
+          "canceled",
+          "expired",
+          "refunded"
+        ]
+      },
+      "CreateCustomer": {
+        "required": [
+          "address"
+        ],
+        "type": "object",
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "properties": {},
+            "nullable": true
+          },
+          "shipping": {
+            "$ref": "#/components/schemas/ShippingDto"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "tax": {
+            "$ref": "#/components/schemas/TaxDto"
+          }
+        }
+      },
+      "CreateCharge": {
+        "required": [
+          "amount",
+          "currency",
+          "channel_code",
+          "action_flow"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "description": "The amount to be charged, expressed in minor units (e.g., 10000 = 100.00).",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The three-letter ISO 4217 currency code (e.g., IDR, MYR, SGD)."
+          },
+          "channel_code": {
+            "$ref": "#/components/schemas/ChannelCodes",
+            "description": "The payment channel to be used, such as qr_qris, bank_redirect_fpx, wallet_dana, etc."
+          },
+          "action_flow": {
+            "$ref": "#/components/schemas/ActionFlows",
+            "description": "The type of payment flow, e.g.redirect, or show. Determines how Merchant presents the payment experience to the user."
+          },
+          "reference_id": {
+            "type": "string",
+            "description": "Merchant’s unique reference ID for this charge (e.g., order number or invoice ID). Used for reconciliation and idempotency tracking.",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional short text describing the purpose of the payment or charge. Useful for invoices or customer-facing receipts.",
+            "nullable": true
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Optional custom key–value pairs for additional information",
+            "properties": {},
+            "nullable": true
+          }
+        }
+      },
+      "CreatePayoutRequest": {
+        "required": [
+          "amount",
+          "bank_account_name",
+          "bank_account_number",
+          "bank_name",
+          "currency"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "description": "Amount",
+            "format": "double"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Metadata",
+            "properties": {},
+            "nullable": true
+          },
+          "bank_account_name": {
+            "type": "string",
+            "description": "Bank Account Name"
+          },
+          "bank_account_number": {
+            "type": "string",
+            "description": "Bank Account Number"
+          },
+          "bank_name": {
+            "type": "string",
+            "description": "Bank Name"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description",
+            "nullable": true
+          },
+          "reference_id": {
+            "type": "string",
+            "description": "Reference Id",
+            "nullable": true
+          }
+        }
+      },
+      "CustomerDto": {
+        "required": [
+          "address",
+          "name",
+          "id",
+          "created_on"
+        ],
+        "type": "object",
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "shipping": {
+            "$ref": "#/components/schemas/ShippingDto"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "tax": {
+            "$ref": "#/components/schemas/TaxDto"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "created_on": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_on": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "FeeTypes": {},
+      "Charge": {
+        "required": [
+          "code",
+          "currency",
+          "created_by",
+          "id",
+          "amount",
+          "channel_code"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier for the charge object."
+          },
+          "code": {
+            "type": "string",
+            "description": "nique charge code used for internal or merchant-side reference. (e.g., chg_01JAB1XYN01P3).\n"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Amount to be charged, in minor units (e.g., 10000 = 100.00)."
+          },
+          "currency": {
+            "type": "string",
+            "description": "SO-4217 currency code (e.g., SGD, MYR, THB)."
+          },
+          "channel_code": {
+            "$ref": "#/components/schemas/ChannelCodes",
+            "description": "Payment channel used (e.g., qr_qris, wallet_dana)."
+          },
+          "action_flow": {
+            "$ref": "#/components/schemas/ActionFlows",
+            "description": "Type of payment flow — e.g. redirect, qr, in-app, etc."
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional text describing the charge or purpose of payment.",
+            "nullable": true
+          },
+          "reference_id": {
+            "type": "string",
+            "description": "Merchant-defined reference (e.g., invoice number or order ID).",
+            "nullable": true
+          },
+          "merchant_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the merchant owning this charge."
+          },
+          "status": {
+            "$ref": "#/components/schemas/ChargeStatus",
+            "description": "Current status of the charge (pending, succeeded, failed, expired, cancelled)."
+          },
+          "fee_amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Total processing fee deducted from the charge.",
+            "nullable": true
+          },
+          "net_amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Net amount credited after fees.",
+            "nullable": true
+          },
+          "settlement_status": {
+            "description": "Settlement progress — pending, settled, or reversed."
+          },
+          "settlement_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when funds were (or will be) settled to merchant balance.",
+            "nullable": true
+          },
+          "paid_on": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when payment was successfully captured.",
+            "nullable": true
+          },
+          "failed_on": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the charge failed.",
+            "nullable": true
+          },
+          "cancelled_on": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when charge was cancelled by merchant or system.\n",
+            "nullable": true
+          },
+          "expired_on": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when charge expired.",
+            "nullable": true
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "properties": {},
+            "description": "Custom key-value pairs for additional data (e.g. {answer: 42})"
+          },
+          "created_by": {
+            "type": "string",
+            "description": "User or system that created the charge."
+          },
+          "created_on": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when charge was created."
+          },
+          "updated_by": {
+            "type": "string",
+            "description": "User or system that last updated the charge.",
+            "nullable": true
+          },
+          "updated_on": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the charge was last updated.",
+            "nullable": true
+          }
+        }
+      },
+      "MxFee": {
+        "required": [
+          "type",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/FeeTypes"
+          },
+          "value": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "PayoutDto": {
+        "required": [
+          "fee",
+          "bank_account_name",
+          "bank_account_number",
+          "bank_name",
+          "currency",
+          "merchant_id",
+          "id",
+          "created_on"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "fee_amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "net_amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "fee": {
+            "$ref": "#/components/schemas/MxFee"
+          },
+          "payout_status": {
+            "$ref": "#/components/schemas/PayoutStatus"
+          },
+          "bank_account_name": {
+            "type": "string"
+          },
+          "bank_account_number": {
+            "type": "string"
+          },
+          "bank_name": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "merchant_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "created_on": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_on": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "PayoutStatus": {},
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ShippingDto": {
+        "required": [
+          "phone",
+          "receiver_name"
+        ],
+        "type": "object",
+        "properties": {
+          "address": {},
+          "phone": {
+            "type": "string"
+          },
+          "receiver_name": {
+            "type": "string"
+          }
+        },
+        "nullable": true
+      },
+      "TaxDto": {
+        "required": [
+          "id_type",
+          "id_value"
+        ],
+        "type": "object",
+        "properties": {
+          "id_type": {
+            "type": "string"
+          },
+          "id_value": {
+            "type": "string"
+          }
+        },
+        "nullable": true
+      },
+      "UpdateCustomer": {
+        "type": "object",
+        "properties": {
+          "address": {},
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "properties": {},
+            "nullable": true
+          },
+          "shipping": {
+            "$ref": "#/components/schemas/ShippingDto"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "tax": {
+            "$ref": "#/components/schemas/TaxDto"
+          }
+        }
+      },
+      "UpdateMonxaChargeDescription": {
+        "required": [
+          "description",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "UpdateMonxaChargeMetadata": {
+        "required": [
+          "id",
+          "metadata"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "properties": {}
+          }
+        }
+      },
+      "UpdateWebHookWithoutIdRequest": {
+        "required": [
+          "web_hook_uri"
+        ],
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "signature_key": {
+            "type": "string",
+            "description": "The kwy will be added into Request Header `X-Signature` with base64 encryption when sending to the WebHook URI.",
+            "nullable": true
+          },
+          "web_hook_uri": {
+            "type": "string",
+            "description": "The WebHook URI to receive event notifications.",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "oauth21": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "authorizationUrl": "{{identityUrl}}/connect/authorize",
+            "tokenUrl": "{{identityUrl}}/connect/token",
+            "refreshUrl": "",
+            "scopes": {
+              "openid": "",
+              "profile": "",
+              "Monxa-api": ""
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.monxa.dev/v1"
+    }
+  ],
+  "security": [
+    {
+      "oauth21": [
+        "openid",
+        "profile",
+        "Monxa-api"
+      ]
+    }
+  ]
+}
