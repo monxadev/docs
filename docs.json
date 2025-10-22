@@ -84,6 +84,24 @@
             ]
           }
         ]
+      },  
+      {
+        "tab": "API Reference",
+        "openapi": {
+            "source": "openapi.json",
+            "directory": "api-reference"
+        }        
+      },      
+      {
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": "Changelog",
+            "pages": [
+              "changelog"
+            ]
+          }
+        ]
       }
     ]
   },
