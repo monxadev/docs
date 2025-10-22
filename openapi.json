@@ -3012,7 +3012,6 @@
         "type": "oauth2",
         "flows": {
           "clientCredentials": {
-            "authorizationUrl": "{{identityUrl}}/connect/authorize",
             "tokenUrl": "{{identityUrl}}/connect/token",
             "refreshUrl": "",
             "scopes": {
@@ -3025,11 +3024,7 @@
       }
     }
   },
-  "servers": [
-    {
-      "url": "https://api.monxa.dev/v1"
-    }
-  ],
+  "servers": [],
   "security": [
     {
       "oauth21": [
