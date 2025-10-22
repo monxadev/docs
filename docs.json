@@ -87,10 +87,7 @@
       },  
       {
         "tab": "API Reference",
-        "openapi": {
-            "source": "openapi.json",
-            "directory": "api-reference"
-        }        
+        "openapi": "/api-reference/openapi.json"
       },      
       {
         "tab": "Changelog",
